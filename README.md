@@ -32,9 +32,9 @@
 2. 项目名称：
 “知稻”病虫害识别系统 
 3. 技术平台：
-前端：HTML5；
-服务端：Java Web 
-后端：pytorch或tensorFlow框架
+    - 前端：HTML5；
+    - 服务端：Java Web 
+    - 后端：pytorch或tensorFlow框架
 4. 方向类型：
 移动或Web
 5. 项目简介：
