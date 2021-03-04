@@ -90,49 +90,46 @@ with codecs.open(label_file) as f:
 
 print(len(items))
 
-# 数据增强
+_aug_log_file = open("process.txt", 'a+')
 
-for item in items:
-    img_list = []
-    img_path, label = item['image_id'], item['disease_class']
-    img_path = os.path.join(data_path, img_path)
-    img = Image.open(img_path).convert('RGB')
-    rn = [0.5, 0.8, 1.2, 1.5]
-    img_list.append(img)
-    # 这个看上去……有不同的权重是吗
-    if(label_count[label] < 1000):
-        for e in rn:
-            img_list.append(ImageEnhance.Brightness(img).enhance(e))
-            img_list.append(ImageEnhance.Contrast(img).enhance(e))
-            img_list.append(ImageEnhance.Color(img).enhance(e))
-            img_list.append(ImageEnhance.Sharpness(img).enhance(e))
-        if(label_count[label] < 100):
-            img = img.transpose(Image.FLIP_LEFT_RIGHT)
-            img_list.append(img)
+""" 数据处理 """
+# 数据增强
+with open(save_list, 'w') as f:
+  
+    for item in items:
+        img_list = []
+        img_path, label = item['image_id'], item['disease_class']
+        img_path = os.path.join(data_path, img_path)
+        img = Image.open(img_path).convert('RGB')
+        rn = [0.5, 0.8, 1.2, 1.5]
+        img_list.append(img)
+        # 这个看上去……有不同的权重是吗
+        if(label_count[label] < 1000):
             for e in rn:
                 img_list.append(ImageEnhance.Brightness(img).enhance(e))
                 img_list.append(ImageEnhance.Contrast(img).enhance(e))
                 img_list.append(ImageEnhance.Color(img).enhance(e))
                 img_list.append(ImageEnhance.Sharpness(img).enhance(e))
+            if(label_count[label] < 100):
+                img = img.transpose(Image.FLIP_LEFT_RIGHT)
+                img_list.append(img)
+                for e in rn:
+                    img_list.append(ImageEnhance.Brightness(img).enhance(e))
+                    img_list.append(ImageEnhance.Contrast(img).enhance(e))
+                    img_list.append(ImageEnhance.Color(img).enhance(e))
+                    img_list.append(ImageEnhance.Sharpness(img).enhance(e))
 
-    for step, image in enumerate(img_list):
-        img_name = "-".join([str(img_num), str(step)]) + '.jpg'
-        file_list.append('\t'.join([img_name, str(label)]))
-        image.save(os.path.join(save_path, img_name))
-
-    # print(len(img_list))
-
-    img_num += 1
-
-    if img_num % 20 == 0:
-        print(img_num)
-
-""" 数据处理 """
-
-with open(save_list, 'w') as f:
-    _count = 0
-    for line in file_list:
-        _count = _count + 1
-        if _count % 1000 == 0:
-            print(_count)
-        f.write(line+'\n')
+        for step, image in enumerate(img_list):
+            img_name = "-".join([str(img_num), str(step)]) + '.jpg'
+            line = '\t'.join([img_name, str(label)])
+            f.write(line+'\n')
+            f.flush()
+            image.save(os.path.join(save_path, img_name))
+        # print(len(img_list))
+        img_num += 1
+        if img_num % 20 == 0:
+            print(img_num)
+            _aug_log_file.write(str(img_num)+'\n')
+            _aug_log_file.flush()
+        
+_aug_log_file.close()
