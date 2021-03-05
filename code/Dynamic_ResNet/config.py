@@ -12,9 +12,9 @@ train_parameters = {
     "data_dir": DATA_ROOT+"",  # 训练数据存储地址
     "train_file_list": "train.txt",
     "label_file": "label_list.txt",
-    "save_persistable_dir": ".model/persistable-params",
-    "continue_train": False,        # 是否接着上一次保存的参数接着训练，优先级高于预训练模型
-    "num_epochs": 50,                # 此处仅仅做尝试，自训练请调整训练轮数
+    "save_persistable_dir": "./model/persistable-params",
+    "continue_train": True,        # 是否接着上一次保存的参数接着训练，优先级高于预训练模型
+    "num_epochs": 10,                # 此处仅仅做尝试，自训练请调整训练轮数
     "train_batch_size": 64,
     "infer_img": 'infer.jpg',
     "mean_rgb": [127.5, 127.5, 127.5],  # 常用图片的三通道均值，通常来说需要先对训练数据做统计，此处仅取中间值
@@ -38,10 +38,15 @@ train_parameters = {
         "good_acc1": 0.92
     },
     "rsm_strategy": {
-        "learning_rate": 0.001,
-        "lr_epochs": [20, 40, 60, 80, 100],
+        "learning_rate": 0.0001,
+        "lr_epochs": [1, 2, 3, 4, 5],
         "lr_decay": [1, 0.5, 0.25, 0.1, 0.01, 0.002]
     },
+    # "rsm_strategy": {
+    #     "learning_rate": 0.001,
+    #     "lr_epochs": [20, 40, 60, 80, 100],
+    #     "lr_decay": [1, 0.5, 0.25, 0.1, 0.01, 0.002]
+    # },
     "momentum_strategy": {
         "learning_rate": 0.001,
         "lr_epochs": [20, 40, 60, 80, 100],

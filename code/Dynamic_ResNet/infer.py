@@ -18,7 +18,7 @@ def resize_img(img, target_size):
     img = img.resize((target_size[1], target_size[2]), Image.BILINEAR)
     return img
 
-def read_img(img_path):
+def read_img(img_path = "./infer.path"):
     img = Image.open(img_path)
     if img.mode != 'RGB':
         img = img.convert('RGB')
@@ -31,7 +31,13 @@ def read_img(img_path):
     img = np.array([img]).astype('float32')
     return img
     
-def infer():
+def infer(image_path = None,image = None):
+    if image is None:
+        if image_path is not None:
+            image = read_img(image_path)
+        else:
+            print("没有提供图片路径")
+
     with fluid.dygraph.guard():
         net = ResNet("resnet", class_dim = train_parameters['class_dim'])
         # load checkpoint
@@ -42,17 +48,21 @@ def infer():
         # start evaluate mode
         net.eval()
         
-        label_dic = train_parameters["label_dict"]
-        label_dic = {v: k for k, v in label_dic.items()}
-        
-        img_path = train_parameters['infer_img']
-        img = read_img(img_path)
-        
-        results = net(fluid.dygraph.to_variable(img))
-        lab = np.argsort(results.numpy())
-        print("image {} Infer result is: {}".format(img_path, label_dic[lab[0][-1]]))
-        
+        label_dict = train_parameters["label_dict"]
+        label_dict = {v: k for k, v in label_dict.items()}
+
+        results = net(fluid.dygraph.to_variable(image)).numpy()[0]
+        print("results",results)
+        sorted_idx = np.argsort(results)[::-1][:-1]
+        print("sorted_idx",sorted_idx)
+        prob_dict = {
+            label_dict[idx]:results[idx] for idx in sorted_idx
+        }
+        print(prob_dict)
+
+        print("image {} Infer result is: {}".format(image_path,label_dict[sorted_idx[0]]))
+
 
 if __name__ == "__main__":
     init_train_parameters()
-    infer()
+    infer(image_path="./infer.jpg")
