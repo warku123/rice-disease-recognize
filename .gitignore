@@ -1,5 +1,5 @@
 替换项目根目录下的.gitignore文件，内容如下：（注意，先提交.gitignore文件，再提交代码，否则会出现.gitignore失效）
- 
+/.idea/workspace.xml
  
 # Built application files
 *.apk
