@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/bulb_image"
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/take_photo" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/logo_image"
         android:layout_width="85dp"
         android:layout_height="90dp"
         android:layout_marginStart="32dp"
@@ -67,7 +67,7 @@
         app:srcCompat="@drawable/groupsignal" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/bulb_image"
         android:layout_width="261dp"
         android:layout_height="218dp"
         android:layout_marginTop="4dp"
@@ -88,9 +88,9 @@
         android:layout_marginBottom="23dp"
         android:text="知稻"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/logo_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView" />
+        app:layout_constraintStart_toEndOf="@+id/logo_image" />
 
     <TextView
         android:id="@+id/textView2"
@@ -103,7 +103,7 @@
         android:layout_marginRight="19dp"
         android:text="手机上的防治专家"
         android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/bulb_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apptitle" />
 
