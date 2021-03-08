@@ -33,47 +33,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49fd455a-bf8d-4cf8-8888-4e70a57857d9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/cogrice/infopage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_infopage.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/xml/file_paths.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/executionHistory/executionHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/executionHistory/executionHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/fileContent/fileContent.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/fileHashes/fileHashes.bin" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.5/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.5/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/javaCompile/classAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/javaCompile/jarAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/javaCompile/javaCompile.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.5/javaCompile/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/vcs-1/gc.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/cogrice/MainActivity.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/cogrice/photopage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/cogrice/photopage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_photopage.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_photopage.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[7d127343]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -114,6 +85,11 @@
     <property name="SelectDeploymentTargetsDialog.selectedDevices" value="Pixel_2_API_29" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../MyApplication" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RecentsManager">
+    <key name="android.template.1465064304">
+      <recent name="com.example.cogrice" />
+    </key>
   </component>
   <component name="RunManager" selected="Android App.app">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -248,7 +224,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2a35f327-fe42-485b-8e17-f3b16d97746f" name="Default Changelist" comment="" />
+      <changelist id="49fd455a-bf8d-4cf8-8888-4e70a57857d9" name="Default Changelist" comment="" />
       <created>1614753619069</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -273,6 +249,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1614754340002" />
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1615178592055">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1615178592055" />
     <state x="93" y="93" width="1350" height="638" key="AVDManager" timestamp="1614863701035">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

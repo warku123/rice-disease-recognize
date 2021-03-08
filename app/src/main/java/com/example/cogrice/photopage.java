@@ -127,7 +127,7 @@ public class photopage extends AppCompatActivity {
                 /*
                    7.0系统开始，直接使用本地真实路径的Uri被认为是不安全的，会抛 出一个FileUriExposedException异常。
                    而FileProvider则是一种特殊的内容提供器，它使用了和内 容提供器类似的机制来对数据进行保护，
-                   可以选择性地将封装过的Uri共享给外部，从而提高了 应用的安全性
+                   可以选择性地将封装过的Uri共享给外部，从而提高了应用的安全性
                  */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //大于等于版本24（7.0）的场合
