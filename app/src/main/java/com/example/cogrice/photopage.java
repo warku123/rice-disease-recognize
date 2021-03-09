@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -28,6 +30,9 @@ import java.io.FileNotFoundException;
 
 public class photopage extends AppCompatActivity {
     ImageButton camera_butt;
+    ImageButton home;
+    ImageButton platform;
+    ImageButton mine;
     Button album_butt;
     TextView tv;
     TextPaint tp;
@@ -44,15 +49,10 @@ public class photopage extends AppCompatActivity {
 
         //全屏，隐藏手机上方状态栏
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //字体加粗
-        tv = (TextView)findViewById(R.id.tip);
-        tp = tv.getPaint();
-        tp.setFakeBoldText(true);
-        tv2 = (TextView)findViewById(R.id.apptitle);
-        tp2 = tv2.getPaint();
-        tp2.setFakeBoldText(true);
 
-        camera_butt = findViewById(R.id.take_photo);
+        //组件初始化
+        init();
+
         camera_butt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +67,42 @@ public class photopage extends AppCompatActivity {
                 dispatchAlbumIntent();
             }
         });
+
+        View.OnClickListener bottomlistener = new View.OnClickListener() {
+            Intent intent=null;
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()){
+                    case R.id.platform:
+                        intent=new Intent(photopage.this,platform.class);
+                        break;
+                    case R.id.mine:
+                        intent=new Intent(photopage.this,mypage.class);
+                        break;
+                    default:
+                        break;
+                }
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        };
+        platform.setOnClickListener(bottomlistener);
+        mine.setOnClickListener(bottomlistener);
+    }
+
+    private void init(){
+        //字体加粗
+        tv = (TextView)findViewById(R.id.tip);
+        tp = tv.getPaint();
+        tp.setFakeBoldText(true);
+        tv2 = (TextView)findViewById(R.id.apptitle);
+        tp2 = tv2.getPaint();
+        tp2.setFakeBoldText(true);
+
+        home=findViewById(R.id.home);
+        platform=findViewById(R.id.platform);
+        mine=findViewById(R.id.mine);
+        camera_butt = findViewById(R.id.take_photo);
     }
 
 

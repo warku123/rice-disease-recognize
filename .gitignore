@@ -26,11 +26,13 @@ local.properties
 # Android Studio
 *.iml
 .idea
- 
+.idea/* 
+
 # Gradle files
-.gradle/
+.gradle
 build/
- 
+.gradle/*
+
 # Local configuration file (sdk path, etc)
 local.properties
  
