@@ -108,7 +108,9 @@ public class photopage extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         ActivityCompat.requestPermissions(photopage.this, new String[]{
                 Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_DOCUMENTS,
+                Manifest.permission.INTERNET
         },101);
 
         // 创建File对象，用于存储拍照后的图片
@@ -147,7 +149,9 @@ public class photopage extends AppCompatActivity {
     private void dispatchAlbumIntent(){
         ActivityCompat.requestPermissions(photopage.this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_DOCUMENTS,
+                Manifest.permission.INTERNET
         },102);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

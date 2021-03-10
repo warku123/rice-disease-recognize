@@ -12,24 +12,35 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class infopage extends AppCompatActivity {
+import javax.net.ssl.HttpsURLConnection;
+
+public class infopage extends AppCompatActivity{
     private Uri imageUri;
+    private String imagepath;
     private ImageView rice_image_view;
-    Button returnbtn;
-    InputStream picstream;
+    private Button returnbtn;
+    InputStream picstream_in;
+//    OutputStream picstream_out;
     String response;
     Bitmap bitmap;
 
@@ -55,14 +66,15 @@ public class infopage extends AppCompatActivity {
 
         try {
             // 将拍摄的照片显示出来
-            picstream = getContentResolver().openInputStream(imageUri);
-            bitmap = BitmapFactory.decodeStream(picstream);
+            picstream_in = getContentResolver().openInputStream(imageUri);
+            bitmap = BitmapFactory.decodeStream(picstream_in);
             rice_image_view.setImageBitmap(bitmap);
+            imagepath = imageUri.getPath();
 
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    doPost("http://40.73.0.45:80/upload", Bitmap2Bytes(bitmap));
+                    doPost("http://40.73.0.45:80/upload");
                 }
             });
 
@@ -73,80 +85,88 @@ public class infopage extends AppCompatActivity {
         }
     }
 
-    public String doPost(String httpUrl, byte[] param) {
+    public String doPost(String httpUrl) {
+        String attachmentName = "bitmap";
+        String attachmentFileName = "bitmap.bmp";
+        String crlf = "\r\n";
+        String twoHyphens = "--";
+        String boundary =  "*****";
 
-        HttpURLConnection connection = null;
-        InputStream is = null;
-        OutputStream os = null;
-        BufferedReader br = null;
-        String result = null;
         try {
-
+            HttpURLConnection httpUrlConnection = null;
             URL url = new URL(httpUrl);
-            // 通过远程url连接对象打开连接
-            connection = (HttpURLConnection) url.openConnection();
-            Log.d("Success", "doPost: URLconnect success");
-            // 设置连接请求方式
-            connection.setRequestMethod("POST");
-            // 设置连接主机服务器超时时间：15000毫秒
-            connection.setConnectTimeout(15000);
-            // 设置读取主机服务器返回数据超时时间：60000毫秒
-            connection.setReadTimeout(60000);
+            httpUrlConnection = (HttpURLConnection) url.openConnection();
+            httpUrlConnection.setUseCaches(false);
+            httpUrlConnection.setDoOutput(true);
 
-            // 默认值为：false，当向远程服务器传送数据/写数据时，需要设置为true
-            connection.setDoOutput(true);
-            // 默认值为：true，当前向远程服务读取数据时，设置为true，该参数可有可无
-            connection.setDoInput(true);
-            // 设置传入参数的格式:请求参数应该是 name1=value1&name2=value2 的形式。
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            // 设置鉴权信息：Authorization: Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0
-            connection.setRequestProperty("Authorization", "Bearer da3efcbf-0845-4fe3-8aba-ee040be542c0");
-            // 通过连接对象获取一个输出流
-            os = connection.getOutputStream();
-            // 通过输出流对象将参数写出去/传输出去,它是通过字节数组写出的
-            os.write(param);
+            httpUrlConnection.setRequestMethod("POST");
+            httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
+            httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
+            httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
-            // 通过连接对象获取一个输入流，向远程读取
-            if (connection.getResponseCode() == 200) {
+            DataOutputStream request = new DataOutputStream(
+                    httpUrlConnection.getOutputStream());
 
-                is = connection.getInputStream();
-                // 对输入流对象进行包装:charset根据工作项目组的要求来设置
-//                br = new BufferedReader(new InputStreamReader(picstream));
+            request.writeBytes(twoHyphens + boundary + crlf);
+            request.writeBytes("Content-Disposition: form-data; name=\"" +
+                    attachmentName + "\";filename=\"" +
+                    attachmentFileName + "\"" + crlf);
+            request.writeBytes(crlf);
 
+            //bitmap to byte array
+            byte[] pixels = Bitmap2Bytes(bitmap);
+            //I want to send only 8 bit black & white bitmaps
+//            byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
+//            for (int i = 0; i < bitmap.getWidth(); ++i) {
+//                for (int j = 0; j < bitmap.getHeight(); ++j) {
+//                    //we're interested only in the MSB of the first byte,
+//                    //since the other 3 bytes are identical for B&W images
+//                    pixels[i + j] = (byte) ((bitmap.getPixel(i, j) & 0x80) >> 7);
+//                }
+//            }
+            request.write(pixels);
+            request.writeBytes(crlf);
+            request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
+
+            request.flush();
+            request.close();
+
+            int responseCode = httpUrlConnection.getResponseCode();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br=new BufferedReader(new InputStreamReader(httpUrlConnection.getInputStream()));
+                while ((line=br.readLine()) != null) {
+                    response+=line;
+                }
             }
-        } catch (MalformedURLException e) {
+            else {
+                response="";
+                Log.d("response", "doPost: "+responseCode);
+            }
+
+            httpUrlConnection.disconnect();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        } catch (ProtocolException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            // 关闭资源
-            if (null != br) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (null != os) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (null != is) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            // 断开与远程地址url的连接
-            connection.disconnect();
         }
-        return result;
+        return "Default return";
+    }
+
+    public static File saveBitmapFile(Bitmap bitmap, String filepath){
+        File file=new File(filepath);//将要保存图片的路径
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
     public static byte[] Bitmap2Bytes(Bitmap bm){
