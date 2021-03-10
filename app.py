@@ -48,7 +48,7 @@ def upload_file():
         img = Image.open(img_obj)
         print(img)
         # print(infer.infer(image_path = save_path))
-        return infer.live_model_infer(model = model, imagepath = save_path)
+        return infer.live_model_infer(model = model, image = save_path)
 
 if __name__ == '__main__':
     # infer.infer("data/infer.jpg")
