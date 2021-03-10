@@ -6,3 +6,8 @@
 *.jpg
 *.pdparams
 *.log
+*.png
+*.bmp
+*.gif
+*.jpeg
+**/uploads/**
