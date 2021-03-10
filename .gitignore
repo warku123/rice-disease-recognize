@@ -1,0 +1,8 @@
+!.gitignore
+**/data/
+**/model/
+**/__pycache__/
+**/.vscode/
+*.jpg
+*.pdparams
+*.log

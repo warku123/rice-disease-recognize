@@ -1,0 +1,12 @@
+request.form:
+ImmutableMultiDict([])
+request.args:
+ImmutableMultiDict([])
+request.values:
+CombinedMultiDict([ImmutableMultiDict([]), ImmutableMultiDict([])])
+request.data:
+b''
+request.json:
+None
+request.files:
+ImmutableMultiDict([('bitmap', <FileStorage: 'bitmap.bmp' (None)>)])
