@@ -21,7 +21,7 @@ def init_log_config():
         os.makedirs(log_path)  
     log_name = os.path.join(log_path, 'train.log')  
     sh = logging.StreamHandler()  
-    fh = logging.FileHandler(log_name, mode='w')  
+    fh = logging.FileHandler(log_name, mode='a')  
     fh.setLevel(logging.DEBUG)  
     formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")  
     fh.setFormatter(formatter)  

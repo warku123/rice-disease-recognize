@@ -1,22 +1,24 @@
 import codecs
 import os
 
+# print(os.getcwd())
 
-DATA_ROOT = "./processed_data/"
+# 相对于Project 的路径
+DATA_ROOT = "./data/"
 
 train_parameters = {
     "input_size": [3, 224, 224],
     "class_dim": -1,  # 分类数，会在初始化自定义 reader 的时候获得
     "image_count": -1,  # 训练图片数量，会在初始化自定义 reader 的时候获得
     "label_dict": {},
-    "data_dir": DATA_ROOT+"",  # 训练数据存储地址
+    "data_dir": DATA_ROOT + "",  # 训练数据存储地址
     "train_file_list": "train.txt",
     "label_file": "label_list.txt",
-    "save_persistable_dir": "./model/persistable-params",
+    "save_persistable_dir": "./model/persistable-params.pdparams",
     "continue_train": True,        # 是否接着上一次保存的参数接着训练，优先级高于预训练模型
     "num_epochs": 10,                # 此处仅仅做尝试，自训练请调整训练轮数
     "train_batch_size": 64,
-    "infer_img": 'infer.jpg',
+    "infer_img":  'infer.jpg',
     "mean_rgb": [127.5, 127.5, 127.5],  # 常用图片的三通道均值，通常来说需要先对训练数据做统计，此处仅取中间值
     "image_enhance_strategy": {  # 图像增强相关策略
         "need_distort": True,  # 是否启用图像颜色增强
@@ -83,3 +85,6 @@ def init_train_parameters():
     with codecs.open(train_file_list, encoding='utf-8') as flist:
         lines = [line.strip() for line in flist]
         train_parameters['image_count'] = len(lines)
+
+
+
