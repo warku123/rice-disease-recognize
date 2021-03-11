@@ -2,6 +2,8 @@ package com.example.cogrice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +18,13 @@ public class platform extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_platform);
+
+//        TupianFragment fragment = new TupianFragment();
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//
+//        transaction.commit();
+
         init();
         View.OnClickListener bottomlistener = new View.OnClickListener() {
             Intent intent=null;

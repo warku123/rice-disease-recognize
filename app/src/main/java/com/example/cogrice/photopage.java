@@ -8,9 +8,13 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,18 +31,23 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.BreakIterator;
 
 public class photopage extends AppCompatActivity {
+    public static BreakIterator weather;
     ImageButton camera_butt;
     ImageButton home;
     ImageButton platform;
+    private static String cityName = "";
     ImageButton mine;
     Button album_butt;
     TextView tv;
     TextPaint tp;
     TextView tv2;
     TextPaint tp2;
-    static final int REQUEST_IMAGE_CAPTURE = 101,REQUEST_IMAGE_ALBUM = 102;
+    TextView thelocation;
+    private static Context context = null;
+    static final int REQUEST_IMAGE_CAPTURE = 101, REQUEST_IMAGE_ALBUM = 102;
 
     private Uri imageUri;
 
@@ -47,11 +56,41 @@ public class photopage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photopage);
 
-        //全屏，隐藏手机上方状态栏
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         //组件初始化
         init();
+
+//        context=photopage.this.getApplicationContext();
+//        LocationUtils.getCNBylocation(context);
+//        cityName = LocationUtils.cityName;
+//
+//        location.setText(cityName);
+        //提供位置定位服务的位置管理器对象,中枢控制系统
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //位置提供器，也就是实际上来定位的对象，这里选择的是GPS定位
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        //开始定位,获取包含上次记录的位置数据的位置对象
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationProvider);
+        //获取纬度
+        Double latitude = location.getLatitude();
+        //获取经度
+        Double longitude = location.getLongitude();
+        Log.e("Latitude", String.valueOf(latitude));
+        Log.e("Longitude", String.valueOf(longitude));
+        thelocation.setText("hello");
+
+
+        //全屏，隐藏手机上方状态栏
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         camera_butt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +137,7 @@ public class photopage extends AppCompatActivity {
         tv2 = (TextView)findViewById(R.id.apptitle);
         tp2 = tv2.getPaint();
         tp2.setFakeBoldText(true);
+        thelocation = (TextView)findViewById(R.id.location);
 
         home=findViewById(R.id.home);
         platform=findViewById(R.id.platform);
@@ -144,7 +184,9 @@ public class photopage extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         ActivityCompat.requestPermissions(photopage.this, new String[]{
                 Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_DOCUMENTS,
+                Manifest.permission.INTERNET
         },101);
 
         // 创建File对象，用于存储拍照后的图片
@@ -183,7 +225,9 @@ public class photopage extends AppCompatActivity {
     private void dispatchAlbumIntent(){
         ActivityCompat.requestPermissions(photopage.this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_DOCUMENTS,
+                Manifest.permission.INTERNET
         },102);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
