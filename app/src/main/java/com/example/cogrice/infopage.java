@@ -125,23 +125,21 @@ public class infopage extends AppCompatActivity{
                 @Override
                 public void run() {
                     response = doPost("http://40.73.0.45:80/upload");
+                    infopage.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String result_s = response.split("\\:")[1].trim();
+                            Log.d("Results", "onCreate: "+result_s);
+                            Log.d("Results", "onCreate: "+respond_result.get(result_s));
+                            result.setText(respond_result.get(result_s));
+                        }
+                    });
                 }
             });
             thread.start();
-            thread.join();
-//            Log.d("Response", "onCreate: "+response);
-            String result_s = response.split("\\:")[1].trim();
-//            Log.d("Results", "onCreate: "+result_s);
-//            Log.d("Results", "onCreate: "+respond_result);
-//            Log.d("Results", "onCreate: "+respond_result.keySet());
-//            Log.d("Results", "onCreate: "+respond_result.get(result_s));
-            result.setText(respond_result.get(result_s));
+            result.setText("识别中...");
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (InterruptedException e)
-        {
             e.printStackTrace();
         }
     }
