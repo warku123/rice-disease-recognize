@@ -57,7 +57,8 @@ public class infopage extends AppCompatActivity{
         put("Blueberry___healthy","正常蓝莓");
         put("Cherry_(including_sour)___Powdery_mildew","樱桃白粉病");
         put("Cherry_(including_sour)___healthy","正常樱桃");
-        put("Corn_(maize)___Cercospora_leaf_spot","Gray_leaf_spot");
+        put("Corn_(maize)___Cercospora_leaf_spot","玉米叶斑病");
+        put("Gray_leaf_spot","玉米灰斑病");
         put("Corn_(maize)___Common_rust_","玉米锈病");
         put("Corn_(maize)___Northern_Leaf_Blight","玉米大斑病");
         put("Corn_(maize)___healthy","正常玉米");
@@ -83,11 +84,12 @@ public class infopage extends AppCompatActivity{
         put("Tomato___Late_blight","番茄晚疫病");
         put("Tomato___Leaf_Mold","番茄叶霉病");
         put("Tomato___Septoria_leaf_spot","番茄斑枯病");
-        put("Tomato___Spider_mites","Two-spotted_spider_mite");
+        put("Tomato___Spider_mites","番茄蜘蛛病");
         put("Tomato___Target_Spot","番茄靶斑病");
         put("Tomato___Tomato_Yellow_Leaf_Curl_Virus","番茄黄化曲叶病毒");
         put("Tomato___Tomato_mosaic_virus","番茄花叶病毒");
         put("Tomato___healthy","正常番茄");
+
     }};
 
     @Override
@@ -125,8 +127,8 @@ public class infopage extends AppCompatActivity{
                     response = doPost("http://40.73.0.45:80/upload");
                 }
             });
-//            thread.start();
-//            thread.join();
+            thread.start();
+            thread.join();
 //            Log.d("Response", "onCreate: "+response);
             String result_s = response.split("\\:")[1].trim();
 //            Log.d("Results", "onCreate: "+result_s);
@@ -136,6 +138,10 @@ public class infopage extends AppCompatActivity{
             result.setText(respond_result.get(result_s));
 
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
     }
