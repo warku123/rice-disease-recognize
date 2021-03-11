@@ -65,28 +65,6 @@ public class photopage extends AppCompatActivity {
 //
 //        location.setText(cityName);
         //提供位置定位服务的位置管理器对象,中枢控制系统
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //位置提供器，也就是实际上来定位的对象，这里选择的是GPS定位
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        //开始定位,获取包含上次记录的位置数据的位置对象
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(locationProvider);
-        //获取纬度
-        Double latitude = location.getLatitude();
-        //获取经度
-        Double longitude = location.getLongitude();
-        Log.e("Latitude", String.valueOf(latitude));
-        Log.e("Longitude", String.valueOf(longitude));
-        thelocation.setText("hello");
 
 
         //全屏，隐藏手机上方状态栏

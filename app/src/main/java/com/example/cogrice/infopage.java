@@ -125,8 +125,8 @@ public class infopage extends AppCompatActivity{
                     response = doPost("http://40.73.0.45:80/upload");
                 }
             });
-            thread.start();
-            thread.join();
+//            thread.start();
+//            thread.join();
 //            Log.d("Response", "onCreate: "+response);
             String result_s = response.split("\\:")[1].trim();
 //            Log.d("Results", "onCreate: "+result_s);
@@ -135,7 +135,7 @@ public class infopage extends AppCompatActivity{
 //            Log.d("Results", "onCreate: "+respond_result.get(result_s));
             result.setText(respond_result.get(result_s));
 
-        } catch (FileNotFoundException | InterruptedException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
