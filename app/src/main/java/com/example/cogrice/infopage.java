@@ -111,6 +111,7 @@ public class infopage extends AppCompatActivity{
             }
         });
 
+        
 
 
         try {
@@ -128,11 +129,8 @@ public class infopage extends AppCompatActivity{
             });
             thread.start();
             thread.join();
-//            Log.d("Response", "onCreate: "+response);
             String result_s = response.split("\\:")[1].trim();
             Log.d("Results", "onCreate: "+result_s);
-//            Log.d("Results", "onCreate: "+respond_result);
-//            Log.d("Results", "onCreate: "+respond_result.keySet());
             Log.d("Results", "onCreate: "+respond_result.get(result_s));
             result.setText(respond_result.get(result_s));
 

@@ -110,7 +110,9 @@ public class photopage extends AppCompatActivity {
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_DOCUMENTS,
-                Manifest.permission.INTERNET
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
         },101);
 
         // 创建File对象，用于存储拍照后的图片
@@ -151,7 +153,9 @@ public class photopage extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_DOCUMENTS,
-                Manifest.permission.INTERNET
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
         },102);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
