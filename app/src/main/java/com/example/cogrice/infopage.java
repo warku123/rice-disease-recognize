@@ -89,6 +89,7 @@ public class infopage extends AppCompatActivity{
         put("Tomato___Tomato_Yellow_Leaf_Curl_Virus","番茄黄化曲叶病毒");
         put("Tomato___Tomato_mosaic_virus","番茄花叶病毒");
         put("Tomato___healthy","正常番茄");
+
     }};
 
     @Override
@@ -125,16 +126,21 @@ public class infopage extends AppCompatActivity{
                 @Override
                 public void run() {
                     response = doPost("http://40.73.0.45:80/upload");
+                    infopage.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String result_s = response.split("\\:")[1].trim();
+                            Log.d("Results", "onCreate: "+result_s);
+                            Log.d("Results", "onCreate: "+respond_result.get(result_s));
+                            result.setText(respond_result.get(result_s));
+                        }
+                    });
                 }
             });
             thread.start();
-            thread.join();
-            String result_s = response.split("\\:")[1].trim();
-            Log.d("Results", "onCreate: "+result_s);
-            Log.d("Results", "onCreate: "+respond_result.get(result_s));
-            result.setText(respond_result.get(result_s));
+            result.setText("识别中...");
 
-        } catch (FileNotFoundException | InterruptedException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

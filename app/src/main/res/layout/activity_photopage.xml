@@ -107,4 +107,93 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apptitle" />
 
+    <LinearLayout
+        android:id="@+id/history"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/main_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/fl_container"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:background="#F2F2F8"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:id="@+id/bottom_bar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:background="#F2F2F8"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/bottom_bar_1_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:id="@+id/home"
+                        android:layout_width="59dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="2dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/home_selected" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/bottom_bar_2_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:id="@+id/platform"
+                        android:layout_width="59dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="2dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/platform" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/bottom_bar_3_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:id="@+id/mine"
+                        android:layout_width="59dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="2dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/mine" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="133dp"
+                android:text="知稻"
+                android:layout_height="30dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
