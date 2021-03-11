@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,6 +33,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -39,10 +43,52 @@ public class infopage extends AppCompatActivity{
     private String imagepath;
     private ImageView rice_image_view;
     private Button returnbtn;
-    InputStream picstream_in;
+    private TextView result;
+    private InputStream picstream_in;
 //    OutputStream picstream_out;
-    String response;
-    Bitmap bitmap;
+    private String response;
+    private Bitmap bitmap;
+
+    private Map<String,String> respond_result = new HashMap<String, String>(){{
+        put("Apple___Apple_scab","苹果黑星病");
+        put("Apple___Black_rot","苹果黑腐病");
+        put("Apple___Cedar_apple_rust","苹果锈病");
+        put("Apple___healthy","正常苹果");
+        put("Blueberry___healthy","正常蓝莓");
+        put("Cherry_(including_sour)___Powdery_mildew","樱桃白粉病");
+        put("Cherry_(including_sour)___healthy","正常樱桃");
+        put("Corn_(maize)___Cercospora_leaf_spot","Gray_leaf_spot");
+        put("Corn_(maize)___Common_rust_","玉米锈病");
+        put("Corn_(maize)___Northern_Leaf_Blight","玉米大斑病");
+        put("Corn_(maize)___healthy","正常玉米");
+        put("Grape___Black_rot","葡萄黑腐病");
+        put("Grape___Esca_(Black_Measles)","葡萄黑麻疹病");
+        put("Grape___Leaf_blight_(Isariopsis_Leaf_Spot)","葡萄叶斑病");
+        put("Grape___healthy","正常葡萄");
+        put("Orange___Haunglongbing_(Citrus_greening)","柑橘黄龙病");
+        put("Peach___Bacterial_spot","桃树细菌性穿孔病");
+        put("Peach___healthy","正常桃");
+        put("Pepper,_bell___Bacterial_spot","灯笼椒细菌性斑点病");
+        put("Pepper,_bell___healthy","正常灯笼椒");
+        put("Potato___Early_blight","土豆早疫病");
+        put("Potato___Late_blight","土豆晚疫病");
+        put("Potato___healthy","正常土豆");
+        put("Raspberry___healthy","正常覆盆子");
+        put("Soybean___healthy","正常黄豆");
+        put("Squash___Powdery_mildew","南瓜白粉病");
+        put("Strawberry___Leaf_scorch","草莓叶焦病");
+        put("Strawberry___healthy","正常草莓");
+        put("Tomato___Bacterial_spot","番茄细菌性斑点病");
+        put("Tomato___Early_blight","番茄早疫病");
+        put("Tomato___Late_blight","番茄晚疫病");
+        put("Tomato___Leaf_Mold","番茄叶霉病");
+        put("Tomato___Septoria_leaf_spot","番茄斑枯病");
+        put("Tomato___Spider_mites","Two-spotted_spider_mite");
+        put("Tomato___Target_Spot","番茄靶斑病");
+        put("Tomato___Tomato_Yellow_Leaf_Curl_Virus","番茄黄化曲叶病毒");
+        put("Tomato___Tomato_mosaic_virus","番茄花叶病毒");
+        put("Tomato___healthy","正常番茄");
+    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +98,8 @@ public class infopage extends AppCompatActivity{
         rice_image_view = findViewById(R.id.rice_image);
 
         imageUri = getIntent().getParcelableExtra("URI");
+
+        result = findViewById(R.id.disease_output);
 
         returnbtn=findViewById(R.id.returnbtn);
         returnbtn.setOnClickListener(new View.OnClickListener() {
@@ -74,13 +122,20 @@ public class infopage extends AppCompatActivity{
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    doPost("http://40.73.0.45:80/upload");
+                    response = doPost("http://40.73.0.45:80/upload");
                 }
             });
-
             thread.start();
+            thread.join();
+//            Log.d("Response", "onCreate: "+response);
+            String result_s = response.split("\\:")[1].trim();
+//            Log.d("Results", "onCreate: "+result_s);
+//            Log.d("Results", "onCreate: "+respond_result);
+//            Log.d("Results", "onCreate: "+respond_result.keySet());
+//            Log.d("Results", "onCreate: "+respond_result.get(result_s));
+            result.setText(respond_result.get(result_s));
 
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -91,13 +146,14 @@ public class infopage extends AppCompatActivity{
         String crlf = "\r\n";
         String twoHyphens = "--";
         String boundary =  "*****";
-
+        String response_inner = null;
         try {
             HttpURLConnection httpUrlConnection = null;
             URL url = new URL(httpUrl);
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
+            httpUrlConnection.setDoInput(true);
 
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
@@ -115,37 +171,34 @@ public class infopage extends AppCompatActivity{
 
             //bitmap to byte array
             byte[] pixels = Bitmap2Bytes(bitmap);
-            //I want to send only 8 bit black & white bitmaps
-//            byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
-//            for (int i = 0; i < bitmap.getWidth(); ++i) {
-//                for (int j = 0; j < bitmap.getHeight(); ++j) {
-//                    //we're interested only in the MSB of the first byte,
-//                    //since the other 3 bytes are identical for B&W images
-//                    pixels[i + j] = (byte) ((bitmap.getPixel(i, j) & 0x80) >> 7);
-//                }
-//            }
+
             request.write(pixels);
             request.writeBytes(crlf);
             request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
 
             request.flush();
             request.close();
+            //accept response
+            InputStream responseStream = new
+                    BufferedInputStream(httpUrlConnection.getInputStream());
 
-            int responseCode = httpUrlConnection.getResponseCode();
+            BufferedReader responseStreamReader =
+                    new BufferedReader(new InputStreamReader(responseStream));
 
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br=new BufferedReader(new InputStreamReader(httpUrlConnection.getInputStream()));
-                while ((line=br.readLine()) != null) {
-                    response+=line;
-                }
+            String line = "";
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ((line = responseStreamReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
             }
-            else {
-                response="";
-                Log.d("response", "doPost: "+responseCode);
-            }
+            responseStreamReader.close();
+
+            response_inner = stringBuilder.toString();
+//            Log.d("Response", "doPost: "+response_inner);
+            responseStream.close();
 
             httpUrlConnection.disconnect();
+            
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -153,20 +206,7 @@ public class infopage extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "Default return";
-    }
-
-    public static File saveBitmapFile(Bitmap bitmap, String filepath){
-        File file=new File(filepath);//将要保存图片的路径
-        try {
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            bos.flush();
-            bos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file;
+        return response_inner;
     }
 
     public static byte[] Bitmap2Bytes(Bitmap bm){
