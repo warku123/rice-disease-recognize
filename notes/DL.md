@@ -11,3 +11,16 @@
 
 ![](https://storage.googleapis.com/tfds-data/visualization/fig/plant_village-1.0.2.png)
 
+# 可行性分析
+
+- 增量学习，终身学习
+
+- OC-NN
+
+- [ ] ResNet Feature map + ML Algorithm
+  - 预训练规模不够
+  - 训练数据本身泛化性不好（相似背景和拍摄角度）
+  - 特征图维度较小
+
+- [ ] DAE 
+  - 还是这个比较好
