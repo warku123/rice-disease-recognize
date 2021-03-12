@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -50,49 +51,6 @@ public class infopage extends AppCompatActivity{
     private String response;
     private Bitmap bitmap;
 
-/*    private Map<String,String> respond_result = new HashMap<String, String>(){{
-        put("Apple___Apple_scab","苹果黑星病");
-        put("Apple___Black_rot","苹果黑腐病");
-        put("Apple___Cedar_apple_rust","苹果锈病");
-        put("Apple___healthy","正常苹果");
-        put("Blueberry___healthy","正常蓝莓");
-        put("Cherry_(including_sour)___Powdery_mildew","樱桃白粉病");
-        put("Cherry_(including_sour)___healthy","正常樱桃");
-        put("Corn_(maize)___Cercospora_leaf_spot","玉米叶斑病");
-        put("Gray_leaf_spot","玉米灰斑病");
-        put("Corn_(maize)___Common_rust_","玉米锈病");
-        put("Corn_(maize)___Northern_Leaf_Blight","玉米大斑病");
-        put("Corn_(maize)___healthy","正常玉米");
-        put("Grape___Black_rot","葡萄黑腐病");
-        put("Grape___Esca_(Black_Measles)","葡萄黑麻疹病");
-        put("Grape___Leaf_blight_(Isariopsis_Leaf_Spot)","葡萄叶斑病");
-        put("Grape___healthy","正常葡萄");
-        put("Orange___Haunglongbing_(Citrus_greening)","柑橘黄龙病");
-        put("Peach___Bacterial_spot","桃树细菌性穿孔病");
-        put("Peach___healthy","正常桃");
-        put("Pepper,_bell___Bacterial_spot","灯笼椒细菌性斑点病");
-        put("Pepper,_bell___healthy","正常灯笼椒");
-        put("Potato___Early_blight","土豆早疫病");
-        put("Potato___Late_blight","土豆晚疫病");
-        put("Potato___healthy","正常土豆");
-        put("Raspberry___healthy","正常覆盆子");
-        put("Soybean___healthy","正常黄豆");
-        put("Squash___Powdery_mildew","南瓜白粉病");
-        put("Strawberry___Leaf_scorch","草莓叶焦病");
-        put("Strawberry___healthy","正常草莓");
-        put("Tomato___Bacterial_spot","番茄细菌性斑点病");
-        put("Tomato___Early_blight","番茄早疫病");
-        put("Tomato___Late_blight","番茄晚疫病");
-        put("Tomato___Leaf_Mold","番茄叶霉病");
-        put("Tomato___Septoria_leaf_spot","番茄斑枯病");
-        put("Tomato___Spider_mites","番茄蜘蛛病");
-        put("Tomato___Target_Spot","番茄靶斑病");
-        put("Tomato___Tomato_Yellow_Leaf_Curl_Virus","番茄黄化曲叶病毒");
-        put("Tomato___Tomato_mosaic_virus","番茄花叶病毒");
-        put("Tomato___healthy","正常番茄");
-
-    }};*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +62,7 @@ public class infopage extends AppCompatActivity{
 
         result_view = findViewById(R.id.disease_output);
         intro_view = findViewById(R.id.disease_introduce);
+        intro_view.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         returnbtn=findViewById(R.id.returnbtn);
         returnbtn.setOnClickListener(new View.OnClickListener() {
