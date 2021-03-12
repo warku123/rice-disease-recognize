@@ -288,15 +288,8 @@ public class photopage extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_DOCUMENTS,
-<<<<<<< HEAD
-                Manifest.permission.INTERNET,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        },102);
-=======
                 Manifest.permission.INTERNET
         }, 102);
->>>>>>> c3607808b15298af43b264644d8cea91e02ba092
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         //Intent.ACTION_GET_CONTENT = "android.intent.action.GET_CONTENT"
