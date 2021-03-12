@@ -125,14 +125,16 @@ public class setpassword extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             //跳转
-                            //Intent link = new Intent(plantperson.this, login.class);
-                            //startActivity(link);
+                            Intent link = new Intent(setpassword.this, login.class);
+                            startActivity(link);
                         }
                     });
                     login.setNegativeButton("残忍拒绝", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            Intent link = new Intent(setpassword.this, mypage.class);
+                            startActivity(link);
                         }
                     });
                     login.show();
