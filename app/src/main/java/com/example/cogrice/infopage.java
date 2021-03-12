@@ -43,13 +43,14 @@ public class infopage extends AppCompatActivity{
     private String imagepath;
     private ImageView rice_image_view;
     private Button returnbtn;
-    private TextView result;
+    private TextView result_view;
+    private TextView intro_view;
     private InputStream picstream_in;
 //    OutputStream picstream_out;
     private String response;
     private Bitmap bitmap;
 
-    private Map<String,String> respond_result = new HashMap<String, String>(){{
+/*    private Map<String,String> respond_result = new HashMap<String, String>(){{
         put("Apple___Apple_scab","苹果黑星病");
         put("Apple___Black_rot","苹果黑腐病");
         put("Apple___Cedar_apple_rust","苹果锈病");
@@ -90,7 +91,7 @@ public class infopage extends AppCompatActivity{
         put("Tomato___Tomato_mosaic_virus","番茄花叶病毒");
         put("Tomato___healthy","正常番茄");
 
-    }};
+    }};*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +102,8 @@ public class infopage extends AppCompatActivity{
 
         imageUri = getIntent().getParcelableExtra("URI");
 
-        result = findViewById(R.id.disease_output);
+        result_view = findViewById(R.id.disease_output);
+        intro_view = findViewById(R.id.disease_introduce);
 
         returnbtn=findViewById(R.id.returnbtn);
         returnbtn.setOnClickListener(new View.OnClickListener() {
@@ -129,16 +131,22 @@ public class infopage extends AppCompatActivity{
                     infopage.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String result_s = response.split("\\:")[1].trim();
-                            Log.d("Results", "onCreate: "+result_s);
-                            Log.d("Results", "onCreate: "+respond_result.get(result_s));
-                            result.setText(respond_result.get(result_s));
+                            String[] result = response.split("####");
+                            String E_name = result[0].trim();
+                            String C_name = result[1].trim();
+                            String Intro = result[2].trim();
+                            String Method = result[3].trim();
+                            String Treat = result[4].trim();
+
+                            result_view.setText(C_name);
+                            intro_view.setText(Intro);
+//                            Log.d("Results", "onCreate: "+result_s);
                         }
                     });
                 }
             });
             thread.start();
-            result.setText("识别中...");
+            result_view.setText("识别中...");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
