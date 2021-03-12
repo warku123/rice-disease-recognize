@@ -189,7 +189,6 @@
             <TextView
                 android:id="@+id/location"
                 android:layout_width="133dp"
-                android:text="知稻"
                 android:layout_height="30dp" />
 
         </RelativeLayout>

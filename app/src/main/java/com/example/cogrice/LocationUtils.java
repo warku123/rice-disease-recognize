@@ -50,12 +50,11 @@
 //            //                                          int[] grantResults)
 //            // to handle the case where the user grants the permission. See the documentation
 //            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
+//            return;locationManager
 //        //通过最后一次的地理位置来获取Location对象
 //        Location location = locationManager.getLastKnownLocation(provider);
 //
-//        String queryed_name = updateWithNewLocation(location);
+//        String queryed_name = locationManager(location);
 //        if((queryed_name!=null)&&(0!=queryed_name.length())){
 //            cityName = queryed_name;
 //        }

@@ -44,7 +44,7 @@
                 android:layout_height="20dp" />
 
             <TextView
-                android:id="@+id/pleaslogin"
+                android:id="@+id/pleaselogin"
                 android:layout_width="180dp"
                 android:layout_height="40dp"
                 android:text="点击登录"
