@@ -11,34 +11,40 @@
 
     <ImageView
         android:id="@+id/history_card_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
+        android:layout_width="0dp"
+        android:layout_height="0"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.2"
         app:srcCompat="@drawable/groupsignal" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="详情"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#000000"
-        android:textSize="18sp"
+        android:textColor="#4CAF50"
+        android:textSize="12sp"
         android:typeface="normal"
-        app:backgroundTint="#FFFFFF"
-        app:cornerRadius="2dp"
+        app:backgroundTint="#838BC34A"
+        app:cornerRadius="0dp"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.15" />
 
     <LinearLayout
         android:id="@+id/history_card_info"
@@ -50,34 +56,26 @@
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.8"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="0.5"
+        app:layout_constraintHorizontal_weight="0.3"
         app:layout_constraintStart_toEndOf="@+id/history_card_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="0.3"
+        app:layout_constraintVertical_weight="0.2"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.5">
-
-        <TextView
-            android:id="@+id/history_card_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="#FFFFFF"
-            android:fontFamily="More Fonts..."
-            android:text="TextView"
-            android:textColor="#000000"
-            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/history_card_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:background="#FFFFFF"
-            android:fontFamily="More Fonts..."
-            android:text="TextView"
-            android:textColor="#000000"
-            android:textSize="18sp" />
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/history_card_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="TextView" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
