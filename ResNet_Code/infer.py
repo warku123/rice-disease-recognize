@@ -8,7 +8,7 @@ import paddle
 import reader
 import os
 
-print(os.getcwd())
+# print(os.getcwd())
 # 个人项目优先采用绝对导入
 from ResNet_Code.net import ResNet
 # from net import ResNet
@@ -85,7 +85,7 @@ def infer(image_path = None,img = None):
 
         print("image {} Infer result is: {}".format(image_path,label_dict[sorted_idx[0]]))
         
-        return "image {} Infer result is: {}".format(image_path,label_dict[sorted_idx[0]])
+        return "{}".format(label_dict[sorted_idx[0]])
 
 def load_model():
     net = ResNet("resnet", class_dim = train_parameters['class_dim'])
@@ -110,11 +110,11 @@ def live_model_infer(model = None,image = None):
         prob_dict = {
             label_dict[idx]:results[idx] for idx in sorted_idx
         }
-        print(prob_dict)
+        # print(prob_dict)
 
-        print("image Infering result is: {}".format(label_dict[sorted_idx[0]]))
+        # print("image Infering result is: {}".format(label_dict[sorted_idx[0]]))
         
-        return "image Infering result is: {}".format(label_dict[sorted_idx[0]])
+        return "{}".format(label_dict[sorted_idx[0]])
 
 if __name__ == "__main__":
     infer(image_path= "./data/infer.jpg") 
