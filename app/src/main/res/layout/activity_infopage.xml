@@ -114,7 +114,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rice_image" />
 
-    <TextView
+    <Button
         android:id="@+id/disease_introduce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -124,12 +124,13 @@
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
         android:layout_marginBottom="208dp"
-        android:text="介绍该病虫害防治方法"
-        android:textSize="20sp"
         android:scrollbars="vertical"
+        android:text="防治方法介绍"
+        android:textSize="20sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.383"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/disease_output"
         app:layout_constraintVertical_bias="0.0" />

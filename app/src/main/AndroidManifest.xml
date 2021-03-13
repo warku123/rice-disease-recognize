@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen">
-        <activity android:name=".login"></activity>
+        <activity android:name=".Intropage"></activity>
+        <activity android:name=".login" />
         <activity android:name=".setpassword" />
         <activity android:name=".identify" />
         <activity android:name=".checkfun" />

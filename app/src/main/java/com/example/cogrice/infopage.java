@@ -43,11 +43,9 @@ public class infopage extends AppCompatActivity{
     private Uri imageUri;
     private String imagepath;
     private ImageView rice_image_view;
-    private Button returnbtn;
+    private Button returnbtn,introbtn;
     private TextView result_view;
-    private TextView intro_view;
     private InputStream picstream_in;
-//    OutputStream picstream_out;
     private String response;
     private Bitmap bitmap;
 
@@ -61,8 +59,6 @@ public class infopage extends AppCompatActivity{
         imageUri = getIntent().getParcelableExtra("URI");
 
         result_view = findViewById(R.id.disease_output);
-        intro_view = findViewById(R.id.disease_introduce);
-        intro_view.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         returnbtn=findViewById(R.id.returnbtn);
         returnbtn.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +69,17 @@ public class infopage extends AppCompatActivity{
             }
         });
 
-        
+        introbtn = findViewById(R.id.disease_introduce);
+        introbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(infopage.this,Intropage.class);
+                intent.putExtra("response",response);
+                startActivity(intent);
+            }
+        });
 
+        introbtn = findViewById(R.id.disease_introduce);
 
         try {
             // 将拍摄的照片显示出来
@@ -98,7 +103,15 @@ public class infopage extends AppCompatActivity{
                             String Treat = result[4].trim();
 
                             result_view.setText(C_name);
-                            intro_view.setText(Intro);
+                            introbtn.setVisibility(View.VISIBLE);
+                            introbtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(infopage.this,Intropage.class);
+                                    intent.putExtra("response",response);
+                                    startActivity(intent);
+                                }
+                            });
 //                            Log.d("Results", "onCreate: "+result_s);
                         }
                     });
@@ -110,6 +123,7 @@ public class infopage extends AppCompatActivity{
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     public String doPost(String httpUrl) {
