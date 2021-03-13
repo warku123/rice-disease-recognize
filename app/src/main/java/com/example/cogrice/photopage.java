@@ -1,19 +1,23 @@
 package com.example.cogrice;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
@@ -35,11 +39,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cogrice.http.GsonUtil;
+import com.example.cogrice.http.HttpHelp;
+import com.example.cogrice.http.I_failure;
+import com.example.cogrice.http.I_success;
+import com.example.cogrice.http.WeBean;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,7 +60,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.BreakIterator;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class photopage extends AppCompatActivity {
     ImageButton camera_butt;
@@ -61,17 +74,14 @@ public class photopage extends AppCompatActivity {
     TextPaint tp;
     TextView tv2;
     TextPaint tp2;
+    TextView weather;
     TextView thelocation;
-    private LocationManager myLocationManager;
-    private GpsStatus.Listener myListener;
-    private String citylocation;
-    private static Context context = null;
-    private Location myLocation;
-    private MyAsyncExtue myAsyncExtue;
+
     static final int REQUEST_IMAGE_CAPTURE = 101, REQUEST_IMAGE_ALBUM = 102;
 
     private Uri imageUri;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +100,7 @@ public class photopage extends AppCompatActivity {
 
         //全屏，隐藏手机上方状态栏
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getLocation2();
         camera_butt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,68 +138,11 @@ public class photopage extends AppCompatActivity {
         platform.setOnClickListener(bottomlistener);
         mine.setOnClickListener(bottomlistener);
 
-        myListener = new GpsStatus.Listener() {
-            @Override
-            public void onGpsStatusChanged(int i) {
-                switch (i) {
-                    //第一次定位
-                    case GpsStatus.GPS_EVENT_FIRST_FIX:
-                        Log.i("TAG", "第一次定位");
-                        break;
-                    //卫星状态改变
-                    case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                        Log.i("TAG", "卫星状态改变");
-                        //获取当前状态
-                        if (ActivityCompat.checkSelfPermission(photopage.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            return;
-                        }
-                        GpsStatus gpsStatus = myLocationManager.getGpsStatus(null);
-                        //获取卫星颗数的默认最大值
-                        int maxSatellites = gpsStatus.getMaxSatellites();
-                        //创建一个迭代器保存所有卫星
-                        Iterator<GpsSatellite> iters = gpsStatus.getSatellites().iterator();
-                        int count = 0;
-                        while (iters.hasNext() && count <= maxSatellites) {
-                            GpsSatellite s = iters.next();
-                            count++;
-                        }
-                        System.out.println("搜索到："+count+"颗卫星");
-                        break;
-                    //定位启动
-                    case GpsStatus.GPS_EVENT_STARTED:
-                        Log.i("TAG", "定位启动");
-                        break;
-                    //定位结束
-                    case GpsStatus.GPS_EVENT_STOPPED:
-                        Log.i("TAG", "定位结束");
-                        break;
-                }
-            }
-        };
-
-
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                Looper.prepare();//增加部分
-//                myLocation=getLocation();
-//                citylocation=myAsyncExtue.doInBackground(myLocation);
-//                myAsyncExtue.onPostExecute(citylocation);
-//                Looper.loop();//增加部分
-//
-//            }
-//        }.start();
     }
 
     private void init() {
         //字体加粗
+        weather = (TextView) findViewById(R.id.weather);
         tv = (TextView) findViewById(R.id.tip);
         tp = tv.getPaint();
         tp.setFakeBoldText(true);
@@ -202,8 +155,6 @@ public class photopage extends AppCompatActivity {
         platform = findViewById(R.id.platform);
         mine = findViewById(R.id.mine);
         camera_butt = findViewById(R.id.take_photo);
-
-        myLocationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
 
@@ -298,143 +249,170 @@ public class photopage extends AppCompatActivity {
 
     }
 
-    private Location getLocation() {
-        //获取位置管理服务
+//入口是getLocation
 
-        //查找服务信息
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE); //定位精度: 最高
-        criteria.setAltitudeRequired(false); //海拔信息：不需要
-        criteria.setBearingRequired(false); //方位信息: 不需要
-        criteria.setCostAllowed(true);  //是否允许付费
-        criteria.setPowerRequirement(Criteria.POWER_LOW); //耗电量: 低功耗
-//        String provider = myLocationManager.getBestProvider(criteria, true); //获取GPS信息
-//        myLocationManager.requestLocationUpdates(provider,2000,5,locationListener);
-//        Log.e("provider", provider);
-//        List<String> list = myLocationManager.getAllProviders();
-//        Log.e("provider", list.toString());
-//
-        Location gpsLocation = null;
-        Location netLocation = null;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) { }
-        myLocationManager.addGpsStatusListener(myListener);
-        if (netWorkIsOpen()) {
-            //2000代表每2000毫秒更新一次，5代表每5秒更新一次
-            myLocationManager.requestLocationUpdates("network", 2000, 5, locationListener);
-            netLocation = myLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    /**
+     * 定位：权限判断
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void getLocation2() {
+        //检查定位权限
+        ArrayList<String> permissions = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(photopage.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (ActivityCompat.checkSelfPermission(photopage.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
 
-        if (gpsIsOpen()) {
-            myLocationManager.requestLocationUpdates("gps", 2000, 5, locationListener);
-            gpsLocation = myLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
+        //判断
+        if (permissions.size() == 0) {//有权限，直接获取定位
+            getLocationLL();
+        } else {//没有权限，获取定位权限
+            requestPermissions(permissions.toArray(new String[permissions.size()]), 2);
 
-        if (gpsLocation == null && netLocation == null) {
-            return null;
+
         }
-        if (gpsLocation != null && netLocation != null) {
-            if (gpsLocation.getTime() < netLocation.getTime()) {
-                gpsLocation = null;
-                return netLocation;
-            } else {
-                netLocation = null;
-                return gpsLocation;
+    }
+
+    //根据经纬度，获取对应的城市
+    public static String getCity(Context context, double latitude, double longitude) {
+        String cityName = "";
+        List<Address> addList = null;
+        Geocoder ge = new Geocoder(context);
+        try {
+            addList = ge.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addList != null && addList.size() > 0) {
+            for (int i = 0; i < addList.size(); i++) {
+                Address ad = addList.get(i);
+                cityName += ad.getCountryName() + ";" + ad.getLocality();
             }
         }
-        if (gpsLocation == null) {
-            return netLocation;
+        Log.v("-----", "city:" + cityName);
+        return cityName;
+    }
+
+    /**
+     * 定位：获取经纬度
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getLocationLL() {
+
+        Location location = getLastKnownLocation();
+        if (location != null) {
+            //传递经纬度给网页
+            String result = "{code: '0',type:'2',data: {longitude: '" + location.getLongitude() + "',latitude: '" + location.getLatitude() + "'}}";
+//            tex.loadUrl("javascript:callback(" + result + ");");
+
+            //日志
+            String locationStr = "维度：" + location.getLatitude() + "\n"
+                    + "经度：" + location.getLongitude();
+//            tv.setText(  "经纬度：\n" + locationStr);
+            Log.v("-----", "经纬度：\n" + locationStr);
+
+            String temp = getCity(photopage.this, location.getLatitude(), location.getLongitude());
+            temp = temp.replace("市", "").replace("中国;", "");
+            isRights(temp);
         } else {
-            return gpsLocation;
+//            Toast.makeText(this, "位置信息获取失败", Toast.LENGTH_SHORT).show();
+//            tv.setText(  "获取定位权限7 - " + "位置获取失败");
+            Log.v("-----", "获取定位权限7 - " + "位置获取失败");
         }
-    }
-    private boolean gpsIsOpen() {
-        boolean isOpen = true;
-        if (!myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//没有开启GPS
-            isOpen = false;
-        }
-        return isOpen;
     }
 
-    private boolean netWorkIsOpen() {
-        boolean netIsOpen = true;
-        if (!myLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {//没有开启网络定位
-            netIsOpen = false;
-        }
-        return netIsOpen;
-    }
-
-    //监听GPS位置改变后得到新的经纬度
-    private LocationListener locationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            Log.e("location", location.toString() + "....");
-            // TODO Auto-generated method stub
-            if (location != null) {
-                //获取国家，省份，城市的名称
-                Log.e("location", location.toString());
-//                List<Address> m_list = getAddress(location);
-                new MyAsyncExtue().execute(location);
-//                Log.e("str", m_list.toString());
-//                String city = "";
-//                if (m_list != null && m_list.size() > 0) {
-//                    city = m_list.get(0).getLocality();//获取城市
-//                }
-//                city = m_list;
-//                show_GPS.setText("location:" + m_list.toString() + "\n" + "城市:" + city + "\n精度:" + location.getLongitude() + "\n纬度:" + location.getLatitude() + "\n定位方式:" + location.getProvider());
-            } else {
-                thelocation.setText("获取不到数据");
+    /**
+     * 定位：得到位置对象
+     *
+     * @return
+     */
+    private Location getLastKnownLocation() {
+        //获取地理位置管理器
+        LocationManager mLocationManager = (LocationManager) photopage.this.getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
             }
         }
+        return bestLocation;
+    }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
+    /**
+     * 定位：权限监听
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 2://定位
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-
-    };
-    private class MyAsyncExtue extends AsyncTask<Location, Void, String> {
-
-        @Override
-        protected String doInBackground(Location... params) {
-            HttpClient client = new DefaultHttpClient();
-            StringBuilder stringBuilder = new StringBuilder();
-            HttpGet httpGet = new HttpGet("http://api.map.baidu.com/geocoder?output=json&location=23.131427,113.379763&ak=esNPFDwwsXWtsQfw4NMNmur1");
-            try {
-                HttpResponse response = client.execute(httpGet);
-                HttpEntity entity = response.getEntity();
-                InputStream inputStream = entity.getContent();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String b;
-                while ((b = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(b + "\n");
+                    Log.v("-----", "同意定位权限");
+                    getLocationLL();
+                } else {
+                    Log.v("-----", "未同意获取定位权限");
                 }
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return stringBuilder.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String m_list) {
-            super.onPostExecute(m_list);
-            Log.e("str", m_list.toString());
-            String city = "";
-//                if (m_list != null && m_list.size() > 0) {
-//                    city = m_list.get(0).getLocality();//获取城市
-//                }
-            city = m_list;
-            thelocation.setText("城市:" + city);
+                break;
+            default:
         }
     }
-}
 
+
+    String http;
+
+    @SuppressLint("CheckResult")
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void isRights(String curCity) {
+
+        http = "https://api.jisuapi.com/weather/query?appkey=4a77836304a7e3cd&city=" + curCity;
+
+        new HttpHelp(new I_success() {
+            @Override
+            public void doSuccess(String t) throws JSONException {
+                WeBean bean = GsonUtil.getInstance().fromJson(t, WeBean.class);
+                Log.v("----------", bean.toString());
+//                tv_00.setText(bean.getResult().getDaily().get(0).getDate()+"\n"+bean.getResult().getDaily().get(0).getWeek());
+//                tv_01.setText(bean.getResult().getDaily().get(0).getDay().getWeather());
+//                tv_02.setText(bean.getResult().getDaily().get(0).getDay().getWinddirect());
+//                tv_03.setText(bean.getResult().getDaily().get(0).getDay().getTemphigh()+" ℃");
+                weather.setText(curCity+":"+
+                        bean.getResult().getDaily().get(0).getDay().getWeather() + "," +
+                        bean.getResult().getDaily().get(0).getDay().getWinddirect() + "," +
+                        bean.getResult().getDaily().get(0).getDay().getTemphigh() + "℃"
+                );
+
+                String sdt="";
+                for (int i = 0; i < bean.getResult().getIndex().size(); i++) {
+                    sdt = sdt + bean.getResult().getIndex().get(i).getIname()+":"+bean.getResult().getIndex().get(i).getIvalue()+"。"+bean.getResult().getIndex().get(i).getDetail()+"\n";
+                }
+
+                String finalSdt = sdt;
+                weather.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new TigDialog(photopage.this, finalSdt).showDialog();
+                    }
+                });
+
+            }
+        }, new I_failure() {
+            @Override
+            public void doFailure() {
+
+            }
+        }, photopage.this, http).getHttp2();
+    }
+
+}

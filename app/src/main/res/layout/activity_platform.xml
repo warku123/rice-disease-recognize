@@ -22,13 +22,7 @@
                 android:id="@+id/id_elv">
 
             </ExpandableListView>
-            <FrameLayout
-                android:id="@+id/fl_container"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:background="#F2F2F8"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"/>
+
             <LinearLayout
                 android:id="@+id/bottom_bar"
                 android:layout_alignParentBottom="true"
