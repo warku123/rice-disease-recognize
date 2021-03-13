@@ -2,32 +2,37 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/history_card"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_corner"
+    android:orientation="vertical"
+    app:layout_constraintDimensionRatio="1">
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:id="@+id/history_card_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
         app:srcCompat="@drawable/groupsignal" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="217dp"
-        android:layout_height="126dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginRight="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
         android:text="详情"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#000000"
-        android:textSize="36sp"
+        android:textSize="18sp"
         android:typeface="normal"
         app:backgroundTint="#FFFFFF"
         app:cornerRadius="2dp"
@@ -36,31 +41,43 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="491dp"
-        android:layout_height="195dp"
+        android:id="@+id/history_card_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="4:3"
         app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/history_card_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="0.3">
+        app:layout_constraintVertical_weight="0.3"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5">
 
         <TextView
-            android:id="@+id/history_date"
+            android:id="@+id/history_card_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="TextView" />
+            android:background="#FFFFFF"
+            android:fontFamily="More Fonts..."
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/history_type"
+            android:id="@+id/history_card_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="TextView" />
+            android:background="#FFFFFF"
+            android:fontFamily="More Fonts..."
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

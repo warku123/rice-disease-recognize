@@ -47,6 +47,7 @@ public class mypage extends AppCompatActivity {
 
         home.setOnClickListener(bottomlistener);
         platform.setOnClickListener(bottomlistener);
+        // TODO 修改buttom Listener
         goto_history_button.setOnClickListener(bottomlistener);
     }
     private void init(){
