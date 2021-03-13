@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen">
-        <activity android:name=".MyHistory"></activity>
+        <activity android:name=".MyHistoryActivity"></activity>
         <activity android:name=".platform" />
         <activity android:name=".mypage" />
         <activity android:name=".infopage" />

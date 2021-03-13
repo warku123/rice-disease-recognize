@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 public class mypage extends AppCompatActivity {
     ImageButton home;
@@ -35,7 +34,7 @@ public class mypage extends AppCompatActivity {
                         intent=new Intent(mypage.this,platform.class);
                         break;
                     case R.id.goto_history_button:
-                        intent = new Intent(mypage.this,MyHistory.class);
+                        intent = new Intent(mypage.this, MyHistoryActivity.class);
                         break;
                     default:
                         break;
