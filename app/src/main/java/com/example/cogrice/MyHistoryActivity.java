@@ -25,8 +25,8 @@ public class MyHistoryActivity extends AppCompatActivity {
     }
 
     private void showAllHistories() {
-        ArrayList<History> localHistoriesList = History.getHistoryRecords();
-        // TODO 读取真实的本地数据
+        ArrayList<History> localHistoriesList = History.getRemoteHistoryRecords();
+        // TODO 读取真实的远程数据
         HistoryRecordsAdapter historyRecordsAdapter = new HistoryRecordsAdapter(localHistoriesList);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         this.historyCardRecyclerView.setLayoutManager(manager);

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,7 +26,7 @@ public class History {
     /**
      * TODO 获取所有的历史记录
      */
-    public static ArrayList<History> getHistoryRecords() {
+    public static ArrayList<History> getRemoteHistoryRecords() {
         ArrayList<History> result = new ArrayList<History>();
         for (int i = 0; i < 10; i++) {
             // 生成10个历史记录
@@ -42,8 +43,11 @@ public class History {
         this.diseaseType = diseaseType;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDate(){return this.date;}
+
+    public String getFormattedDate() {
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return ft.format(this.date);
     }
 
     public void setDate(Date date) {
@@ -69,8 +73,8 @@ public class History {
      * 默认构造函数
      */
     public History() {
-        this("考虑采用枚举类",
-                new Date(121, 1, 1, 12, 0, 0),
+        this("水稻稻瘟病",
+                new Date(121, 1, 1, 15, 26, 10),
                 new DiseaseInfo(),
                 // FIXME 绝对路径！
                 BitmapFactory.decodeFile("D:\\Research\\GraduationInternship\\rice-disease-recognize\\app\\src\\main\\res\\drawable\\camera.jpg")

@@ -40,8 +40,8 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
      */
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
-        holder.photo.setImageBitmap(historyRecords.get(position).getPhoto());
-        holder.date.setText(historyRecords.get(position).getDate().toString());
+        // holder.photo.setImageBitmap(historyRecords.get(position).getPhoto());
+        holder.date.setText((historyRecords.get(position).getFormattedDate()).toString());
         holder.type.setText(historyRecords.get(position).getDiseaseType().toString());
     }
 
