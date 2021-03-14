@@ -161,6 +161,7 @@ public class photopage extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // 响应拍照返回结果
         if (resultCode == RESULT_OK) { // 如果返回数据 
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:

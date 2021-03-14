@@ -7,7 +7,7 @@
         android:required="true" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/> -->
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -31,6 +31,7 @@
         <activity android:name=".identify" />
         <activity android:name=".checkfun" />
         <activity android:name=".register" />
+        <activity android:name=".MyHistoryActivity"></activity>
         <activity android:name=".platform" />
         <activity android:name=".mypage" />
         <activity android:name=".infopage" />

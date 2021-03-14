@@ -10,4 +10,6 @@
     <color name="colorlogin_button">#87CEFA</color>
     <color name="colorloginregister_text">#FFFAFA</color>
     <color name="colorLoginpasswordEditText">#FFFFFF</color>
+    <color name="bg_green">#3C76FF03</color>
+    <color name="text_green">#4CAF50</color>
 </resources>

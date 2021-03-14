@@ -14,11 +14,15 @@ public class mypage extends AppCompatActivity {
     ImageButton platform;
     ImageButton mine;
     TextView login;
+    // 需要把将要操作的组件激活
+    Button goto_history_button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
         init();
+        // TODO 改成viewListener
         View.OnClickListener bottomlistener = new View.OnClickListener() {
             Intent intent=null;
             @Override
@@ -30,9 +34,13 @@ public class mypage extends AppCompatActivity {
                     case R.id.platform:
                         intent=new Intent(mypage.this,platform.class);
                         break;
+                    case R.id.goto_history_button:
+                        intent = new Intent(mypage.this, MyHistoryActivity.class);
+                        break;
                     default:
                         break;
                 }
+                // 打开新活动页面
                 startActivity(intent);
                 overridePendingTransition(0, 0);
             }
@@ -44,14 +52,18 @@ public class mypage extends AppCompatActivity {
                   startActivity(intent);
               }
         });
+
         home.setOnClickListener(bottomlistener);
         platform.setOnClickListener(bottomlistener);
-
+        // TODO 修改buttom Listener
+        goto_history_button.setOnClickListener(bottomlistener);
     }
     private void init(){
         home=findViewById(R.id.home);
         platform=findViewById(R.id.platform);
         mine=findViewById(R.id.mine);
         login=findViewById(R.id.pleaselogin);
+        // 加载组件
+        goto_history_button = findViewById(R.id.goto_history_button);
     }
 }
