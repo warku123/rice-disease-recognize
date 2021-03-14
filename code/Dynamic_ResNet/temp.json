@@ -1,0 +1,57 @@
+results [
+    1.1272507e-03 5.2377243e-12 6.7616817e-08 4.7095283e-10 8.9457436e-10
+    3.1580445e-09 5.2070449e-12 1.5170728e-03 1.4456700e-06 9.9676836e-01
+    2.5853781e-06 1.4198614e-11 6.4482286e-08 5.9268446e-10 6.8221064e-14
+    4.9615352e-07 5.5879985e-07 1.0161371e-15 5.5985420e-06 4.0593723e-06
+    3.6379700e-07 5.2353334e-06 1.1653027e-11 1.6999697e-16 8.9759431e-14
+    4.4894838e-07 9.9047233e-09 1.8747488e-12 4.1625829e-04 1.4870851e-04
+    1.4294872e-06 6.5040076e-09 1.6943109e-09 3.6342158e-12 2.0103945e-09
+    2.5432580e-09 1.8058363e-16 4.8489256e-13
+]
+
+sorted_idx [
+    9  7  0 28 29 18 21 19 10  8 30 16 15 25 20  2 12 26 31  5 35 34 32  4
+    13  3 11 22  1  6 33 27 37 24 14 17 36
+]
+
+{
+    "Corn_(maize)___Northern_Leaf_Blight": 0.99676836,
+    "Corn_(maize)___Cercospora_leaf_spot": 0.0015170728,
+    "Apple___Apple_scab": 0.0011272507,
+    "Tomato___Bacterial_spot": 0.0004162583,
+    "Tomato___Early_blight": 0.00014870851,
+    "Pepper,_bell___Bacterial_spot": 5.598542e-06,
+    "Potato___Late_blight": 5.2353334e-06,
+    "Pepper,_bell___healthy": 4.0593723e-06,
+    "Corn_(maize)___healthy": 2.585378e-06,
+    "Corn_(maize)___Common_rust_": 1.44567e-06,
+    "Tomato___Late_blight": 1.4294872e-06,
+    "Peach___Bacterial_spot": 5.5879985e-07,
+    "Orange___Haunglongbing_(Citrus_greening)": 4.961535e-07,
+    "Squash___Powdery_mildew": 4.4894838e-07,
+    "Potato___Early_blight": 3.63797e-07,
+    "Apple___Cedar_apple_rust": 6.761682e-08,
+    "Grape___Esca_(Black_Measles)": 6.4482286e-08,
+    "Strawberry___Leaf_scorch": 9.904723e-09,
+    "Tomato___Leaf_Mold": 6.5040076e-09,
+    "Cherry_(including_sour)___Powdery_mildew": 3.1580445e-09,
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": 2.543258e-09,
+    "Tomato___Target_Spot": 2.0103945e-09,
+    "Tomato___Septoria_leaf_spot": 1.6943109e-09,
+    "Blueberry___healthy": 8.9457436e-10,
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": 5.9268446e-10,
+    "Apple___healthy": 4.7095283e-10,
+    "Grape___Black_rot": 1.4198614e-11,
+    "Potato___healthy": 1.1653027e-11,
+    "Apple___Black_rot": 5.2377243e-12,
+    "Cherry_(including_sour)___healthy": 5.207045e-12,
+    "Tomato___Spider_mites": 3.6342158e-12,
+    "Strawberry___healthy": 1.8747488e-12,
+    "Tomato___healthy": 4.8489256e-13,
+    "Soybean___healthy": 8.975943e-14,
+    "Grape___healthy": 6.8221064e-14,
+    "Peach___healthy": 1.0161371e-15,
+    "Tomato___Tomato_mosaic_virus": 1.8058363e-16
+}
+
+image ./infer.jpg Infer result is: Corn_(maize)___Northern_Leaf_Blight
