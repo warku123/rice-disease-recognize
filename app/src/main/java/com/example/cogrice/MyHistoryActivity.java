@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.example.cogrice.dataclass.History;
 import com.example.cogrice.adapters.HistoryRecordsAdapter;
+import com.example.cogrice.utils.SpacesItemDecoration;
 
 import java.util.ArrayList;
 
@@ -36,5 +37,6 @@ public class MyHistoryActivity extends AppCompatActivity {
     public void initComponents(){
         setContentView(R.layout.activity_my_history);
         this.historyCardRecyclerView = (RecyclerView)findViewById(R.id.history_card_recycler_view);
+        this.historyCardRecyclerView.addItemDecoration(new SpacesItemDecoration(HistoryRecordsAdapter.SPACE));
     }
 }

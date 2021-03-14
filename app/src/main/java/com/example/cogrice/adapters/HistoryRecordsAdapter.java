@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAdapter.HistoryViewHolder> {
 
+    public static final int SPACE = 8;
     private ArrayList<History> historyRecords;
 
     /**

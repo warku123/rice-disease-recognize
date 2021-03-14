@@ -4,15 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/history_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:background="@drawable/shape_corner"
     android:orientation="vertical"
     app:layout_constraintDimensionRatio="1">
 
+    <android.widget.Button
+        android:id="@+id/history_card_gotodetail_button"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_corner_right"
+        android:text="详情"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.15" />
+
     <ImageView
         android:id="@+id/history_card_image"
         android:layout_width="0dp"
-        android:layout_height="0"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
@@ -22,40 +35,22 @@
         app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.2"
         app:srcCompat="@drawable/groupsignal" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="详情"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#4CAF50"
-        android:textSize="12sp"
-        android:typeface="normal"
-        app:backgroundTint="#838BC34A"
-        app:cornerRadius="0dp"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.15" />
+<!--    https://blog.csdn.net/chengxu_kuangrexintu/article/details/78554553-->
 
     <LinearLayout
         android:id="@+id/history_card_info"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.8"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="0.3"
         app:layout_constraintStart_toEndOf="@+id/history_card_image"
         app:layout_constraintTop_toTopOf="parent"
@@ -68,14 +63,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="TextView" />
+            android:text="疾病类型" />
 
         <TextView
             android:id="@+id/history_card_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="TextView" />
+            android:text="日期" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
