@@ -1,7 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/bg_green" />
-    <corners android:topRightRadius="10dp"
-        android:bottomRightRadius="10dp"/>
-   <!--<stroke android:width="0.2dp" android:color="#000000-->" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--https://blog.csdn.net/zhijiandedaima/article/details/114318689-->
+    <item>
+        <shape android:layout_width="match_parent">
+            <solid android:color="#ffffff" />
+            <corners
+                android:bottomRightRadius="10dp"
+                android:topRightRadius="10dp" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/text_green" />
+        </shape>
+    </item>
+    <!--向内缩进-->
+    <item
+        android:left="@dimen/bold_line_width">
+        <shape android:layout_width="match_parent">
+            <solid android:color="#ffffff" />
+            <corners
+                android:bottomRightRadius="10dp"
+                android:topRightRadius="10dp" />
+        </shape>
+    </item>
+</layer-list>
