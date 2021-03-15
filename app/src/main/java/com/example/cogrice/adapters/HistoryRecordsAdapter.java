@@ -54,9 +54,7 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
      * 放置HistoryCard
      */
     public class HistoryViewHolder extends RecyclerView.ViewHolder {
-
-        // TODO: 应该做什么?
-
+        // 实际填充
         // private ConstraintLayout historyCard;
         private ImageView photo;
         private TextView date;
@@ -66,7 +64,6 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
             super(itemView);
             date = (TextView) itemView.findViewById(R.id.history_card_date);
             type = (TextView) itemView.findViewById(R.id.history_card_type);
-            // FIXME 图片暂时无法添加
             photo = (ImageView) itemView.findViewById(R.id.history_card_image);
         }
     }

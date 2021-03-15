@@ -28,10 +28,8 @@ public class History {
      */
     public static ArrayList<History> getRemoteHistoryRecords() {
         ArrayList<History> result = new ArrayList<History>();
-        for (int i = 0; i < 10; i++) {
-            // 生成10个历史记录
-            result.add(new History());
-        }
+        // 获取远程历史记录
+
         return result;
     }
 
