@@ -91,7 +91,7 @@ public class infopage extends AppCompatActivity{
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    response = doPost("http://40.73.0.45:80/upload");
+                    response = HttpClient.doPostBitmap("http://40.73.0.45:80/upload",bitmap);
                     infopage.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
