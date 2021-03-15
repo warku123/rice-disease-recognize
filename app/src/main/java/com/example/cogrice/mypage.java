@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class mypage extends AppCompatActivity {
     ImageButton home;
     ImageButton platform;
     ImageButton mine;
-
+    TextView login;
     // 需要把将要操作的组件激活
     Button goto_history_button;
 
@@ -44,6 +45,13 @@ public class mypage extends AppCompatActivity {
                 overridePendingTransition(0, 0);
             }
         };
+        login.setOnClickListener(new View.OnClickListener() {
+              public void onClick(View view) {
+                  // TODO Auto-generated method stub
+                  Intent intent = new Intent(mypage.this, login.class);
+                  startActivity(intent);
+              }
+        });
 
         home.setOnClickListener(bottomlistener);
         platform.setOnClickListener(bottomlistener);
@@ -54,6 +62,7 @@ public class mypage extends AppCompatActivity {
         home=findViewById(R.id.home);
         platform=findViewById(R.id.platform);
         mine=findViewById(R.id.mine);
+        login=findViewById(R.id.pleaselogin);
         // 加载组件
         goto_history_button = findViewById(R.id.goto_history_button);
     }

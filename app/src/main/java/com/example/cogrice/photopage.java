@@ -1,23 +1,34 @@
 package com.example.cogrice;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.net.sip.SipAudioCall;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.TextPaint;
 import android.util.Log;
@@ -28,29 +39,49 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cogrice.http.GsonUtil;
+import com.example.cogrice.http.HttpHelp;
+import com.example.cogrice.http.I_failure;
+import com.example.cogrice.http.I_success;
+import com.example.cogrice.http.WeBean;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class photopage extends AppCompatActivity {
-    public static BreakIterator weather;
     ImageButton camera_butt;
     ImageButton home;
     ImageButton platform;
-    private static String cityName = "";
     ImageButton mine;
     Button album_butt;
     TextView tv;
     TextPaint tp;
     TextView tv2;
     TextPaint tp2;
+    TextView weather;
     TextView thelocation;
-    private static Context context = null;
+
     static final int REQUEST_IMAGE_CAPTURE = 101, REQUEST_IMAGE_ALBUM = 102;
 
     private Uri imageUri;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +100,7 @@ public class photopage extends AppCompatActivity {
 
         //全屏，隐藏手机上方状态栏
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getLocation2();
         camera_butt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,15 +117,16 @@ public class photopage extends AppCompatActivity {
         });
 
         View.OnClickListener bottomlistener = new View.OnClickListener() {
-            Intent intent=null;
+            Intent intent = null;
+
             @Override
             public void onClick(View view) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.platform:
-                        intent=new Intent(photopage.this,platform.class);
+                        intent = new Intent(photopage.this, platform.class);
                         break;
                     case R.id.mine:
-                        intent=new Intent(photopage.this,mypage.class);
+                        intent = new Intent(photopage.this, mypage.class);
                         break;
                     default:
                         break;
@@ -105,21 +137,23 @@ public class photopage extends AppCompatActivity {
         };
         platform.setOnClickListener(bottomlistener);
         mine.setOnClickListener(bottomlistener);
+
     }
 
-    private void init(){
+    private void init() {
         //字体加粗
-        tv = (TextView)findViewById(R.id.tip);
+        weather = (TextView) findViewById(R.id.weather);
+        tv = (TextView) findViewById(R.id.tip);
         tp = tv.getPaint();
         tp.setFakeBoldText(true);
-        tv2 = (TextView)findViewById(R.id.apptitle);
+        tv2 = (TextView) findViewById(R.id.apptitle);
         tp2 = tv2.getPaint();
         tp2.setFakeBoldText(true);
-        thelocation = (TextView)findViewById(R.id.location);
+        thelocation = (TextView) findViewById(R.id.location);
 
-        home=findViewById(R.id.home);
-        platform=findViewById(R.id.platform);
-        mine=findViewById(R.id.mine);
+        home = findViewById(R.id.home);
+        platform = findViewById(R.id.platform);
+        mine = findViewById(R.id.mine);
         camera_butt = findViewById(R.id.take_photo);
     }
 
@@ -132,11 +166,11 @@ public class photopage extends AppCompatActivity {
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
                     try {
-    //                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                        //                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
                         //获取图片
 
                         Intent intent = new Intent(photopage.this, infopage.class);
-                        intent.putExtra("URI",imageUri);
+                        intent.putExtra("URI", imageUri);
                         startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -149,7 +183,7 @@ public class photopage extends AppCompatActivity {
                         //获取图片
 
                         Intent intent = new Intent(photopage.this, infopage.class);
-                        intent.putExtra("URI",imageUri);
+                        intent.putExtra("URI", imageUri);
                         startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -165,10 +199,8 @@ public class photopage extends AppCompatActivity {
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_DOCUMENTS,
-                Manifest.permission.INTERNET,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        },101);
+                Manifest.permission.INTERNET
+        }, 101);
 
         // 创建File对象，用于存储拍照后的图片
         //存放在手机SD卡的应用关联缓存目录下
@@ -203,15 +235,13 @@ public class photopage extends AppCompatActivity {
         }
     }
 
-    private void dispatchAlbumIntent(){
+    private void dispatchAlbumIntent() {
         ActivityCompat.requestPermissions(photopage.this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_DOCUMENTS,
-                Manifest.permission.INTERNET,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        },102);
+                Manifest.permission.INTERNET
+        }, 102);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         //Intent.ACTION_GET_CONTENT = "android.intent.action.GET_CONTENT"
@@ -219,4 +249,171 @@ public class photopage extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_IMAGE_ALBUM); // 打开相册
 
     }
+
+//入口是getLocation
+
+    /**
+     * 定位：权限判断
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void getLocation2() {
+        //检查定位权限
+        ArrayList<String> permissions = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(photopage.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (ActivityCompat.checkSelfPermission(photopage.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+
+        //判断
+        if (permissions.size() == 0) {//有权限，直接获取定位
+            getLocationLL();
+        } else {//没有权限，获取定位权限
+            requestPermissions(permissions.toArray(new String[permissions.size()]), 2);
+
+
+        }
+    }
+
+    //根据经纬度，获取对应的城市
+    public static String getCity(Context context, double latitude, double longitude) {
+        String cityName = "";
+        List<Address> addList = null;
+        Geocoder ge = new Geocoder(context);
+        try {
+            addList = ge.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addList != null && addList.size() > 0) {
+            for (int i = 0; i < addList.size(); i++) {
+                Address ad = addList.get(i);
+                cityName += ad.getCountryName() + ";" + ad.getLocality();
+            }
+        }
+        Log.v("-----", "city:" + cityName);
+        return cityName;
+    }
+
+    /**
+     * 定位：获取经纬度
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getLocationLL() {
+
+        Location location = getLastKnownLocation();
+        if (location != null) {
+            //传递经纬度给网页
+            String result = "{code: '0',type:'2',data: {longitude: '" + location.getLongitude() + "',latitude: '" + location.getLatitude() + "'}}";
+//            tex.loadUrl("javascript:callback(" + result + ");");
+
+            //日志
+            String locationStr = "维度：" + location.getLatitude() + "\n"
+                    + "经度：" + location.getLongitude();
+//            tv.setText(  "经纬度：\n" + locationStr);
+            Log.v("-----", "经纬度：\n" + locationStr);
+
+            String temp = getCity(photopage.this, location.getLatitude(), location.getLongitude());
+            temp = temp.replace("市", "").replace("中国;", "");
+            isRights(temp);
+        } else {
+//            Toast.makeText(this, "位置信息获取失败", Toast.LENGTH_SHORT).show();
+//            tv.setText(  "获取定位权限7 - " + "位置获取失败");
+            Log.v("-----", "获取定位权限7 - " + "位置获取失败");
+        }
+    }
+
+    /**
+     * 定位：得到位置对象
+     *
+     * @return
+     */
+    private Location getLastKnownLocation() {
+        //获取地理位置管理器
+        LocationManager mLocationManager = (LocationManager) photopage.this.getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
+    }
+
+    /**
+     * 定位：权限监听
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 2://定位
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Log.v("-----", "同意定位权限");
+                    getLocationLL();
+                } else {
+                    Log.v("-----", "未同意获取定位权限");
+                }
+                break;
+            default:
+        }
+    }
+
+
+    String http;
+
+    @SuppressLint("CheckResult")
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void isRights(String curCity) {
+
+        http = "https://api.jisuapi.com/weather/query?appkey=4a77836304a7e3cd&city=" + curCity;
+
+        new HttpHelp(new I_success() {
+            @Override
+            public void doSuccess(String t) throws JSONException {
+                WeBean bean = GsonUtil.getInstance().fromJson(t, WeBean.class);
+                Log.v("----------", bean.toString());
+//                tv_00.setText(bean.getResult().getDaily().get(0).getDate()+"\n"+bean.getResult().getDaily().get(0).getWeek());
+//                tv_01.setText(bean.getResult().getDaily().get(0).getDay().getWeather());
+//                tv_02.setText(bean.getResult().getDaily().get(0).getDay().getWinddirect());
+//                tv_03.setText(bean.getResult().getDaily().get(0).getDay().getTemphigh()+" ℃");
+                weather.setText(curCity+":"+
+                        bean.getResult().getDaily().get(0).getDay().getWeather() + "," +
+                        bean.getResult().getDaily().get(0).getDay().getWinddirect() + "," +
+                        bean.getResult().getDaily().get(0).getDay().getTemphigh() + "℃"
+                );
+
+                String sdt="";
+                for (int i = 0; i < bean.getResult().getIndex().size(); i++) {
+                    sdt = sdt + bean.getResult().getIndex().get(i).getIname()+":"+bean.getResult().getIndex().get(i).getIvalue()+"。"+bean.getResult().getIndex().get(i).getDetail()+"\n";
+                }
+
+                String finalSdt = sdt;
+                weather.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new TigDialog(photopage.this, finalSdt).showDialog();
+                    }
+                });
+
+            }
+        }, new I_failure() {
+            @Override
+            public void doFailure() {
+
+            }
+        }, photopage.this, http).getHttp2();
+    }
+
 }

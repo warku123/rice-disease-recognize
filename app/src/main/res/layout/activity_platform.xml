@@ -16,13 +16,13 @@
             android:id="@+id/main_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <FrameLayout
-                android:id="@+id/fl_container"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:background="#F2F2F8"
+            <ExpandableListView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"/>
+                android:layout_height="match_parent"
+                android:id="@+id/id_elv">
+
+            </ExpandableListView>
+
             <LinearLayout
                 android:id="@+id/bottom_bar"
                 android:layout_alignParentBottom="true"

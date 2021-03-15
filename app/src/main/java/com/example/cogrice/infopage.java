@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,55 +43,11 @@ public class infopage extends AppCompatActivity{
     private Uri imageUri;
     private String imagepath;
     private ImageView rice_image_view;
-    private Button returnbtn;
-    private TextView result;
+    private Button returnbtn,introbtn;
+    private TextView result_view;
     private InputStream picstream_in;
-//    OutputStream picstream_out;
     private String response;
     private Bitmap bitmap;
-
-    private Map<String,String> respond_result = new HashMap<String, String>(){{
-        put("Apple___Apple_scab","苹果黑星病");
-        put("Apple___Black_rot","苹果黑腐病");
-        put("Apple___Cedar_apple_rust","苹果锈病");
-        put("Apple___healthy","正常苹果");
-        put("Blueberry___healthy","正常蓝莓");
-        put("Cherry_(including_sour)___Powdery_mildew","樱桃白粉病");
-        put("Cherry_(including_sour)___healthy","正常樱桃");
-        put("Corn_(maize)___Cercospora_leaf_spot","玉米叶斑病");
-        put("Gray_leaf_spot","玉米灰斑病");
-        put("Corn_(maize)___Common_rust_","玉米锈病");
-        put("Corn_(maize)___Northern_Leaf_Blight","玉米大斑病");
-        put("Corn_(maize)___healthy","正常玉米");
-        put("Grape___Black_rot","葡萄黑腐病");
-        put("Grape___Esca_(Black_Measles)","葡萄黑麻疹病");
-        put("Grape___Leaf_blight_(Isariopsis_Leaf_Spot)","葡萄叶斑病");
-        put("Grape___healthy","正常葡萄");
-        put("Orange___Haunglongbing_(Citrus_greening)","柑橘黄龙病");
-        put("Peach___Bacterial_spot","桃树细菌性穿孔病");
-        put("Peach___healthy","正常桃");
-        put("Pepper,_bell___Bacterial_spot","灯笼椒细菌性斑点病");
-        put("Pepper,_bell___healthy","正常灯笼椒");
-        put("Potato___Early_blight","土豆早疫病");
-        put("Potato___Late_blight","土豆晚疫病");
-        put("Potato___healthy","正常土豆");
-        put("Raspberry___healthy","正常覆盆子");
-        put("Soybean___healthy","正常黄豆");
-        put("Squash___Powdery_mildew","南瓜白粉病");
-        put("Strawberry___Leaf_scorch","草莓叶焦病");
-        put("Strawberry___healthy","正常草莓");
-        put("Tomato___Bacterial_spot","番茄细菌性斑点病");
-        put("Tomato___Early_blight","番茄早疫病");
-        put("Tomato___Late_blight","番茄晚疫病");
-        put("Tomato___Leaf_Mold","番茄叶霉病");
-        put("Tomato___Septoria_leaf_spot","番茄斑枯病");
-        put("Tomato___Spider_mites","番茄蜘蛛病");
-        put("Tomato___Target_Spot","番茄靶斑病");
-        put("Tomato___Tomato_Yellow_Leaf_Curl_Virus","番茄黄化曲叶病毒");
-        put("Tomato___Tomato_mosaic_virus","番茄花叶病毒");
-        put("Tomato___healthy","正常番茄");
-
-    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +58,7 @@ public class infopage extends AppCompatActivity{
 
         imageUri = getIntent().getParcelableExtra("URI");
 
-        result = findViewById(R.id.disease_output);
+        result_view = findViewById(R.id.disease_output);
 
         returnbtn=findViewById(R.id.returnbtn);
         returnbtn.setOnClickListener(new View.OnClickListener() {
@@ -112,8 +69,17 @@ public class infopage extends AppCompatActivity{
             }
         });
 
-        
+        introbtn = findViewById(R.id.disease_introduce);
+        introbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(infopage.this,Intropage.class);
+                intent.putExtra("response",response);
+                startActivity(intent);
+            }
+        });
 
+        introbtn = findViewById(R.id.disease_introduce);
 
         try {
             // 将拍摄的照片显示出来
@@ -129,20 +95,35 @@ public class infopage extends AppCompatActivity{
                     infopage.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String result_s = response.split("\\:")[1].trim();
-                            Log.d("Results", "onCreate: "+result_s);
-                            Log.d("Results", "onCreate: "+respond_result.get(result_s));
-                            result.setText(respond_result.get(result_s));
+                            String[] result = response.split("####");
+                            String E_name = result[0].trim();
+                            String C_name = result[1].trim();
+                            String Intro = result[2].trim();
+                            String Method = result[3].trim();
+                            String Treat = result[4].trim();
+
+                            result_view.setText(C_name);
+                            introbtn.setVisibility(View.VISIBLE);
+                            introbtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(infopage.this,Intropage.class);
+                                    intent.putExtra("response",response);
+                                    startActivity(intent);
+                                }
+                            });
+//                            Log.d("Results", "onCreate: "+result_s);
                         }
                     });
                 }
             });
             thread.start();
-            result.setText("识别中...");
+            result_view.setText("识别中...");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     public String doPost(String httpUrl) {
@@ -159,26 +140,31 @@ public class infopage extends AppCompatActivity{
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
-
+            // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
             httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-
+            //写入图片
+            //先设置字节流
             DataOutputStream request = new DataOutputStream(
                     httpUrlConnection.getOutputStream());
-
+            //每次写入各类文件前要固定写入三个部分，以确定文件从这里写入开始
             request.writeBytes(twoHyphens + boundary + crlf);
+            //文件的头部信息，注意固定格式
             request.writeBytes("Content-Disposition: form-data; name=\"" +
                     attachmentName + "\";filename=\"" +
                     attachmentFileName + "\"" + crlf);
+            //最后头部信息部分总共要写两个换行（crlf）
             request.writeBytes(crlf);
 
             //bitmap to byte array
             byte[] pixels = Bitmap2Bytes(bitmap);
-
+            //正式写入pixel文件
             request.write(pixels);
+            //写入完pixel文件需要后面加一个换行符
             request.writeBytes(crlf);
+            //整个输入流结尾的标识
             request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
 
             request.flush();
