@@ -29,7 +29,10 @@ public class History {
     public static ArrayList<History> getRemoteHistoryRecords() {
         ArrayList<History> result = new ArrayList<History>();
         // 获取远程历史记录
-
+        for(int i = 0;i<10;i++){
+            result.add(new History());
+        }
+        System.out.println("生成10个缺省历史记录");
         return result;
     }
 
