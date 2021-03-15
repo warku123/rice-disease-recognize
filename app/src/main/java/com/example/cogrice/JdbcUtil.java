@@ -19,7 +19,7 @@ public class JdbcUtil {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://40.73.0.45:3306/tftz?characterEncoding=utf8";
-            return DriverManager.getConnection(url, "root", "root");
+            return DriverManager.getConnection(url, "root", "123456");
         } catch (Exception e) {
             e.printStackTrace();
         }

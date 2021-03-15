@@ -140,26 +140,31 @@ public class infopage extends AppCompatActivity{
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
-
+            // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
             httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
             httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-
+            //写入图片
+            //先设置字节流
             DataOutputStream request = new DataOutputStream(
                     httpUrlConnection.getOutputStream());
-
+            //每次写入各类文件前要固定写入三个部分，以确定文件从这里写入开始
             request.writeBytes(twoHyphens + boundary + crlf);
+            //文件的头部信息，注意固定格式
             request.writeBytes("Content-Disposition: form-data; name=\"" +
                     attachmentName + "\";filename=\"" +
                     attachmentFileName + "\"" + crlf);
+            //最后头部信息部分总共要写两个换行（crlf）
             request.writeBytes(crlf);
 
             //bitmap to byte array
             byte[] pixels = Bitmap2Bytes(bitmap);
-
+            //正式写入pixel文件
             request.write(pixels);
+            //写入完pixel文件需要后面加一个换行符
             request.writeBytes(crlf);
+            //整个输入流结尾的标识
             request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
 
             request.flush();
