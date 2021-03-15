@@ -102,6 +102,7 @@ public class infopage extends AppCompatActivity{
                             String Method = result[3].trim();
                             String Treat = result[4].trim();
 
+                            Log.d("bitmap", "run: "+result);
                             result_view.setText(C_name);
                             introbtn.setVisibility(View.VISIBLE);
                             introbtn.setOnClickListener(new View.OnClickListener() {

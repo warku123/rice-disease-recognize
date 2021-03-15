@@ -53,7 +53,7 @@ public class login extends AppCompatActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-//                        Log.d("get", "onClick: "+HttpClient.doGet("http://40.73.0.45/get"));
+                        Log.d("get", "onClick: "+HttpClient.doGet("http://40.73.0.45/get"));
 //                        Log.d("post", "run: "+HttpClient.doPostString("http://40.73.0.45/post",s));
                     }
                 });
