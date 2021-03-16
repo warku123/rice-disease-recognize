@@ -56,6 +56,7 @@ public class infopage extends AppCompatActivity{
 
         rice_image_view = findViewById(R.id.rice_image);
 
+        // 调用相机API获取URL
         imageUri = getIntent().getParcelableExtra("URI");
 
         result_view = findViewById(R.id.disease_output);
@@ -74,6 +75,7 @@ public class infopage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(infopage.this,Intropage.class);
+                // 服务器返回了种类，详细信息等，以字符串传输
                 intent.putExtra("response",response);
                 startActivity(intent);
             }
@@ -126,6 +128,11 @@ public class infopage extends AppCompatActivity{
 
     }
 
+    /**
+     * TODO 封装
+     * @param httpUrl
+     * @return
+     */
     public String doPost(String httpUrl) {
         String attachmentName = "bitmap";
         String attachmentFileName = "bitmap.bmp";

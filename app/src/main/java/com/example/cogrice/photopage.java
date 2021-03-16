@@ -44,6 +44,7 @@ import com.example.cogrice.http.HttpHelp;
 import com.example.cogrice.http.I_failure;
 import com.example.cogrice.http.I_success;
 import com.example.cogrice.http.WeBean;
+import com.example.cogrice.utils.Status;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -278,6 +279,15 @@ public class photopage extends AppCompatActivity {
 
     //根据经纬度，获取对应的城市
     public static String getCity(Context context, double latitude, double longitude) {
+        public void login(String username){
+            userStatus = Status.StatusEnum.LOGGED_IN;
+            this.userName = username;
+        }
+
+        public void logout(){
+            userStatus = Status.StatusEnum.LOGGED_OUT;
+            this.userName = null;
+        }
         String cityName = "";
         List<Address> addList = null;
         Geocoder ge = new Geocoder(context);

@@ -10,15 +10,7 @@ public class Status {
 
     private String userName = null;
 
-    public void login(String username){
-        userStatus = StatusEnum.LOGGED_IN;
-        this.userName = username;
-    }
 
-    public void logout(){
-        userStatus = StatusEnum.LOGGED_OUT;
-        this.userName = null;
-    }
 
 
 }
