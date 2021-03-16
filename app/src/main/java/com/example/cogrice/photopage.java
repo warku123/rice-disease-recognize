@@ -82,7 +82,7 @@ public class photopage extends AppCompatActivity {
 
     private Uri imageUri;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,7 +256,7 @@ public class photopage extends AppCompatActivity {
     /**
      * 定位：权限判断
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = 24)
     private void getLocation2() {
         //检查定位权限
         ArrayList<String> permissions = new ArrayList<>();
@@ -279,7 +279,7 @@ public class photopage extends AppCompatActivity {
 
     //根据经纬度，获取对应的城市
     public static String getCity(Context context, double latitude, double longitude) {
-        public void login(String username){
+        /*public void login(String username){
             userStatus = Status.StatusEnum.LOGGED_IN;
             this.userName = username;
         }
@@ -287,7 +287,7 @@ public class photopage extends AppCompatActivity {
         public void logout(){
             userStatus = Status.StatusEnum.LOGGED_OUT;
             this.userName = null;
-        }
+        }*/
         String cityName = "";
         List<Address> addList = null;
         Geocoder ge = new Geocoder(context);
@@ -345,13 +345,22 @@ public class photopage extends AppCompatActivity {
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
-            Location l = mLocationManager.getLastKnownLocation(provider);
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                // Found best last known location: %s", l);
-                bestLocation = l;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                Location l = mLocationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l;
+                }
             }
         }
         return bestLocation;
@@ -364,6 +373,7 @@ public class photopage extends AppCompatActivity {
      * @param permissions
      * @param grantResults
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {

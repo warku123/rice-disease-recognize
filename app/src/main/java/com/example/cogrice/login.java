@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,6 +13,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class login extends AppCompatActivity {
     private EditText id_login;
@@ -39,6 +44,23 @@ public class login extends AppCompatActivity {
         button_login=(Button) findViewById(R.id.login_button);
         button_register=(Button)findViewById(R.id.register_button);
         forgetpass=(TextView)findViewById(R.id.forgetpass);
+
+        String s = "success\nsuccess2\nsuccess3";
+
+        button_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("get", "onClick: "+HttpClient.doGet("http://40.73.0.45/get"));
+//                        Log.d("post", "run: "+HttpClient.doPostString("http://40.73.0.45/post",s));
+                    }
+                });
+                thread.start();
+
+            }
+        });
 
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
