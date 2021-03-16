@@ -78,7 +78,7 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
     public static void fillRecyclerView(RecyclerView recyclerView,Context parent){
         recyclerView.addItemDecoration(new SpacesItemDecoration(HistoryRecordsAdapter.SPACE));
         System.out.println("读取远程数据填充");
-        ArrayList<History> localHistoriesList = History.getRemoteHistoryRecords();
+        ArrayList<History> localHistoriesList = History.getAllRemoteHistoryRecords();
         // TODO 读取真实的远程数据
         HistoryRecordsAdapter historyRecordsAdapter = new HistoryRecordsAdapter(localHistoriesList);
         LinearLayoutManager manager = new LinearLayoutManager(parent);

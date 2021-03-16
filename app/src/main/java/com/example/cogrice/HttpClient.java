@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
 
 public class HttpClient {
     private static final String crlf = "\r\n";
@@ -113,7 +114,6 @@ public class HttpClient {
             request.writeBytes(crlf);
             //整个输入流结尾的标识
             request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
-
             request.flush();
             request.close();
             //accept response

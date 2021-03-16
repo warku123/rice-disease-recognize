@@ -1,6 +1,9 @@
 package com.example.cogrice.dataclass;
 
 import android.graphics.Bitmap;
+
+import com.example.cogrice.HttpClient;
+
 import java.util.ArrayList;
 
 public class Wiki {
@@ -36,10 +39,11 @@ public class Wiki {
         this("【Wiki示例】",new ControlMeasure(),null,"Wiki防治措施简介");
     }
     /**
-     * TODO 获取所有的历史记录
+     * TODO 获取所有远程防治信息
      */
     public static ArrayList<Wiki> getAllRemoteWikis() {
         ArrayList<Wiki> result = new ArrayList<Wiki>();
+        HttpClient.doGet("http://40.73.0.45:80/get_all_wikis");
         // 获取远程历史记录
         for(int i = 0;i<10;i++){
             result.add(new Wiki());
