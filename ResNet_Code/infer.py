@@ -110,7 +110,8 @@ def live_model_infer(model = None,image = None):
         prob_dict = {
             label_dict[idx]:results[idx] for idx in sorted_idx
         }
-        # print(prob_dict)
+        print(prob_dict)
+        print(len(prob_dict))
 
         # print("image Infering result is: {}".format(label_dict[sorted_idx[0]]))
         
