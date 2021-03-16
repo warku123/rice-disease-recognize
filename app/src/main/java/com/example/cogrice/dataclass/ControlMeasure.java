@@ -1,12 +1,12 @@
 package com.example.cogrice.dataclass;
 
-public class DiseaseInfo {
+public class ControlMeasure {
     private String agriControl;
     private String diseaseFeature;
     private String chemControl;
 
 
-    public DiseaseInfo(String agriControl, String diseaseFeature, String chemControl) {
+    public ControlMeasure(String agriControl, String diseaseFeature, String chemControl) {
         this.agriControl = agriControl;
         this.diseaseFeature = diseaseFeature;
         this.chemControl = chemControl;
@@ -14,14 +14,14 @@ public class DiseaseInfo {
 
     @Override
     public String toString() {
-        return "DiseaseInfo{" +
+        return "ControlMeasure{" +
                 "agriControl='" + agriControl + '\'' +
                 ", diseaseFeature='" + diseaseFeature + '\'' +
                 ", chemControl='" + chemControl + '\'' +
                 '}';
     }
 
-    public DiseaseInfo(){
+    public ControlMeasure(){
         this("农业防治","疾病特点","化学防治");
     }
 

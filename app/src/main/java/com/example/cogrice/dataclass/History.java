@@ -2,7 +2,6 @@ package com.example.cogrice.dataclass;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.ImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.Date;
 public class History {
     private String diseaseType;
     private Date date;
-    private DiseaseInfo diseaseInfo;
+    private ControlMeasure controlMeasure;
     private Bitmap photo;
 
     public Bitmap getPhoto() {
@@ -55,18 +54,18 @@ public class History {
         this.date = date;
     }
 
-    public DiseaseInfo getDiseaseInfo() {
-        return diseaseInfo;
+    public ControlMeasure getControlMeasure() {
+        return controlMeasure;
     }
 
-    public void setDiseaseInfo(DiseaseInfo diseaseInfo) {
-        this.diseaseInfo = diseaseInfo;
+    public void setControlMeasure(ControlMeasure controlMeasure) {
+        this.controlMeasure = controlMeasure;
     }
 
-    public History(String diseaseType, Date date, DiseaseInfo diseaseInfo, Bitmap photo) {
+    public History(String diseaseType, Date date, ControlMeasure controlMeasure, Bitmap photo) {
         this.diseaseType = diseaseType;
         this.date = date;
-        this.diseaseInfo = diseaseInfo;
+        this.controlMeasure = controlMeasure;
         this.photo = photo;
     }
 
@@ -76,7 +75,7 @@ public class History {
     public History() {
         this("水稻稻瘟病",
                 new Date(121, 1, 1, 15, 26, 10),
-                new DiseaseInfo(),
+                new ControlMeasure(),
                 // FIXME 绝对路径！
                 BitmapFactory.decodeFile("D:\\Research\\GraduationInternship\\rice-disease-recognize\\app\\src\\main\\res\\drawable\\camera.jpg")
         );
@@ -102,12 +101,12 @@ public class History {
         return "History{" +
                 "diseaseType='" + diseaseType + '\'' +
                 ", date=" + date +
-                ", diseaseInfo=" + diseaseInfo +
+                ", controlMeasure=" + controlMeasure +
                 '}';
     }
 
     public static void main(String[] args) {
-        History history = new History("考虑采用枚举类", new Date(121, 1, 1, 12, 0, 0), new DiseaseInfo(), BitmapFactory.decodeFile("drawable\\camera.jpg"));
+        History history = new History("考虑采用枚举类", new Date(121, 1, 1, 12, 0, 0), new ControlMeasure(), BitmapFactory.decodeFile("drawable\\camera.jpg"));
         System.out.println(history.toString());
     }
 

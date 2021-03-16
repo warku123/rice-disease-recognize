@@ -1,5 +1,6 @@
 package com.example.cogrice.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,10 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cogrice.R;
 import com.example.cogrice.dataclass.History;
+import com.example.cogrice.utils.SpacesItemDecoration;
 
 import java.util.ArrayList;
 
@@ -62,8 +65,8 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
 
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            date = (TextView) itemView.findViewById(R.id.history_card_date);
-            type = (TextView) itemView.findViewById(R.id.history_card_type);
+            date = (TextView) itemView.findViewById(R.id.history_card_disease_type);
+            type = (TextView) itemView.findViewById(R.id.history_card_date);
             photo = (ImageView) itemView.findViewById(R.id.history_card_image);
         }
     }
@@ -72,4 +75,15 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
         this.historyRecords = historyRecords;
     }
 
+    public static void fillRecyclerView(RecyclerView recyclerView,Context parent){
+        recyclerView.addItemDecoration(new SpacesItemDecoration(HistoryRecordsAdapter.SPACE));
+        System.out.println("读取远程数据填充");
+        ArrayList<History> localHistoriesList = History.getRemoteHistoryRecords();
+        // TODO 读取真实的远程数据
+        HistoryRecordsAdapter historyRecordsAdapter = new HistoryRecordsAdapter(localHistoriesList);
+        LinearLayoutManager manager = new LinearLayoutManager(parent);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(historyRecordsAdapter);
+    }
 }

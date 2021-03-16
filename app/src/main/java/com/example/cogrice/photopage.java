@@ -124,7 +124,8 @@ public class photopage extends AppCompatActivity {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.platform:
-                        intent = new Intent(photopage.this, platform.class);
+                        // intent = new Intent(photopage.this, platform.class);
+                        intent = new Intent(photopage.this, DiseaseWikiActivity.class);
                         break;
                     case R.id.mine:
                         intent = new Intent(photopage.this, mypage.class);

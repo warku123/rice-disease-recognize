@@ -32,7 +32,8 @@ public class mypage extends AppCompatActivity {
                         intent=new Intent(mypage.this,photopage.class);
                         break;
                     case R.id.platform:
-                        intent=new Intent(mypage.this,platform.class);
+                        // intent=new Intent(mypage.this,platform.class);
+                        intent=new Intent(mypage.this,DiseaseWikiActivity.class);
                         break;
                     case R.id.goto_history_button:
                         intent = new Intent(mypage.this, MyHistoryActivity.class);

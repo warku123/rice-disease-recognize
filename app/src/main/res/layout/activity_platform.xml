@@ -8,73 +8,82 @@
 
     <LinearLayout
         android:id="@+id/history"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:id="@+id/main_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ExpandableListView
+                android:id="@+id/id_elv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/id_elv">
+                android:layout_height="match_parent">
 
             </ExpandableListView>
 
             <LinearLayout
                 android:id="@+id/bottom_bar"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:background="#F2F2F8"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:background="#F2F2F8"
+                android:orientation="horizontal">
+
                 <RelativeLayout
                     android:id="@+id/bottom_bar_1_btn"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
                     <ImageButton
                         android:id="@+id/home"
                         android:layout_width="59dp"
                         android:layout_height="60dp"
                         android:layout_alignParentTop="true"
-                        android:background="@android:color/transparent"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="2dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/home" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/bottom_bar_2_btn"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
                     <ImageButton
                         android:id="@+id/platform"
                         android:layout_width="59dp"
                         android:layout_height="60dp"
                         android:layout_alignParentTop="true"
-                        android:background="@android:color/transparent"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="2dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/platform_selected" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:id="@+id/bottom_bar_3_btn"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <ImageButton
                         android:id="@+id/mine"
                         android:layout_width="59dp"
                         android:layout_height="60dp"
                         android:layout_alignParentTop="true"
-                        android:background="@android:color/transparent"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="2dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/mine" />
                 </RelativeLayout>
             </LinearLayout>
