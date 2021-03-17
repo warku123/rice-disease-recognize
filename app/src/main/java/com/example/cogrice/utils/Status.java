@@ -11,6 +11,4 @@ public class Status {
     private String userName = null;
 
 
-
-
 }

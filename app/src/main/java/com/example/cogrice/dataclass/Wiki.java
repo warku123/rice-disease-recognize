@@ -43,7 +43,7 @@ public class Wiki {
      */
     public static ArrayList<Wiki> getAllRemoteWikis() {
         ArrayList<Wiki> result = new ArrayList<Wiki>();
-        HttpClient.doGet("http://40.73.0.45:80/get_all_wikis");
+        // HttpClient.doGet("http://40.73.0.45:80/get_all_wikis");
         // 获取远程历史记录
         for(int i = 0;i<10;i++){
             result.add(new Wiki());

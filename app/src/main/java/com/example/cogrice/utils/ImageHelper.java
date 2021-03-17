@@ -4,8 +4,13 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import java.net.URLEncoder;
+import com.example.cogrice.http.HttpFileDownloader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 public class ImageHelper {
 
@@ -19,5 +24,35 @@ public class ImageHelper {
         byte[] imageByteArray = Base64.getDecoder().decode(base64ForImage);
         Bitmap bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
         return bitmap;
+    }
+
+    /**
+     * TODO 根据URL列表载图像文件
+     * @param urlList
+     * @return
+     */
+    public static List<Bitmap> downloadImagesAndLoadAsBitmap(List<String> urlList) {
+        ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
+        for(String url : urlList){
+            bitmapArrayList.add(downloadImageAndLoadAsBitmap(url));
+        }
+        return null;
+    }
+
+    /**
+     * 根据单个url下载图像
+     * @param recordImagePath
+     * @return
+     */
+    public static Bitmap downloadImageAndLoadAsBitmap(String recordImagePath) {
+        Bitmap result = null;
+        try {
+            InputStream inputStream = HttpFileDownloader.getInputStream(recordImagePath);
+            result = BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

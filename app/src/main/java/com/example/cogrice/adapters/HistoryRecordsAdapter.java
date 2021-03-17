@@ -13,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cogrice.R;
 import com.example.cogrice.dataclass.History;
+import com.example.cogrice.http.HttpFileDownloader;
 import com.example.cogrice.utils.SpacesItemDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAdapter.HistoryViewHolder> {
 
     public static final int SPACE = 2;
-    private ArrayList<History> historyRecords;
+    private List<History> historyRecords;
 
     /**
      * @param parent
@@ -71,15 +73,16 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
         }
     }
 
-    public HistoryRecordsAdapter(ArrayList<History> historyRecords) {
+    public HistoryRecordsAdapter(List<History> historyRecords) {
         this.historyRecords = historyRecords;
     }
 
-    public static void fillRecyclerView(RecyclerView recyclerView,Context parent){
+
+
+    public static void fillRecyclerView(RecyclerView recyclerView, Context parent, List<History> histories){
+        HistoryRecordsAdapter historyRecordsAdapter = new HistoryRecordsAdapter(histories);
+        System.out.println("数据填充");
         recyclerView.addItemDecoration(new SpacesItemDecoration(HistoryRecordsAdapter.SPACE));
-        System.out.println("读取远程数据填充");
-        ArrayList<History> localHistoriesList = History.getAllRemoteHistoryRecords();
-        HistoryRecordsAdapter historyRecordsAdapter = new HistoryRecordsAdapter(localHistoriesList);
         LinearLayoutManager manager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);
