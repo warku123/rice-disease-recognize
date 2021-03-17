@@ -51,5 +51,11 @@ public class login extends AppCompatActivity {
 
             }
         });
+        forgetpass.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Intent intent = new Intent(login.this,ForgetPassword.class);
+                startActivity(intent);
+            }
+        });
     }
 }

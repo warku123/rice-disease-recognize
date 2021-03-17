@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/background2"
     android:orientation="vertical"
     tools:context=".mypage">
 
@@ -32,7 +32,7 @@
             app:srcCompat="@drawable/my" />
 
         <TextView
-            android:layout_width="20dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent" />
 
         <LinearLayout
@@ -92,126 +92,6 @@
         android:layout_height="50dp"
         android:orientation="vertical"></LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/myinformation"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/takenlesson"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/takenlesson_num"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="0"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/takenlesson_name"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="已学教程"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/medal"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/medal_num"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="0"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/medal_name"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="勋章"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/certificate"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/certificate_num"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="0"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/certificate_name"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="证书"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/score"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/score_num"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="0"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/score_name"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:text="勋章"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/nullspace3"
@@ -234,17 +114,17 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/takenclass" />
+            app:srcCompat="@drawable/question" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/takenclass_char"
+            android:id="@+id/customer_service"
             android:layout_width="280dp"
             android:layout_height="40dp"
-            android:text="已学课程"
+            android:text="咨询客服"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -263,17 +143,17 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/myfavorite" />
+            app:srcCompat="@drawable/takenclass" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/myfavorite_char"
+            android:id="@+id/question_feedback"
             android:layout_width="280dp"
             android:layout_height="40dp"
-            android:text="我的收藏"
+            android:text="问题反馈"
             android:textSize="20sp" />
 
     </LinearLayout>

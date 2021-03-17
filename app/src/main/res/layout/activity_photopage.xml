@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/background_gradient">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/ourlogo"
@@ -52,8 +51,8 @@
 
     <ImageButton
         android:id="@+id/take_photo"
-        android:layout_width="285dp"
-        android:layout_height="273dp"
+        android:layout_width="240dp"
+        android:layout_height="230dp"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
@@ -61,7 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/qrcode" />
+        app:srcCompat="@drawable/camera" />
 
     <TextView
         android:id="@+id/tip"

@@ -12,9 +12,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class setpassword extends AppCompatActivity {
+
+    private String flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,14 @@ public class setpassword extends AppCompatActivity {
         background.getBackground().setAlpha(200);
         final Button submit;
         final EditText password,password2;
+        final TextView title;
+        Intent get = getIntent();
+        flag = get.getStringExtra("flag");
+        title = findViewById(R.id.textView4);
+        title.setText("重新设置密码");
+        if(flag.equals("login")){
+            title.setText("重新设置密码");
+        }
         password = findViewById(R.id.editText5);
         password2 = findViewById(R.id.editText6);
         password.setOnFocusChangeListener(new View.OnFocusChangeListener(){
@@ -116,9 +127,20 @@ public class setpassword extends AppCompatActivity {
                 }
 
                 if (str.equals(str2) && length>=6 && count_abc>0 && count_num>0 && count_oth>0) {
+                    String username = get.getStringExtra("username");
+                    String tel = get.getStringExtra("tel");
+                    String success,ask;
                     AlertDialog.Builder login = new AlertDialog.Builder(setpassword.this);
-                    login.setTitle("注册成功");
-                    login.setMessage("你已经注册成功了，是否要立马登录？");
+                    if(flag.equals("login")){
+                        success="重新设置密码成功";
+                        ask="你已经重新设置密码成功了，是否要立马登录？";
+                    }
+                    else{
+                        success="注册成功";
+                        ask="你已经注册成功了，是否要立马登录？";
+                    }
+                    login.setTitle(success);
+                    login.setMessage(ask);
                     login.setIcon(R.drawable.happy);
                     login.setPositiveButton("欣然接受", new DialogInterface.OnClickListener() {
                         @Override
