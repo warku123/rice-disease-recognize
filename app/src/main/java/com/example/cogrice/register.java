@@ -1,12 +1,15 @@
 package com.example.cogrice;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -97,32 +100,70 @@ public class register extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String str = editText.getText().toString().trim();
-                String str2 = editText2.getText().toString().trim();
+                String username = editText.getText().toString().trim();
+                String tel_number
+                        = editText2.getText().toString().trim();
                 checkfun checktel=new checkfun();
-                boolean correct=checktel.checktel(str2);
-                if(str.equals("") || str2.equals("")){
+                boolean correct=checktel.checktel(tel_number);
+                if(username.equals("") || tel_number.equals("")){
 
                 }
-                else if (!str.equals("") && correct) {
-                    Intent i = new Intent(register.this, identify.class);
-                    i.putExtra("username",str);
-                    i.putExtra("tel",str2);
-                    startActivity(i);
+                else if (!username.equals("") && correct) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String res = HttpClient.doPost_username_tel(
+                                    "http://40.73.0.45/user/detetive_user_repeat"
+                                    ,username,tel_number).trim();
+                            Log.d("Register", "run: "+res);
+                            if(res.equals("0"))
+                            {
+                                register.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent i = new Intent(register.this, identify.class);
+                                        i.putExtra("username",username);
+                                        i.putExtra("tel",tel_number);
+                                        startActivity(i);
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                register.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder failed = new AlertDialog.Builder(register.this);
+                                        failed.setTitle("注册失败");
+                                        failed.setMessage("手机号或用户名存在！");
+                                        failed.setPositiveButton("重新注册",new DialogInterface.OnClickListener(){
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        });
+                                        failed.show();
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+                    thread.start();
                 }
-                else if(!str.equals("") && !correct){
+                else if(!username.equals("") && !correct){
                     Toast toast=Toast.makeText(getApplicationContext(), "手机号码格式不正确！", Toast.LENGTH_SHORT);
                     toast.show();
                 }
-                else if(!str.equals("")){
+                else if(!username.equals("")){
                     Toast toast=Toast.makeText(getApplicationContext(), "此手机号码和用户名均已被注册！", Toast.LENGTH_SHORT);
                     toast.show();
                 }
-                else if(!str.equals("")){
+                else if(!username.equals("")){
                     Toast toast=Toast.makeText(getApplicationContext(), "此手机号码已被注册！", Toast.LENGTH_SHORT);
                     toast.show();
                 }
-                else if(!str.equals("")){
+                else if(!username.equals("")){
                     Toast toast=Toast.makeText(getApplicationContext(), "此用户名已被注册！", Toast.LENGTH_SHORT);
                     toast.show();
                 }
