@@ -1,6 +1,9 @@
 import os
 
 def get_request_info():
+    '''
+    获取request请求报文body中的模块信息，写入至文件
+    '''
     with open(r"/home/team4980/rice-disease-recognize/uploads/osdata.txt","w") as f:    
         f.write("request.form:\r\n")
         f.write(str(request.form))

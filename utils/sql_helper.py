@@ -72,10 +72,10 @@ class Sql_Helper:
 
     def fetchall(self, sql, params=None):
         '''
-        根据sql和参数获取一行数据
+        根据sql和参数获取所有数据
         :param sql:          sql语句
         :param params:       sql语句对象的参数列表，默认值为None
-        :return:             查询的一行数据
+        :return:             查询的所有数据
         '''
         dataall = None
         try:

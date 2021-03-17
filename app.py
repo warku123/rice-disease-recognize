@@ -1,23 +1,26 @@
+# flask
 from flask import Flask
-from flask import request, Response, jsonify
+from flask import request, Response, send_from_directory #, jsonify
+# path
+import os
 from werkzeug.utils import secure_filename
+# image
 from PIL import Image
-
-from io import BytesIO, BufferedWriter
-import json
 # import cv2
 # import matplotlib.pyplot as plt
 
-import os
+# common
+import json
+import time
+import base64
+from io import BytesIO #, BufferedWriter
+from utils import common
+from tools import db_operations, app_tools
+
+# model
 from ResNet_Code import infer
 from ResNet_Code.net import ResNet
 from ResNet_Code.config import train_parameters, init_train_parameters
-
-# from utils.sql_helper import Sql_Helper
-
-from tools import db_operations, app_tools
-
-import base64
 
 app = Flask(__name__)
 
@@ -102,7 +105,7 @@ def insert_one_user():
         tel_number = request.form['tel_number']
         influence_row = db_operations.insert_one_user(username, password, tel_number)
         print(influence_row)
-        return influence_row
+        return str(influence_row)
     else:
         return "insert user record failed!"
 
@@ -133,7 +136,7 @@ def update_pw_by_tel():
         tel_number = request.form['tel_number']
         password = request.form['password']
         influence_row = db_operations.update_pw_by_tel(tel_number, password)
-        return influence_row
+        return str(influence_row)
     else:
         return "update user password by tel failed!"
 
@@ -149,8 +152,7 @@ def get_all_wiki():
         # transfor list to json
         wiki_json_list = db_operations.wiki_list_to_json(list_label_info)
         wiki_json_result = json.dumps(wiki_json_list)
-        print(type(bytes(wiki_json_result,encoding='utf8')))
-        # print(json_result)
+
         return bytes(wiki_json_result,encoding='utf8')
     else:
         return "Get all wiki failed!"
@@ -159,24 +161,24 @@ def get_all_wiki():
 def get_all_records():
     '''
     frank's demand 2:
-    get all record from db.upload_records, return json(bytes) info with image(bytes) in
-    :return:    success:    records(bytes, json)
+    get all record from db.upload_records, return json info with image_url in
+    :return:    success:    records(json)
                 fail:       "Get all wiki failed!"
     '''
-    if request.method == 'POST': 
-        # transfor list to json
-        # record_json_list = db_operations.record_list_to_json(xxx)
-        # record_json_list = [{"record_id":"001","diease_name":"Two-spotted_spider_mite","image":str(open('./uploads/infer.jpg','rb').read())},\
-        #     {"record_id":"002","diease_name":"DO NOT KNOW","image":str(open('./uploads/MyPic.jpg','rb').read())}]
-        record_json_list = [{"record_id":"001","diease_name":"Two-spotted_spider_mite","image":str(open('./uploads/infer.jpg','rb').read())},\
-            {"record_id":"002","diease_name":"DO NOT KNOW","image":str(open('./uploads/MyPic.jpg','rb').read())}]
-        print(record_json_list)
+    if request.method == 'POST':
+        try:
+            username = request.form['username']
+        except:
+            return "Cannot get a username, please post a username!"
+        # username = "TOURIST"
+        record_result = db_operations.get_records_by_username(username)
+        record_json_result = json.dumps(record_result)
         
-        # record_json_result = bytes(json.dumps(record_json_list),encoding='utf8')
-        record_json_result = base64.b64encode(record_json_result)#使用base64进行加密
-        # print(type(bytes(json_result,encoding='utf8')))
-        # print(json_result)
-        # return record_json_result
+        # # record_json_result = bytes(json.dumps(record_json_list),encoding='utf8')
+        # record_json_result = base64.b64encode(record_json_result)#使用base64进行加密
+        # # print(type(bytes(json_result,encoding='utf8')))
+
+        return bytes(record_json_result, encoding="utf8")
     else:
         return "Get all records failed!"
 
@@ -186,18 +188,70 @@ def get_all_records_base64():
     frank's demand 2:
     get all record from db.upload_records, return json(bytes) info with image(bytes) in
     :return:    success:    records(bytes, json)
-                fail:       "Get all wiki failed!"
+                fail:       "Get all records failed!"
     '''
     if request.method == 'POST': 
       
-        record_json_list = [{"record_id":"001","diease_name":"Two-spotted_spider_mite","image":base64.b64encode(open('./uploads/infer.jpg','rb').read()).decode('utf-8')},\
-            {"record_id":"002","diease_name":"DO NOT KNOW","image":base64.b64encode(open('./uploads/MyPic.jpg','rb').read()).decode('utf-8')}]
-        
+        record_json_list = [{"recordId":"001","date":"2021-08-18 19:03:25","diseaseName":"Two-spotted_spider_mite","image":base64.b64encode(open('./uploads/infer.jpg','rb').read()).decode('utf-8')},{"recordId":"002","date":"2021-08-18 19:03:25","diseaseName":"DO NOT KNOW","image":base64.b64encode(open('./uploads/MyPic.jpg','rb').read()).decode('utf-8')}]        
         record_json_result_string = json.dumps(record_json_list)
         return record_json_result_string
     else:
         return "Get all records failed!"
 
+from flask import send_file, send_from_directory
+import os
+
+@app.route("/download/absolute/<path:path>", methods=['GET','POST'])
+def download_file_absolute_path(path):
+    '''
+    frank's demand 3:
+    get a image by url request(absolute path, not safety)
+    :para path:     absolute path
+    :return:        downliad file
+    '''
+    path = '/' + path
+    # print(path)
+    try:
+        if os.path.isdir(path):
+            return '<h1>Cannot download folder!</h1>'
+        else:
+            name=path.split('/')[-1]#split file name
+            filePath=path.replace(name,'')
+            # print(name)
+            # print(filePath)
+            return send_from_directory(filePath,filename=name,as_attachment=True)
+    except:
+        return '<h1>The file cannot be found or downloaded!</h1>'
+
+@app.route("/download/relative/<mode>/<path:path>", methods=['GET','POST'])
+def download_file_relative_path(mode,path):
+    '''
+    frank's demand 3:
+    get a image by url request(relative path, safety)
+    :para mode:     determined begin folder
+    :para path:     relative path
+    :return:        downliad file
+    '''
+    # TODO 需要知道2个参数, 第1个参数mode是某个功能的相对访问的起始路径, 第2个参数是在起始路径下的相对路径
+    if mode == 'record_image':
+        path = '/home/team4980/rice-disease-recognize/uploads/images/'+ path
+    elif mode == 'disease_info':
+        path = '/home/team4980/PreventionInfo/Pictures/' + path
+    else:
+        return "relative path did not define!"
+    print(path)
+    try:
+        if os.path.isdir(path):
+            return '<h1>Cannot download folder!</h1>'
+        else:
+            name=path.split('/')[-1]#split file name
+            filePath=path.replace(name,'')
+            # print(name)
+            # print(filePath)
+            return send_from_directory(filePath,filename=name,as_attachment=True)
+    except:
+        return '<h1>The file cannot be found or downloaded!</h1>'
+    
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -208,19 +262,43 @@ def upload_file():
     :return:    result diease's record(string, attribute split by '####')
     '''
     if request.method == 'POST':
+        # read post influence_row
         img_obj = request.files['bitmap']
         print(img_obj)
-        save_path = './uploads/' + secure_filename(img_obj.filename)
-        # TODO 数据库中记录好的路径
-        # TODO 随机文件名 date_type.jpg
-        img_obj.save(save_path)
+        try:
+            username = request.form['username']
+            print(username)
+        except:
+            username = "TOURIST"
+
+        # call live-model
         img = Image.open(img_obj)
-        # print(img)
-        # print(infer.infer(image_path = save_path))
+        diease_result = string_label_info[infer.live_model_infer(model = model, image = img)]
+        print(diease_result)
+
+        # generate img_save name
         # Beautiful!
-        result = label_info[infer.live_model_infer(model = model, image = save_path)]
-        print(result)
-        return result
+        img_name = db_operations.generate_image_name_by_time(diease_result,secure_filename(img_obj.filename))
+
+        # TODO generate img_save path, which needed to be added to db
+        ticks = time.localtime(time.time())
+        common.create_dir_not_exist('./uploads/images/'+ str(ticks.tm_year) +'-'+ str(ticks.tm_mon) + '/')
+        save_path = '/home/team4980/rice-disease-recognize/uploads/images/' + str(ticks.tm_year) +'-'+ str(ticks.tm_mon) + '/' + img_name
+        print(save_path)
+
+        # save img
+        img.save(save_path)
+
+        # insert one record into db
+        insert_result = db_operations.record_insert(diease_result,save_path,username)
+        if insert_result != 1:
+            print("insert record error!")
+        else:
+            print("insert 1 record!")
+        
+        # return string split by "####"
+        return diease_result
+
     else:
         return "Upload file error!"
 
@@ -233,7 +311,7 @@ if __name__ == '__main__':
     model = infer.load_model()
     # TODO Load all dieases' info from Database, although retrieving is quick enough.
     list_label_info = db_operations.get_all_info()
-    string_abel_info = db_operations.list_to_string(list_label_info)
+    string_label_info = db_operations.list_to_string(list_label_info)
 
     ## for test
     # result1 = infer.live_model_infer(model = model, image = "./uploads/bitmap.bmp")

@@ -1,5 +1,6 @@
 from utils.sql_helper import Sql_Helper
 import pymysql
+import time
 
 def get_all_info():
     '''
@@ -32,9 +33,12 @@ def get_all_info():
         # TODO 循环的次数根据数据表结构确定
         for i in range(2):
             list_data[item].append(tuple_data[item][i])
-        for i in range(len(tuple_data[item])-2):
+        for i in range(len(tuple_data[item])-3):
             with open(tuple_data[item][i+2],mode = 'r',encoding = 'utf8') as f:
                 list_data[item].append(f.read())
+        # TODO 1 此处不一定全都是png，可能会产生bug; 2 [item][5]根据表结构确定，可能会有bug
+        list_data[item].append("http://40.73.0.45/download/relative/disease_info/"+\
+             tuple_data[item][5].split("/")[-1])
 
     # print(list_data)
 
@@ -52,7 +56,8 @@ def list_to_string(list_data):
     for item in list_data:
         # 循环读取所有数据
         record = item[0] + "####" + item[1]
-        for elem in item[2:]:
+        # TODO 此处的item切片根据db中的表结构确定
+        for elem in item[2:5]:
             # 以####分割
             record = record + "####" + elem
             # print(record)
@@ -80,9 +85,10 @@ def wiki_list_to_json(list_data):
         json_item["disease_feature"] = item[2]
         json_item["agri_control"] = item[3]
         json_item["chem_control"] = item[4]
+        json_item["img_url"] = item[5]
         json_dic.append(json_item)
     
-    # print(json_dic)
+    print(json_dic)
 
     return json_dic
 
@@ -163,7 +169,7 @@ def insert_one_user(username,password,tel_number):
     else:
         # 执行插入
         influence_row = conn.insert("insert into user values(%s,%s,%s)",[username,password,tel_number])
-        print(influence_row)
+        # print(influence_row)
     # 关闭
     conn.close()
 
@@ -238,4 +244,91 @@ def update_pw_by_tel(tel_number, password):
     else:
         return influence_row
     
+def record_insert(result,image_path,username="TOURIST"):
+    '''
+    插入一条用户查询记录
+    :param result:              病虫害识别结果
+    :param image_path:          图片存储路径
+    :param username:            查询的用户名（不存在的话就是TUORIST）
+    :return:                    影响的行数
+    '''
+    # 获取%Y-%m-%d %H:%M:%S类型的时间字符串
+    ticks = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    # 初始化对象
+    conn = Sql_Helper('localhost', 'root', '123456', 'PreventionInformation')
+    # 连接
+    try:
+        conn.connect()
+
+    except:
+        return 'Error when linking to database!'
     
+    # 执行插入
+    try:
+        sql = "insert into upload_records(username,record_time,record_result,record_image_path) values(%s,%s,%s,%s)"
+        influence_row = conn.insert(sql,[username,str(ticks),result.split("####")[0],image_path])
+    except:
+        print('Error when inserting upload record to database!')
+    # print(influence_row)
+    # 关闭
+    conn.close()
+
+    return influence_row
+
+def generate_image_name_by_time(result,secure_filename):
+    '''
+    根据时间自动生成图片名称
+    :param result:              病虫害识别结果
+    :param secure_filename:     原图片名称
+    :return:                    生成图片名称
+    '''
+    ticks = time.localtime(time.time())
+    name = "{}_{}_{}-{}_{}_{}-{}.{}".format(ticks.tm_year,ticks.tm_mon,ticks.tm_mday,\
+    # TODO 注意这里secure_filename.split的"."
+        ticks.tm_hour,ticks.tm_min,ticks.tm_sec,result.split("####")[0],secure_filename.split(".")[-1])
+    return name
+
+def get_records_by_username(username):
+    '''
+    通过username获取所有历史记录
+    :param username:        用户名
+    :return:                json数据
+    '''
+    if username == None or username == "TOURIST":
+        return "username CANNOT be NONE or TOURIST!"
+
+    # 初始化对象
+    conn = Sql_Helper('localhost', 'root', '123456', 'PreventionInformation')
+    # 连接
+    try:
+        conn.connect()
+    except:
+        return 'Error when linking to database!'
+    
+    # SQL语句
+    sql = "select * from upload_records where username=%s"
+
+    # 执行
+    data = conn.fetchall(sql,[username])
+    
+    # 关闭
+    conn.close()
+ 
+    if data == None:
+        return "Cannot find record."
+    else:
+        # 将所有记录写入json形式
+        json_list = []
+        for item in data:
+            item_dic = {}
+            item_dic["record_id"] = str(item[0])
+            item_dic["record_time"] = str(item[2])
+            item_dic["record_result"] = str(item[3])
+            # TODO 最后两个路径叠加根据存储路径确定，可能会有bug
+            item_dic["record_image_path"] = "http://40.73.0.45/download/relative/record_image/"+ \
+                str(item[4]).split('/')[-2] + '/' + str(item[4]).split('/')[-1]
+            json_list.append(item_dic)
+        
+        # print(json_list)
+
+        return json_list
