@@ -9,6 +9,7 @@ public class Userinfo {
     public static void init()
     {
         is_login = false;
-        username
+        username = null;
+        tel_number = null;
     }
 }

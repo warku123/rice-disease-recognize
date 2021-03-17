@@ -13,9 +13,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class setpassword extends AppCompatActivity {
+
+    private String flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,14 @@ public class setpassword extends AppCompatActivity {
         background.getBackground().setAlpha(200);
         final Button submit;
         final EditText password,password2;
+        final TextView title;
+        Intent get = getIntent();
+        flag = get.getStringExtra("flag");
+        title = findViewById(R.id.textView4);
+        title.setText("重新设置密码");
+        if(flag.equals("login")){
+            title.setText("重新设置密码");
+        }
         password = findViewById(R.id.editText5);
         password2 = findViewById(R.id.editText6);
         password.setOnFocusChangeListener(new View.OnFocusChangeListener(){
