@@ -5,18 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class identify extends AppCompatActivity {
+public class ForgetPassword extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_identify);
-        View background = findViewById(R.id.identify);
-        background.getBackground().setAlpha(200);
+        setContentView(R.layout.activity_forget_password);
+
     }
+
     String str2;
     public void identifycode(View v){
         int s=(int)((Math.random()*9+1)*100000);
@@ -24,16 +28,16 @@ public class identify extends AppCompatActivity {
         Toast toast=Toast.makeText(getApplicationContext(),str2, Toast.LENGTH_SHORT);
         toast.show();
     }
-    public void submit(View v){
-        EditText editText4 = findViewById(R.id.editText4);
-        String code = editText4.getText().toString().trim();
-        String flag="register";
+
+    public void submitpin(View v){
+        EditText login_pin = findViewById(R.id.login_pin);
+        EditText login_tel = findViewById(R.id.login_tel);
+        String code = login_pin.getText().toString().trim();
+        String tel = login_tel.getText().toString().trim();
+        String flag="login";
         if(code.equals(str2)) {
             Intent get = getIntent();
-            String username = get.getStringExtra("username");
-            String tel = get.getStringExtra("tel");
-            Intent i = new Intent(identify.this, setpassword.class);
-            i.putExtra("username",username);
+            Intent i = new Intent(ForgetPassword.this, setpassword.class);
             i.putExtra("tel",tel);
             i.putExtra("flag",flag);
             startActivity(i);
@@ -43,4 +47,5 @@ public class identify extends AppCompatActivity {
             toast.show();
         }
     }
+
 }

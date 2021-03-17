@@ -14,6 +14,7 @@ public class mypage extends AppCompatActivity {
     ImageButton platform;
     ImageButton mine;
     TextView login;
+    TextView question;
     // 需要把将要操作的组件激活
     Button goto_history_button;
 
@@ -53,6 +54,12 @@ public class mypage extends AppCompatActivity {
                   startActivity(intent);
               }
         });
+        question.setOnClickListener(new View.OnClickListener(){
+           public void onClick(View view){
+               Intent intent = new Intent(mypage.this,CustomerService.class);
+               startActivity(intent);
+           }
+        });
 
         home.setOnClickListener(bottomlistener);
         platform.setOnClickListener(bottomlistener);
@@ -64,7 +71,14 @@ public class mypage extends AppCompatActivity {
         platform=findViewById(R.id.platform);
         mine=findViewById(R.id.mine);
         login=findViewById(R.id.pleaselogin);
+        question=findViewById(R.id.question_feedback);
         // 加载组件
         goto_history_button = findViewById(R.id.goto_history_button);
+
+        if(Userinfo.is_login==true)
+        {
+            login.setText(Userinfo.username);
+            question.setText(Userinfo.tel_number);
+        }
     }
 }
