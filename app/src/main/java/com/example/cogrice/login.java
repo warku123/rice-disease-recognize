@@ -2,6 +2,7 @@ package com.example.cogrice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ public class login extends AppCompatActivity {
     private TextView forgetpass;
     private static final int PASSWORD_MIWEN = 0x81;
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +48,7 @@ public class login extends AppCompatActivity {
         button_register=(Button)findViewById(R.id.register_button);
         forgetpass=(TextView)findViewById(R.id.forgetpass);
 
-        String s = "success\nsuccess2\nsuccess3";
+
 
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,8 +56,37 @@ public class login extends AppCompatActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("get", "onClick: "+HttpClient.doGet("http://40.73.0.45/get"));
-//                        Log.d("post", "run: "+HttpClient.doPostString("http://40.73.0.45/post",s));
+                        String login_result = null;
+                        String name_tel,password;
+                        name_tel = id_login.getText().toString();
+                        password = password_login.getText().toString();
+                        login_result = HttpClient.doPost_Usr_info(
+                                "http://40.73.0.45/user/fetch_one",
+                                name_tel,password,name_tel);
+                        Log.d("login", "run: "+login_result);
+                        String[] user_info = login_result.split("####");
+                        if (user_info.length==3) {
+                            Userinfo.is_login = true;
+                            Userinfo.username = user_info[0];
+                            Userinfo.tel_number = user_info[2];
+                            login.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "登陆成功", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(login.this, mypage.class);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                        else
+                        {
+                            login.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "登陆失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
                 });
                 thread.start();

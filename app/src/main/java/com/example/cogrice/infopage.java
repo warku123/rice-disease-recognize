@@ -91,10 +91,13 @@ public class infopage extends AppCompatActivity{
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    response = HttpClient.doPostBitmap("http://40.73.0.45:80/upload",bitmap);
+                    String username = null;
+                    response = HttpClient.doPostBitmap(
+                            "http://40.73.0.45:80/upload",bitmap);
                     infopage.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Log.d("response", "run: "+response);
                             String[] result = response.split("####");
                             String E_name = result[0].trim();
                             String C_name = result[1].trim();

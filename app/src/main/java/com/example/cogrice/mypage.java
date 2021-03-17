@@ -14,6 +14,7 @@ public class mypage extends AppCompatActivity {
     ImageButton platform;
     ImageButton mine;
     TextView login;
+    TextView tel_number;
     // 需要把将要操作的组件激活
     Button goto_history_button;
 
@@ -63,7 +64,14 @@ public class mypage extends AppCompatActivity {
         platform=findViewById(R.id.platform);
         mine=findViewById(R.id.mine);
         login=findViewById(R.id.pleaselogin);
+        tel_number=findViewById(R.id.history_login);
         // 加载组件
         goto_history_button = findViewById(R.id.goto_history_button);
+
+        if(Userinfo.is_login==true)
+        {
+            login.setText(Userinfo.username);
+            tel_number.setText(Userinfo.tel_number);
+        }
     }
 }
