@@ -23,8 +23,14 @@ public class JSONHelper {
     }
 
     public static List<HistoryRawPOJO> getHistoryPOJOsFromJson(String username) {
-        String recordsJson = getRecordsJsonStringAfterPost(username);
-        AlertHelper.log("获取到历史记录JSON信息" + recordsJson);
+        String recordsJson = null;
+        int count = 1;
+        while (recordsJson == null) {
+            recordsJson = getRecordsJsonStringAfterPost(username);
+            AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
+            count++;
+        }
+        AlertHelper.warnNotImplemented("获取到历史记录JSON信息" + recordsJson);
         List<HistoryRawPOJO> historyRawPOJOS = null;
         try {
             historyRawPOJOS = new ObjectMapper().readValue(recordsJson, new TypeReference<List<HistoryRawPOJO>>() {
@@ -38,7 +44,7 @@ public class JSONHelper {
     public static void main(String[] args) throws JsonProcessingException {
         String username = "JLKASD";
         ArrayList<HistoryRawPOJO> histories = (ArrayList<HistoryRawPOJO>) getHistoryPOJOsFromJson(username);
-        for(HistoryRawPOJO history:histories){
+        for (HistoryRawPOJO history : histories) {
             System.out.println(history);
         }
     }

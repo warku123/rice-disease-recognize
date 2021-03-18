@@ -11,18 +11,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.cogrice.R;
 import com.example.cogrice.dataclass.History;
-import com.example.cogrice.http.HttpFileDownloader;
+import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.SpacesItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAdapter.HistoryViewHolder> {
 
     public static final int SPACE = 2;
     private List<History> historyRecords;
+    private static Context context;
+
+    public Context getContext() {
+        return context;
+    }
+
+    public static void setContext(Context tar) {
+        HistoryRecordsAdapter.context = tar;
+    }
 
     /**
      * @param parent
@@ -46,6 +55,10 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         // holder.photo.setImageBitmap(historyRecords.get(position).getPhoto());
+        // Error
+        if (this.getContext() != null) {
+            Glide.with(this.getContext()).load(historyRecords.get(position).getPhotoUrl()).into(holder.photo);
+        }
         holder.date.setText((historyRecords.get(position).getFormattedDate()).toString());
         holder.type.setText(historyRecords.get(position).getDiseaseType().toString());
     }
@@ -78,14 +91,14 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
     }
 
 
-
-    public static void fillRecyclerView(RecyclerView recyclerView, Context parent, List<History> histories){
+    public static void fillRecyclerView(RecyclerView recyclerView, Context parent, List<History> histories) {
+        HistoryRecordsAdapter.setContext(parent);
         HistoryRecordsAdapter historyRecordsAdapter = new HistoryRecordsAdapter(histories);
-        System.out.println("数据填充");
         recyclerView.addItemDecoration(new SpacesItemDecoration(HistoryRecordsAdapter.SPACE));
         LinearLayoutManager manager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(historyRecordsAdapter);
+        System.out.println("数据填充");
     }
 }

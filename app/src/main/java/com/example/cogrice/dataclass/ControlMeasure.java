@@ -7,7 +7,7 @@ public class ControlMeasure {
     private String diseaseFeature;
     private String chemControl;
 
-    public static HashMap<String,ControlMeasure> controlMeasureMap;
+    public static HashMap<String,ControlMeasure> controlMeasureMap = new HashMap<String, ControlMeasure>();
 
     public ControlMeasure(String agriControl, String diseaseFeature, String chemControl) {
         this.agriControl = agriControl;

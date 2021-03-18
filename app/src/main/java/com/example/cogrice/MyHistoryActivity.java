@@ -52,10 +52,10 @@ public class MyHistoryActivity extends AppCompatActivity {
     public void initComponents() {
         setContentView(R.layout.activity_my_history);
         this.historyCardRecyclerView = (RecyclerView) findViewById(R.id.history_card_recycler_view);
-        HistoryRecordsAdapter.fillRecyclerView(this.historyCardRecyclerView,this,new ArrayList<>());
-        History.startDownloadingHistories(historyViewHandler);
-        System.out.println("Toast提示信息");
+        // HistoryRecordsAdapter.fillRecyclerView(this.historyCardRecyclerView,this,new ArrayList<>());
         AlertHelper.toastAlert("正在拉取历史记录，请稍候……");
+        HistoryRecordsAdapter.setContext(this);
+        History.startDownloadingHistories(historyViewHandler);
     }
 
 }

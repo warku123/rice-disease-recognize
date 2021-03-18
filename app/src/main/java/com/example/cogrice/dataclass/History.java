@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.cogrice.HttpClient;
 import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.ImageHelper;
-import com.example.cogrice.utils.Status;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,9 +22,29 @@ public class History implements Serializable {
 
 
     private String diseaseType;
-    private Date date;
+    private Date time;
     private ControlMeasure controlMeasure;
     private Bitmap photo;
+    private String photoUrl;
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "History{" +
+                "diseaseType='" + diseaseType + '\'' +
+                ", time=" + time +
+                ", controlMeasure=" + controlMeasure +
+                ", photo=" + photo +
+                ", photoUrl='" + photoUrl + '\'' +
+                '}';
+    }
 
     public static class HistoryRawPOJO {
         /**
@@ -85,12 +106,23 @@ public class History implements Serializable {
         }
 
         public History toHistory() {
+            AlertHelper.warnNotImplemented("正在填充" + this.toString());
             History result = new History();
+            SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+            Date time = null;
+            try {
+                time = ft.parse(recordTime);
+                System.out.println(time);
+            } catch (ParseException e) {
+                System.out.println("Unparseable using " + ft);
+            }
             result.setControlMeasure(ControlMeasure.getMeasureFor(recordResult));
-            result.setDate(new Date(recordTime));
+            result.setTime(time);
             // TODO! IMPORTANT! 转化为BitMap
-            result.setPhoto(ImageHelper.downloadImageAndLoadAsBitmap(recordImagePath));
-            result.setPhoto(null);
+            result.setDiseaseType(recordResult);
+            result.setPhotoUrl(recordImagePath);
+            AlertHelper.warnNotImplemented("在History对象当中不加载位图");
+            // result.setPhoto(ImageHelper.downloadImageAndLoadAsBitmap(recordImagePath));
             return result;
         }
     }
@@ -106,6 +138,7 @@ public class History implements Serializable {
 
     /**
      * TODO 获取所有的历史记录
+     *
      * @param username
      */
     public static List<History> getAllRemoteHistoryRecords(String username) {
@@ -121,8 +154,8 @@ public class History implements Serializable {
     }
 
     private static List<History> fillPOJOList(ArrayList<HistoryRawPOJO> historyRawPOJOS) {
-       ArrayList<History> histories = new ArrayList<>();
-        for(HistoryRawPOJO historyRawPOJO : historyRawPOJOS){
+        ArrayList<History> histories = new ArrayList<>();
+        for (HistoryRawPOJO historyRawPOJO : historyRawPOJOS) {
             histories.add(historyRawPOJO.toHistory());
         }
         return histories;
@@ -140,17 +173,17 @@ public class History implements Serializable {
         this.diseaseType = diseaseType;
     }
 
-    public Date getDate() {
-        return this.date;
+    public Date getTime() {
+        return this.time;
     }
 
     public String getFormattedDate() {
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        return ft.format(this.date);
+        return ft.format(this.time);
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public ControlMeasure getControlMeasure() {
@@ -161,40 +194,10 @@ public class History implements Serializable {
         this.controlMeasure = controlMeasure;
     }
 
-    public History(String diseaseType, Date date, ControlMeasure controlMeasure, Bitmap photo) {
-        this.diseaseType = diseaseType;
-        this.date = date;
-        this.controlMeasure = controlMeasure;
-        this.photo = photo;
-    }
-
-    /**
-     * 默认构造函数
-     */
-    public History() {
-        this("水稻稻瘟病",
-                new Date(121, 1, 1, 15, 26, 10),
-                new ControlMeasure(),
-                null
-        );
-    }
-
-
-    @Override
-    public String toString() {
-        return "History{" +
-                "diseaseType='" + diseaseType + '\'' +
-                ", date=" + date +
-                ", controlMeasure=" + controlMeasure +
-                '}';
-    }
-
 
     public static void startDownloadingHistories(Handler historyViewHandler) {
         new HistoriesDownloadThread(historyViewHandler).start();
-        AlertHelper.log("开始下载历史记录");
     }
-
 
 
     public static class HistoriesDownloadThread extends Thread {
@@ -207,7 +210,7 @@ public class History implements Serializable {
         @Override
         public void run() {
             super.run();
-            AlertHelper.log("下载线程开始运行");
+            AlertHelper.warnNotImplemented("下载线程开始运行");
             // 阻塞，等待历史记录获取
             List<History> histories = History.getAllRemoteHistoryRecords("TOURIST_1");
             Message msg = Message.obtain();
@@ -220,6 +223,8 @@ public class History implements Serializable {
     }
 
     public static void main(String[] args) {
-
+//        String bitmapString = HttpClient.doGet("http://40.73.0.45/download/relative/record_image/2021-3/2021_3_17-15_11_58-Tomato___Early_blight.bmp");
+        String bitmapString = HttpClient.doGet("http://40.73.0.45/download/relative/record_image/2021-3/lADPD2eDPMraS4bNBoLNCcQ_2500_1666.jpg");
+        System.out.println(bitmapString.length());
     }
 }

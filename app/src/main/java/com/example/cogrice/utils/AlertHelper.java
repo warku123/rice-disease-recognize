@@ -5,10 +5,10 @@ import android.widget.Toast;
 
 public class AlertHelper {
     public static void toastAlert(String msg){
-        Toast.makeText(GlobalApplication.getGlobalContext(), "发送广播成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(GlobalApplication.getGlobalContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
-    public static void log(String msg){
-        Log.d("ALERT_HELPER_LOG",msg);
+    public static void warnNotImplemented(String msg){
+        Log.d("【NOT IMPLEMENTED】",msg);
     }
 }

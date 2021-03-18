@@ -1,13 +1,14 @@
 package com.example.cogrice.utils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
-import com.example.cogrice.http.HttpFileDownloader;
+import com.example.cogrice.HttpClient;
+import com.example.cogrice.http.Downloader;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -28,12 +29,13 @@ public class ImageHelper {
 
     /**
      * TODO 根据URL列表载图像文件
+     *
      * @param urlList
      * @return
      */
     public static List<Bitmap> downloadImagesAndLoadAsBitmap(List<String> urlList) {
         ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
-        for(String url : urlList){
+        for (String url : urlList) {
             bitmapArrayList.add(downloadImageAndLoadAsBitmap(url));
         }
         return null;
@@ -41,18 +43,19 @@ public class ImageHelper {
 
     /**
      * 根据单个url下载图像
+     *
      * @param recordImagePath
      * @return
      */
     public static Bitmap downloadImageAndLoadAsBitmap(String recordImagePath) {
-        Bitmap result = null;
-        try {
-            InputStream inputStream = HttpFileDownloader.getInputStream(recordImagePath);
-            result = BitmapFactory.decodeStream(inputStream);
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+        /*
+                    InputStream inputStream = Downloader.getInputStream(recordImagePath);
+                    result = BitmapFactory.decodeStream(inputStream);
+                    inputStream.close();
+        */
+        String filePath = new Downloader(recordImagePath,"image").startSilently();
+        // 下载一个文件，但是要让他在这里等待
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        return bitmap;
     }
 }
