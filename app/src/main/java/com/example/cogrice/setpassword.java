@@ -139,33 +139,51 @@ public class setpassword extends AppCompatActivity {
                                         "http://40.73.0.45/user/insert",
                                         username, str, tel_number).trim();
                                 Log.d("register_res", "run: " + res);
-                                setpassword.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AlertDialog.Builder login = new AlertDialog.Builder(setpassword.this);
-                                        login.setTitle("注册成功");
-                                        login.setMessage("你已经注册成功了，是否要立马登录？");
-                                        login.setIcon(R.drawable.happy);
-                                        login.setPositiveButton("欣然接受", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                                //跳转
-                                                Intent link = new Intent(setpassword.this, login.class);
-                                                startActivity(link);
-                                            }
-                                        });
-                                        login.setNegativeButton("残忍拒绝", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                                Intent link = new Intent(setpassword.this, mypage.class);
-                                                startActivity(link);
-                                            }
-                                        });
-                                        login.show();
-                                    }
-                                });
+                                if(res.equals("connection failed")){
+                                    setpassword.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            AlertDialog.Builder failed = new AlertDialog.Builder(setpassword.this);
+                                            failed.setTitle("网络连接失败");
+                                            failed.setMessage("请检查网络连接");
+                                            failed.setPositiveButton("重试",new DialogInterface.OnClickListener(){
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                }
+                                            });
+                                            failed.show();
+                                        }
+                                    });
+                                }
+                                else{
+                                    setpassword.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            AlertDialog.Builder login = new AlertDialog.Builder(setpassword.this);
+                                            login.setTitle("注册成功");
+                                            login.setMessage("你已经注册成功了，是否要立马登录？");
+                                            login.setIcon(R.drawable.happy);
+                                            login.setPositiveButton("欣然接受", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                    //跳转
+                                                    Intent link = new Intent(setpassword.this, login.class);
+                                                    startActivity(link);
+                                                }
+                                            });
+                                            login.setNegativeButton("残忍拒绝", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                    Intent link = new Intent(setpassword.this, mypage.class);
+                                                    startActivity(link);
+                                                }
+                                            });
+                                            login.show();
+                                        }
+                                    });
+                                }
                             }
                         });
                         thread.start();
@@ -180,33 +198,52 @@ public class setpassword extends AppCompatActivity {
                                         "http://40.73.0.45/user/update_pw_by_tel",
                                         tel_number, str).trim();
                                 Log.d("update", "onClick: " + res);
-                                setpassword.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AlertDialog.Builder login = new AlertDialog.Builder(setpassword.this);
-                                        login.setTitle("修改成功");
-                                        login.setMessage("密码修改成功，是否要立马登录？");
-                                        login.setIcon(R.drawable.happy);
-                                        login.setPositiveButton("欣然接受", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                                //跳转
-                                                Intent link = new Intent(setpassword.this, login.class);
-                                                startActivity(link);
-                                            }
-                                        });
-                                        login.setNegativeButton("残忍拒绝", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                                Intent link = new Intent(setpassword.this, mypage.class);
-                                                startActivity(link);
-                                            }
-                                        });
-                                        login.show();
-                                    }
-                                });
+                                if(res.equals("connection failed"))
+                                {
+                                    setpassword.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            AlertDialog.Builder failed = new AlertDialog.Builder(setpassword.this);
+                                            failed.setTitle("网络连接失败");
+                                            failed.setMessage("请检查网络连接");
+                                            failed.setPositiveButton("重试",new DialogInterface.OnClickListener(){
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                }
+                                            });
+                                            failed.show();
+                                        }
+                                    });
+                                }
+                                else {
+                                    setpassword.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            AlertDialog.Builder login = new AlertDialog.Builder(setpassword.this);
+                                            login.setTitle("修改成功");
+                                            login.setMessage("密码修改成功，是否要立马登录？");
+                                            login.setIcon(R.drawable.happy);
+                                            login.setPositiveButton("欣然接受", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                    //跳转
+                                                    Intent link = new Intent(setpassword.this, login.class);
+                                                    startActivity(link);
+                                                }
+                                            });
+                                            login.setNegativeButton("残忍拒绝", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                    Intent link = new Intent(setpassword.this, mypage.class);
+                                                    startActivity(link);
+                                                }
+                                            });
+                                            login.show();
+                                        }
+                                    });
+                                }
                             }
                         });
                         thread.start();

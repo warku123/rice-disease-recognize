@@ -128,7 +128,7 @@ public class register extends AppCompatActivity {
                                     }
                                 });
                             }
-                            else
+                            else if(res.equals("1"))
                             {
                                 register.this.runOnUiThread(new Runnable() {
                                     @Override
@@ -136,6 +136,24 @@ public class register extends AppCompatActivity {
                                         AlertDialog.Builder failed = new AlertDialog.Builder(register.this);
                                         failed.setTitle("注册失败");
                                         failed.setMessage("手机号或用户名存在！");
+                                        failed.setPositiveButton("重新注册",new DialogInterface.OnClickListener(){
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        });
+                                        failed.show();
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                register.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder failed = new AlertDialog.Builder(register.this);
+                                        failed.setTitle("网络连接失败");
+                                        failed.setMessage("请检查网络连接！");
                                         failed.setPositiveButton("重新注册",new DialogInterface.OnClickListener(){
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {

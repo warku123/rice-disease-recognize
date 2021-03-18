@@ -45,9 +45,26 @@ public class ForgetPassword extends AppCompatActivity {
                 @Override
                 public void run() {
                     String res = HttpClient.doPost_select_tel(
-                            "http://40.73.0.45/user/fetch_by_tel",tel);
+                            "http://40.73.0.45/user/fetch_by_tel",tel).trim();
                     Log.d("Forget", "run: "+res);
-                    if(res.split("####").length>1)
+                    if(res.equals("connection failed")) {
+                        ForgetPassword.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder failed = new AlertDialog.Builder(ForgetPassword.this);
+                                failed.setTitle("网络连接失败");
+                                failed.setMessage("请检查网络连接");
+                                failed.setPositiveButton("重新找回",new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                                failed.show();
+                            }
+                        });
+                    }
+                    else if(res.split("####").length>1)
                     {
                         ForgetPassword.this.runOnUiThread(new Runnable() {
                             @Override
