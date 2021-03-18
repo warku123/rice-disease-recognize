@@ -96,7 +96,7 @@
     <LinearLayout
         android:id="@+id/nullspace3"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:orientation="vertical"></LinearLayout>
 
     <LinearLayout

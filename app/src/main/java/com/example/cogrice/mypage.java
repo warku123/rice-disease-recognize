@@ -95,7 +95,7 @@ public class mypage extends AppCompatActivity {
         goto_history_button = findViewById(R.id.goto_history_button);
     }
     public  void calltel(View view){
-        String number = "13854551953";
+        String number = "18801013877";
         Log.i("mw","===="+number);
 
         //android6版本获取动态权限
