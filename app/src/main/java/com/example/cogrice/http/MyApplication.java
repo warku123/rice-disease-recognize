@@ -15,10 +15,6 @@ import okhttp3.OkHttpClient;
 //import cn.jpush.android.api.JPushInterface;
 
 
-/**
- * Created by gaopeng on 2018/5/7.
- */
-
 public class MyApplication extends LitePalApplication {
 
     public static final String TAG = "-----------";

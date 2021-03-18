@@ -3,6 +3,7 @@ package com.example.cogrice;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,9 @@ public class CustomerService extends AppCompatActivity {
     private EditText inputText;
     private Button send;
     private MsgAdapter adapter;
-    private int MsgNum=0;
+    private int[] LastMsgtime={0,0,0};
+    private  int[] NowMsgtime={0,0,0};
+    private String source;
 
     private List<Msg> msgList = new ArrayList<Msg>();
 
@@ -36,8 +39,11 @@ public class CustomerService extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_customer_service);
+        Intent get = getIntent();
+        source=get.getStringExtra("question");
 
-        initMsgs();
+        
+        initMsgs(source);
         adapter = new MsgAdapter(CustomerService.this, R.layout.msg_box, msgList);
         inputText = (EditText)findViewById(R.id.input_text);
         send = (Button)findViewById(R.id.send);
@@ -49,14 +55,22 @@ public class CustomerService extends AppCompatActivity {
                 String content = inputText.getText().toString();
                 if(!"".equals(content)) {
                     String time=NowTime();
-                    Msg msg = new Msg(content, Msg.TYPE_SEND,time);
+                    Msg msg = new Msg(content, Msg.TYPE_SEND,time,quickresponse(LastMsgtime,NowMsgtime));
                     msgList.add(msg);
                     adapter.notifyDataSetChanged();
                     msgListView.setSelection(msgList.size());
                     inputText.setText("");
+                    autoresponse(source);
                 }
             }
         });
+    }
+
+    private boolean quickresponse(int[] LastMsgtime,int[] NowMsgtime) {
+        if(NowMsgtime[0]*24*60+NowMsgtime[1]*60+NowMsgtime[2]-LastMsgtime[0]*24*60-LastMsgtime[1]*60-LastMsgtime[2]>5)
+            return false;
+        else
+            return true;
     }
 
     private String NowTime(){
@@ -67,16 +81,35 @@ public class CustomerService extends AppCompatActivity {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute=calendar.get(Calendar.MINUTE);
         String date=(year+"年"+month+"月"+day+"日"+" "+hour+":"+minute);
+        for(int i = 0; i < 3; i++){
+            LastMsgtime[i]=NowMsgtime[i];
+        }
+        NowMsgtime[0]=day;
+        NowMsgtime[1]=hour;
+        NowMsgtime[2]=minute;
+
         return date;
     }
 
-    private void initMsgs() {
-        Msg msg1 = new Msg("Hello, how are you?", Msg.TYPE_RECEIVED,NowTime());
+    private void initMsgs(String source) {
+        Msg msg1;
+        if(source.equals("product")){
+            msg1 = new Msg("尊敬的用户您好！这里是客服君，请问您对本产品有什么意见吗？", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+        }
+        else{
+            msg1 = new Msg("尊敬的用户您好！这里是客服君，请问您对本次识别结果有什么疑问吗？", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+        }
         msgList.add(msg1);
-        Msg msg2 = new Msg("Fine, thank you, and you?", Msg.TYPE_SEND,NowTime());
-        msgList.add(msg2);
-        Msg msg3 = new Msg("I am fine, too!", Msg.TYPE_RECEIVED,NowTime());
-        msgList.add(msg3);
+    }
+    private void autoresponse(String source){
+        Msg response;
+        if(source.equals("product")){
+            response = new Msg("您的回复我已收到，感谢您对本产品提出的建议！后台管理员会定期查看用户回复，并对产品进行改进！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+        }
+        else{
+            response = new Msg("您的反馈我已收到，感谢您对识别结果提出的建议！我们会检查模型，核对结果，进一步提高识别正确率！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+        }
+        msgList.add(response);
     }
 
     public class Msg {
@@ -86,11 +119,13 @@ public class CustomerService extends AppCompatActivity {
         private String content;
         private String time;
         private int type;
+        private boolean newMsg;
 
-        public Msg(String content, int type, String time) {
+        public Msg(String content, int type, String time, boolean newMsg) {
             this.content = content;
             this.type = type;
             this.time = time;
+            this.newMsg = newMsg;
         }
 
         public String getContent() {
@@ -102,6 +137,9 @@ public class CustomerService extends AppCompatActivity {
         public int getType() {
             return type;
         }
+
+        public boolean ifNewMsg() { return newMsg; }
+
     }
 
     public class MsgAdapter extends ArrayAdapter<Msg> {
@@ -136,8 +174,13 @@ public class CustomerService extends AppCompatActivity {
                 viewHolder = (ViewHolder) view.getTag();
             }
             if(msg.getType() == Msg.TYPE_RECEIVED) {
+                if(!msg.ifNewMsg()){
+                    viewHolder.receivetime.setVisibility(View.VISIBLE);
+                }
+                else{
+                    viewHolder.receivetime.setVisibility(View.GONE);
+                }
                 viewHolder.receive.setVisibility(View.VISIBLE);
-                viewHolder.receivetime.setVisibility(View.VISIBLE);
                 viewHolder.receivename.setVisibility(View.VISIBLE);
 
                 viewHolder.send.setVisibility(View.GONE);
@@ -147,8 +190,13 @@ public class CustomerService extends AppCompatActivity {
                 viewHolder.leftMsg.setText(msg.getContent());
                 viewHolder.receivetime.setText(msg.getTime());
             } else if(msg.getType() == Msg.TYPE_SEND) {
+                if(!msg.ifNewMsg()){
+                    viewHolder.sendtime.setVisibility(View.VISIBLE);
+                }
+                else{
+                    viewHolder.sendtime.setVisibility(View.GONE);
+                }
                 viewHolder.send.setVisibility(View.VISIBLE);
-                viewHolder.sendtime.setVisibility(View.VISIBLE);
                 viewHolder.sendname.setVisibility(View.VISIBLE);
 
                 viewHolder.receive.setVisibility(View.GONE);

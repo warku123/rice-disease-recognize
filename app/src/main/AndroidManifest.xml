@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="true" />
@@ -17,6 +16,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -26,7 +31,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen">
-
+        <activity android:name=".photopage"></activity>
         <activity android:name=".CustomerService" />
         <activity android:name=".Intropage" />
         <activity android:name=".ForgetPassword" />
@@ -39,7 +44,7 @@
         <activity android:name=".platform" />
         <activity android:name=".mypage" />
         <activity android:name=".infopage" />
-        <activity android:name=".photopage">
+        <activity android:name=".Welcomepage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,6 +61,15 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <receiver
+
+            android:name=".identify">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

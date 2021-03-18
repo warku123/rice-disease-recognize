@@ -125,6 +125,7 @@
             android:layout_width="280dp"
             android:layout_height="40dp"
             android:text="咨询客服"
+            android:onClick="calltel"
             android:textSize="20sp" />
     </LinearLayout>
 

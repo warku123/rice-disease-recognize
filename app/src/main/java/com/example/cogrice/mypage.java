@@ -2,8 +2,13 @@ package com.example.cogrice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,6 +20,7 @@ public class mypage extends AppCompatActivity {
     ImageButton mine;
     TextView login;
     TextView question;
+    TextView call;
     // 需要把将要操作的组件激活
     Button goto_history_button;
 
@@ -56,9 +62,22 @@ public class mypage extends AppCompatActivity {
         question.setOnClickListener(new View.OnClickListener(){
            public void onClick(View view){
                Intent intent = new Intent(mypage.this,CustomerService.class);
+               intent.putExtra("question","product");
                startActivity(intent);
            }
         });
+
+
+//        call.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View view){
+//                Intent intent = new Intent();
+//                intent.setAction(Intent.ACTION_CALL);//dial是拨号的意思
+//                Uri data = Uri.parse("tel:" + "13854551953");//这个tel不能改，后面的数字可以随便改
+//                startActivity(intent);
+//                intent.setData(data);
+//                startActivity(intent); // 激活Activity组件
+//            }
+//        });
 
         home.setOnClickListener(bottomlistener);
         platform.setOnClickListener(bottomlistener);
@@ -71,7 +90,32 @@ public class mypage extends AppCompatActivity {
         mine=findViewById(R.id.mine);
         login=findViewById(R.id.pleaselogin);
         question=findViewById(R.id.question_feedback);
+        call=findViewById(R.id.customer_service);
         // 加载组件
         goto_history_button = findViewById(R.id.goto_history_button);
+    }
+    public  void calltel(View view){
+        String number = "13854551953";
+        Log.i("mw","===="+number);
+
+        //android6版本获取动态权限
+        if (Build.VERSION.SDK_INT >= 23) {
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {Manifest.permission.CALL_PHONE};
+            //验证是否许可权限
+            for (String str : permissions) {
+                if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    //申请权限
+                    this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                    return;
+                }
+            }
+        }
+
+        //如果需要手动拨号将Intent.ACTION_CALL改为Intent.ACTION_DIAL（跳转到拨号界面，用户手动点击拨打）
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        Uri data = Uri.parse("tel:" +number);
+        intent.setData(data);
+        startActivity(intent);
     }
 }

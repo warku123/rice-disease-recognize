@@ -9,9 +9,6 @@ import com.lzy.okgo.model.Response;
 import org.json.JSONException;
 
 
-/**
- * Created by seven on 2016/5/21.
- */
 public class HttpHelp {
 
 

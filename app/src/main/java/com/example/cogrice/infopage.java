@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -45,6 +46,7 @@ public class infopage extends AppCompatActivity{
     private ImageView rice_image_view;
     private Button returnbtn,introbtn;
     private TextView result_view;
+    private TextView anyquestion;
     private InputStream picstream_in;
     private String response;
     private Bitmap bitmap;
@@ -59,7 +61,8 @@ public class infopage extends AppCompatActivity{
         imageUri = getIntent().getParcelableExtra("URI");
 
         result_view = findViewById(R.id.disease_output);
-
+        anyquestion=findViewById(R.id.anyquestion);
+        anyquestion.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
         returnbtn=findViewById(R.id.returnbtn);
         returnbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +112,15 @@ public class infopage extends AppCompatActivity{
                                 public void onClick(View view) {
                                     Intent intent=new Intent(infopage.this,Intropage.class);
                                     intent.putExtra("response",response);
+                                    startActivity(intent);
+                                }
+                            });
+                            anyquestion.setVisibility(View.VISIBLE);
+                            anyquestion.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(infopage.this,CustomerService.class);
+                                    intent.putExtra("question","output");
                                     startActivity(intent);
                                 }
                             });
