@@ -1,5 +1,13 @@
 plugins {
     id 'com.android.application'
+    id 'com.mob.sdk'
+}
+
+// 在MobSDK的扩展中注册SMSSDK的相关信息
+MobSDK {
+    appKey "32a423ebfb6f2"
+    appSecret "4a2854f3cb814426840bfc94dced5913"
+    SMSSDK {}
 }
 
 android {
@@ -54,4 +62,5 @@ dependencies {
     //LitePal
     implementation 'org.litepal.android:core:1.3.2'
     compileOnly 'com.google.android.wearable:wearable:2.6.0'
+
 }

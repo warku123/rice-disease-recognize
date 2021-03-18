@@ -31,9 +31,11 @@ public class setpassword extends AppCompatActivity {
         Intent get = getIntent();
         flag = get.getStringExtra("flag");
         title = findViewById(R.id.textView4);
-        title.setText("重新设置密码");
         if(flag.equals("login")){
             title.setText("重新设置密码");
+        }
+        else{
+            title.setText("设置密码");
         }
         password = findViewById(R.id.editText5);
         password2 = findViewById(R.id.editText6);
