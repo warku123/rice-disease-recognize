@@ -110,21 +110,22 @@ public class infopage extends AppCompatActivity{
                                 String[] result = response.split("####");
                                 String E_name = result[0].trim();
                                 String C_name = result[1].trim();
-                                String Intro = result[2].trim();
-                                String Method = result[3].trim();
-                                String Treat = result[4].trim();
 
-                                Log.d("bitmap", "run: " + result);
+                                Log.d("bitmap", "run: " + result.length);
+
                                 result_view.setText(C_name);
-                                introbtn.setVisibility(View.VISIBLE);
-                                introbtn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(infopage.this, Intropage.class);
-                                        intent.putExtra("response", response);
-                                        startActivity(intent);
-                                    }
-                                });
+
+                                if(result.length>2) {
+                                    introbtn.setVisibility(View.VISIBLE);
+                                    introbtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(infopage.this, Intropage.class);
+                                            intent.putExtra("response", response);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
                             }
                         });
                     }
