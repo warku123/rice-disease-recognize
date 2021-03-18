@@ -57,7 +57,7 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
         // holder.photo.setImageBitmap(historyRecords.get(position).getPhoto());
         // Error
         if (this.getContext() != null) {
-            Glide.with(this.getContext()).load(historyRecords.get(position).getPhotoUrl()).into(holder.photo);
+            Glide.with(this.getContext()).load(historyRecords.get(position).getPhotoUrl()).error(R.drawable.loadfailed).placeholder(R.drawable.loading_bg).fallback(R.drawable.loadfailed).into(holder.photo);
         }
         holder.date.setText((historyRecords.get(position).getFormattedDate()).toString());
         holder.type.setText(historyRecords.get(position).getDiseaseType().toString());

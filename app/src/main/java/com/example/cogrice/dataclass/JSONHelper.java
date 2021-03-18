@@ -26,10 +26,12 @@ public class JSONHelper {
 
     public static List<HistoryRawPOJO> getHistoryPOJOsFromJson(String username) {
         String recordsJson = null;
-        int count = 1;
-        while (recordsJson == null) {
-            recordsJson = getRecordsJsonStringAfterPost(username);
+        int count = 2;
+        recordsJson = getRecordsJsonStringAfterPost(username);
+        while (recordsJson == null || recordsJson.toLowerCase().contains("fail")) {
+            AlertHelper.warn("服务器繁忙，请稍候");
             AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
+            recordsJson = getRecordsJsonStringAfterPost(username);
             count++;
         }
         AlertHelper.warnNotImplemented("获取到历史记录JSON信息" + recordsJson);

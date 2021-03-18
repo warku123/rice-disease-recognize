@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.example.cogrice.HttpClient;
+import com.example.cogrice.Userinfo;
 import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.ImageHelper;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -121,7 +122,6 @@ public class History implements Serializable {
             // TODO! IMPORTANT! 转化为BitMap
             result.setDiseaseType(recordResult);
             result.setPhotoUrl(recordImagePath);
-            AlertHelper.warnNotImplemented("在History对象当中不加载位图");
             // result.setPhoto(ImageHelper.downloadImageAndLoadAsBitmap(recordImagePath));
             return result;
         }
@@ -206,7 +206,7 @@ public class History implements Serializable {
             AlertHelper.warnNotImplemented("下载线程采用Glide加载图片");
             // 阻塞，等待历史记录获取
             AlertHelper.warnNotImplemented("请设置默认用户名");
-            List<History> histories = History.getAllRemoteHistoryRecords("zpg");
+            List<History> histories = History.getAllRemoteHistoryRecords(Userinfo.username);
             Message msg = Message.obtain();
             msg.what = GOT_ALL_HISTORIES;
             Bundle historiesBundle = new Bundle();
