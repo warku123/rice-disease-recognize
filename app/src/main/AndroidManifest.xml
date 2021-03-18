@@ -34,6 +34,7 @@
         <activity android:name=".ForgetPassword" />
         <activity android:name=".login" />
         <activity android:name=".setpassword" />
+        <activity android:name=".DiseaseWikiActivity" />
         <activity android:name=".identify" />
         <activity android:name=".checkfun" />
         <activity android:name=".register" />
@@ -44,7 +45,6 @@
         <activity android:name=".photopage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

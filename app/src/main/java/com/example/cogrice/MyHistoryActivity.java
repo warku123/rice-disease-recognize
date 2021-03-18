@@ -46,7 +46,6 @@ public class MyHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initComponents();
-        // setContentView(R.layout.activity_my_history);
     }
 
     public void initComponents() {

@@ -1,69 +1,130 @@
 package com.example.cogrice.dataclass;
 
-import android.graphics.Bitmap;
-import android.net.wifi.aware.DiscoverySession;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.cogrice.HttpClient;
+import com.example.cogrice.Userinfo;
 import com.example.cogrice.utils.AlertHelper;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Wiki implements Serializable{
+public class Wiki implements Serializable {
     public static final int GOT_ALL_WIKIS = 1;
 
 
-    private String diseaseType;
     private ControlMeasure controlMeasure;
-    private String briefIntro;
-    private Bitmap instancePhoto;
 
-    public Bitmap getInstancePhoto() {
-        return instancePhoto;
+    private String enTypeName;
+    private String cnTypename;
+    private String diseaseFeature;
+    private String agriControl;
+
+    public String getEnTypeName() {
+        return enTypeName;
     }
 
-    public String getBriefIntro() {
-        return briefIntro;
+    public void setEnTypeName(String enTypeName) {
+        this.enTypeName = enTypeName;
     }
 
-    public void setBriefIntro(String briefIntro) {
-        this.briefIntro = briefIntro;
+    public String getCnTypename() {
+        return cnTypename;
     }
 
-    public void setInstancePhoto(Bitmap instancePhoto) {
-        this.instancePhoto = instancePhoto;
+    public void setCnTypename(String cnTypename) {
+        this.cnTypename = cnTypename;
     }
 
-    public Wiki(String diseaseType, ControlMeasure controlMeasure, Bitmap instancePhoto,String briefIntro) {
-        this.diseaseType = diseaseType;
+    public String getDiseaseFeature() {
+        return diseaseFeature;
+    }
+
+    public void setDiseaseFeature(String diseaseFeature) {
+        this.diseaseFeature = diseaseFeature;
+    }
+
+    public String getAgriControl() {
+        return agriControl;
+    }
+
+    public void setAgriControl(String agriControl) {
+        this.agriControl = agriControl;
+    }
+
+    public Wiki(ControlMeasure controlMeasure, String enTypeName, String cnTypename, String diseaseFeature, String agriControl, String chemControl, String imgUrl) {
         this.controlMeasure = controlMeasure;
-        this.instancePhoto = instancePhoto;
-        this.briefIntro = briefIntro;
+        this.enTypeName = enTypeName;
+        this.cnTypename = cnTypename;
+        this.diseaseFeature = diseaseFeature;
+        this.agriControl = agriControl;
+        this.chemControl = chemControl;
+        this.imgUrl = imgUrl;
     }
 
-    public Wiki(){
-        this("【Wiki示例】",new ControlMeasure(),null,"Wiki防治措施简介");
+    public Wiki() {
     }
+
+    public String getChemControl() {
+        return chemControl;
+    }
+
+    public void setChemControl(String chemControl) {
+        this.chemControl = chemControl;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    private String chemControl;
+    private String imgUrl;
+
+
     /**
      * TODO 获取所有远程防治信息
      */
-    public static ArrayList<Wiki> getAllRemoteWikis() {
-        ArrayList<Wiki> result = new ArrayList<Wiki>();
-        HttpClient.doGet("http://40.73.0.45:80/get_all_wikis");
+    public static List<Wiki> getAllRemoteWikis() {
         AlertHelper.warnNotImplemented("获取远程Wiki");
-        Wiki.startDownloading();
-        ControlMeasure.initControlMearsures();
-        return result;
+        List<Wiki> wikis = Wiki.startDownloading();
+        return wikis;
     }
 
-    private static void startDownloading() {
-        
+    private static List<Wiki> startDownloading() {
+        List<WikiRawPOJO> wikiRawPOJOS = JSONHelper.getWikiPOJOsFromJson(Userinfo.username);
+        List<Wiki> wikis = fillPOJOList(wikiRawPOJOS);
+        return wikis;
     }
 
+    public static class HistoriesDownloadThread extends Thread {
+        private final Handler WikiViewHandler;
+
+        public HistoriesDownloadThread(Handler WikiViewHandler) {
+            this.WikiViewHandler = WikiViewHandler;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            AlertHelper.warnNotImplemented("下载线程采用Glide加载图片");
+            // 阻塞，等待历史记录获取
+            AlertHelper.warnNotImplemented("请设置默认用户名");
+            List<Wiki> histories = Wiki.getAllRemoteWikiRecords(Userinfo.username);
+            Message msg = Message.obtain();
+            msg.what = GOT_ALL_WIKIS;
+            Bundle historiesBundle = new Bundle();
+            historiesBundle.putSerializable("WikiList", (Serializable) histories);
+            msg.setData(historiesBundle);
+            this.WikiViewHandler.sendMessage(msg);
+        }
+    }
 
     public ControlMeasure getControlMeasure() {
         return controlMeasure;
@@ -73,20 +134,16 @@ public class Wiki implements Serializable{
         this.controlMeasure = controlMeasure;
     }
 
-    public String getDiseaseType() {
-        return diseaseType;
+    public static void startDownloadingWikis(Handler wikiViewHandler) {
+        new Wiki.WikiDownloadThread(wikiViewHandler).start();
     }
 
-    public void setDiseaseType(String diseaseType) {
-        this.diseaseType = diseaseType;
-    }
 
     public static class WikiDownloadThread extends Thread {
-        private final Handler historyViewHandler;
-        private Handler wikiViewHandler;
+        private final Handler wikiViewHandler;
 
-        public WikiDownloadThread(Handler historyViewHandler) {
-            this.historyViewHandler = historyViewHandler;
+        public WikiDownloadThread(Handler wikiViewHandler) {
+            this.wikiViewHandler = wikiViewHandler;
         }
 
         @Override
@@ -95,6 +152,7 @@ public class Wiki implements Serializable{
             AlertHelper.warnNotImplemented("下载Wiki");
             AlertHelper.warnNotImplemented("默认用户zpg");
             List<Wiki> histories = Wiki.getAllRemoteWikiRecords("zpg");
+
             Message msg = Message.obtain();
             msg.what = GOT_ALL_WIKIS;
             Bundle wikiBundle = new Bundle();
@@ -106,21 +164,23 @@ public class Wiki implements Serializable{
 
     /**
      * 通过JSON获取POJO，得到WIKI
+     *
      * @param username
      * @return
      */
     private static List<Wiki> getAllRemoteWikiRecords(String username) {
-        ArrayList<WikiRawPOJO> historyRawPOJOS = (ArrayList<WikiRawPOJO>) getWikiPOJOsFromJson(username);
-        return fillPOJOList(historyRawPOJOS);
+        ArrayList<WikiRawPOJO> wikiRawPOJOS = (ArrayList<WikiRawPOJO>) getWikiPOJOsFromJson(username);
+        return fillPOJOList(wikiRawPOJOS);
     }
 
-    private static List<Wiki> fillPOJOList(ArrayList<Wiki.WikiRawPOJO> wikiRawPOJOS) {
-        ArrayList<Wiki> histories = new ArrayList<>();
+    private static List<Wiki> fillPOJOList(List<Wiki.WikiRawPOJO> wikiRawPOJOS) {
+        ArrayList<Wiki> wikis = new ArrayList<>();
         for (Wiki.WikiRawPOJO wikiRawPOJO : wikiRawPOJOS) {
-            histories.add(wikiRawPOJO.toWiki());
+            wikis.add(wikiRawPOJO.toWiki());
         }
-        return histories;
+        return wikis;
     }
+
     private static List<WikiRawPOJO> getWikiPOJOsFromJson(String username) {
         return JSONHelper.getWikiPOJOsFromJson(username);
     }
@@ -128,14 +188,34 @@ public class Wiki implements Serializable{
     /**
      * TODO
      */
-    public class WikiRawPOJO {
+    public static class WikiRawPOJO {
+
+        @JsonProperty("en_type_name")
+        private String enTypeName;
+        @JsonProperty("cn_type_name")
+        private String cnTypeName;
+        @JsonProperty("disease_feature")
+        private String diseaseFeature;
+        @JsonProperty("agri_control")
+        private String agriControl;
+        @JsonProperty("chem_control")
+        private String chemControl;
+        @JsonProperty("img_url")
+        private String imgUrl;
 
         /**
          * TODO
+         *
          * @return
          */
         public Wiki toWiki() {
-            Wiki result = null;
+            Wiki result = new Wiki();
+            result.enTypeName = this.enTypeName;
+            result.cnTypename = this.cnTypeName;
+            result.diseaseFeature = this.diseaseFeature;
+            result.agriControl = this.agriControl;
+            result.chemControl = this.chemControl;
+            result.imgUrl = this.imgUrl;
             AlertHelper.warnNotImplemented("没有编写类");
             return result;
         }

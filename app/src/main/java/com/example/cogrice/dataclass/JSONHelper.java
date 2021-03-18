@@ -65,7 +65,7 @@ public class JSONHelper {
     }
 
     private static String getWikiJsonStringAfterPost(String username) {
-        String json = HttpClient.doPostOneMsg(getAllWikisUrl, username,username);
+        String json = HttpClient.doGet(getAllWikisUrl);
         return json;
     }
 

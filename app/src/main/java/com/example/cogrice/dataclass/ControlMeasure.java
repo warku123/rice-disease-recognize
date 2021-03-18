@@ -3,6 +3,7 @@ package com.example.cogrice.dataclass;
 import com.example.cogrice.utils.AlertHelper;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class ControlMeasure {
     private String agriControl;
@@ -27,8 +28,9 @@ public class ControlMeasure {
 
     /**
      * TODO 初始化防治信息，不必多次访问
+     * @param wikis
      */
-    public static void initControlMearsures(){
+    public static void initControlMearsures(List<Wiki> wikis){
         AlertHelper.warnNotImplemented("防治信息未初始化");
     }
 

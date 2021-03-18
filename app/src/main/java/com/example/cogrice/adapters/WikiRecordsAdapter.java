@@ -5,22 +5,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.cogrice.R;
 import com.example.cogrice.dataclass.Wiki;
+import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.SpacesItemDecoration;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.WikiViewHolder> {
 
     public static final int SPACE = 2;
-    private ArrayList<Wiki> wikiRecords;
+
+    private static Context context;
+    private List<Wiki> wikiList;
+
+    public static void setContext(Context diseaseWikiActivity) {
+        WikiRecordsAdapter.context = diseaseWikiActivity;
+    }
 
     /**
      * @param parent
@@ -37,19 +46,31 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
 
     /**
      * 获取数据
+     * TODO
      *
      * @param holder
      * @param position
      */
     @Override
     public void onBindViewHolder(@NonNull WikiViewHolder holder, int position) {
-        holder.insatncePhoto.setImageBitmap(wikiRecords.get(position).getInstancePhoto());
-        holder.type.setText(wikiRecords.get(position).getBriefIntro().toString());
+        if (this.getContext() != null) {
+            Glide.with(this.getContext()).load(wikiList.get(position).getImgUrl()).error(R.drawable.loadfailed).placeholder(R.drawable.loading_bg).fallback(R.drawable.loadfailed).into(holder.insatncePhoto);
+        }
+        if(wikiList.get(position).getEnTypeName().toLowerCase().contains("healthy")){
+            holder.setVisibility(false);
+        }
+        holder.diseaseTypeName.setText(wikiList.get(position).getCnTypename());
+        holder.diseaseBriefInfo.setText(wikiList.get(position).getDiseaseFeature());
+        AlertHelper.warnNotImplemented("绑定Wiki控件");
+    }
+
+    private Context getContext() {
+        return WikiRecordsAdapter.context;
     }
 
     @Override
     public int getItemCount() {
-        return this.wikiRecords.size();
+        return this.wikiList.size();
     }
 
     /**
@@ -59,22 +80,39 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
         // 实际填充
         // private ConstraintLayout wikiCard;
         private ImageView insatncePhoto;
-        private TextView type;
+        private TextView diseaseTypeName;
+        private TextView diseaseBriefInfo;
+
+        public void setVisibility(boolean isVisible){
+            RecyclerView.LayoutParams param = (RecyclerView.LayoutParams)itemView.getLayoutParams();
+            if (isVisible){
+                param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                param.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                itemView.setVisibility(View.VISIBLE);
+            }else{
+                itemView.setVisibility(View.GONE);
+                param.height = 0;
+                param.width = 0;
+            }
+            itemView.setLayoutParams(param);
+        }
 
         public WikiViewHolder(@NonNull View itemView) {
             super(itemView);
-            type = (TextView) itemView.findViewById(R.id.wiki_card_date);
+            diseaseTypeName = (TextView) itemView.findViewById(R.id.wiki_card_disease_type);
+            diseaseBriefInfo = (TextView) itemView.findViewById(R.id.wiki_card_brief_intro);
             insatncePhoto = (ImageView) itemView.findViewById(R.id.wiki_card_image);
         }
     }
 
-    public WikiRecordsAdapter(ArrayList<Wiki> wikiRecords) {
-        this.wikiRecords = wikiRecords;
+    public WikiRecordsAdapter(List<Wiki> wikiRecords) {
+        this.wikiList = wikiRecords;
     }
 
-    public static void fillRecyclerView(RecyclerView recyclerView,Context parent){
-        ArrayList<Wiki> localHistoriesList = Wiki.getAllRemoteWikis();
-        WikiRecordsAdapter wikiRecordsAdapter = new WikiRecordsAdapter(localHistoriesList);
+    public static void fillRecyclerView(RecyclerView recyclerView, Context parent, List<Wiki> wikiList) {
+        WikiRecordsAdapter.setContext(parent);
+        WikiRecordsAdapter wikiRecordsAdapter = new WikiRecordsAdapter(wikiList);
+        // 设置适配器
         recyclerView.addItemDecoration(new SpacesItemDecoration(WikiRecordsAdapter.SPACE));
         LinearLayoutManager manager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(manager);

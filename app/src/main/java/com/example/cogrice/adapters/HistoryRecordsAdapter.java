@@ -94,11 +94,11 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
     public static void fillRecyclerView(RecyclerView recyclerView, Context parent, List<History> histories) {
         HistoryRecordsAdapter.setContext(parent);
         HistoryRecordsAdapter historyRecordsAdapter = new HistoryRecordsAdapter(histories);
+        // 设置适配器
         recyclerView.addItemDecoration(new SpacesItemDecoration(HistoryRecordsAdapter.SPACE));
         LinearLayoutManager manager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(historyRecordsAdapter);
-        System.out.println("数据填充");
     }
 }
