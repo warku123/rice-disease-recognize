@@ -45,11 +45,11 @@ public class JSONHelper {
         return historyRawPOJOS;
     }
 
-    public static List<WikiRawPOJO> getWikiPOJOsFromJson(String username) {
+    public static List<WikiRawPOJO> getWikiPOJOsFromJson() {
         String wikisJson = null;
         int count = 1;
         while (wikisJson == null) {
-            wikisJson = getWikiJsonStringAfterPost(username);
+            wikisJson = getWikiJsonStringAfterPost();
             AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
             count++;
         }
@@ -64,7 +64,7 @@ public class JSONHelper {
         return wikiRawPOJOS;
     }
 
-    private static String getWikiJsonStringAfterPost(String username) {
+    private static String getWikiJsonStringAfterPost() {
         String json = HttpClient.doGet(getAllWikisUrl);
         return json;
     }

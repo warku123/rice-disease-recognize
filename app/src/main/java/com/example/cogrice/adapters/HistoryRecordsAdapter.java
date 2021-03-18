@@ -80,8 +80,8 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
 
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            date = (TextView) itemView.findViewById(R.id.history_card_disease_type);
-            type = (TextView) itemView.findViewById(R.id.history_card_date);
+            type = (TextView) itemView.findViewById(R.id.history_card_disease_type);
+            date = (TextView) itemView.findViewById(R.id.history_card_date);
             photo = (ImageView) itemView.findViewById(R.id.history_card_image);
         }
     }

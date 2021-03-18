@@ -77,9 +77,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="4"
                 android:ellipsize="none"
-                android:text="sdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksadsdlfkajskdfljkasjdjfksad"
+                android:text="病虫害名称"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView

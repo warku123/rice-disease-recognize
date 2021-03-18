@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowId;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +21,8 @@ import com.example.cogrice.dataclass.Wiki;
 import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.SpacesItemDecoration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.WikiViewHolder> {
@@ -25,11 +30,19 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
     public static final int SPACE = 2;
 
     private static Context context;
-    private List<Wiki> wikiList;
+    private final ArrayList<Wiki> fullWikiList;
+    private List<Wiki> filteredWikiList;
+
+    private static WikiRecordsAdapter instance;
+
+    public static WikiRecordsAdapter getInstance() {
+        return instance;
+    }
 
     public static void setContext(Context diseaseWikiActivity) {
         WikiRecordsAdapter.context = diseaseWikiActivity;
     }
+
 
     /**
      * @param parent
@@ -44,23 +57,16 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
         return new WikiViewHolder(view);
     }
 
-    /**
-     * 获取数据
-     * TODO
-     *
-     * @param holder
-     * @param position
-     */
     @Override
     public void onBindViewHolder(@NonNull WikiViewHolder holder, int position) {
         if (this.getContext() != null) {
-            Glide.with(this.getContext()).load(wikiList.get(position).getImgUrl()).error(R.drawable.loadfailed).placeholder(R.drawable.loading_bg).fallback(R.drawable.loadfailed).into(holder.insatncePhoto);
+            Glide.with(this.getContext()).load(filteredWikiList.get(position).getImgUrl()).error(R.drawable.loadfailed).placeholder(R.drawable.loading_bg).fallback(R.drawable.loadfailed).into(holder.insatncePhoto);
         }
-        if(wikiList.get(position).getEnTypeName().toLowerCase().contains("healthy")){
+        if (filteredWikiList.get(position).getEnTypeName().toLowerCase().contains("healthy")) {
             holder.setVisibility(false);
         }
-        holder.diseaseTypeName.setText(wikiList.get(position).getCnTypename());
-        holder.diseaseBriefInfo.setText(wikiList.get(position).getDiseaseFeature());
+        holder.diseaseTypeName.setText(filteredWikiList.get(position).getCnTypename());
+        holder.diseaseBriefInfo.setText(filteredWikiList.get(position).getDiseaseFeature());
         AlertHelper.warnNotImplemented("绑定Wiki控件");
     }
 
@@ -70,8 +76,19 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
 
     @Override
     public int getItemCount() {
-        return this.wikiList.size();
+        return this.filteredWikiList.size();
     }
+
+    public void setFilter(String filterWord) {
+        this.filteredWikiList = new ArrayList<Wiki>();
+        for(Wiki wiki : this.fullWikiList){
+            if(wiki.containsKeyword(filterWord)){
+                this.filteredWikiList.add(wiki);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 
     /**
      * 放置WikiCard
@@ -83,13 +100,13 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
         private TextView diseaseTypeName;
         private TextView diseaseBriefInfo;
 
-        public void setVisibility(boolean isVisible){
-            RecyclerView.LayoutParams param = (RecyclerView.LayoutParams)itemView.getLayoutParams();
-            if (isVisible){
+        public void setVisibility(boolean isVisible) {
+            RecyclerView.LayoutParams param = (RecyclerView.LayoutParams) itemView.getLayoutParams();
+            if (isVisible) {
                 param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 param.width = LinearLayout.LayoutParams.MATCH_PARENT;
                 itemView.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 itemView.setVisibility(View.GONE);
                 param.height = 0;
                 param.width = 0;
@@ -106,17 +123,23 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
     }
 
     public WikiRecordsAdapter(List<Wiki> wikiRecords) {
-        this.wikiList = wikiRecords;
+        this.filteredWikiList = new ArrayList<Wiki>(wikiRecords);
+        this.fullWikiList = new ArrayList<Wiki>(wikiRecords);
     }
 
     public static void fillRecyclerView(RecyclerView recyclerView, Context parent, List<Wiki> wikiList) {
         WikiRecordsAdapter.setContext(parent);
         WikiRecordsAdapter wikiRecordsAdapter = new WikiRecordsAdapter(wikiList);
+        WikiRecordsAdapter.setInstance(wikiRecordsAdapter);
         // 设置适配器
         recyclerView.addItemDecoration(new SpacesItemDecoration(WikiRecordsAdapter.SPACE));
         LinearLayoutManager manager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(wikiRecordsAdapter);
+    }
+
+    private static void setInstance(WikiRecordsAdapter wikiRecordsAdapter) {
+        WikiRecordsAdapter.instance = wikiRecordsAdapter;
     }
 }

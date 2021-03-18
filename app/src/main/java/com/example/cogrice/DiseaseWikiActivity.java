@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Adapter;
 import android.widget.SearchView;
 
 import com.example.cogrice.adapters.WikiRecordsAdapter;
@@ -15,6 +16,7 @@ import com.example.cogrice.dataclass.ControlMeasure;
 import com.example.cogrice.dataclass.Wiki;
 import com.example.cogrice.utils.AlertHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiseaseWikiActivity extends AppCompatActivity {
@@ -32,7 +34,7 @@ public class DiseaseWikiActivity extends AppCompatActivity {
                     Bundle bundle = msg.getData();
                     List<Wiki> wikis = (List<Wiki>) bundle.get("wikiList");
                     AlertHelper.warnNotImplemented("正在初始化本地防治信息列表");
-                    ControlMeasure.initControlMearsures(wikis);
+                    ControlMeasure.initControlMeasures(wikis);
                     // 填充信息
                     WikiRecordsAdapter.fillRecyclerView(wikiRecycler, DiseaseWikiActivity.this, wikis);
                     break;
@@ -41,6 +43,7 @@ public class DiseaseWikiActivity extends AppCompatActivity {
             }
         }
     };
+    private WikiRecordsAdapter wikiAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +55,22 @@ public class DiseaseWikiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_disease_wiki);
         this.searchView = (SearchView) findViewById(R.id.wiki_search_bar);
         this.wikiRecycler = (RecyclerView) findViewById(R.id.wiki_cards_recycler_view);
-        AlertHelper.warnNotImplemented("WIKI INIT");
+        AlertHelper.toastAlert("正在获取防治指南");
         WikiRecordsAdapter.setContext(this);
         Wiki.startDownloadingWikis(wikiViewHandler);
+
+        // 设置搜索框的监听器
+        this.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                WikiRecordsAdapter.getInstance().setFilter(s);
+                return false;
+            }
+        });
     }
 }

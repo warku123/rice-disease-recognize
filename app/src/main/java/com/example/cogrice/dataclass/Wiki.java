@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.cogrice.Userinfo;
 import com.example.cogrice.utils.AlertHelper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,7 +15,6 @@ public class Wiki implements Serializable {
     public static final int GOT_ALL_WIKIS = 1;
 
 
-    private ControlMeasure controlMeasure;
 
     private String enTypeName;
     private String cnTypename;
@@ -55,8 +53,7 @@ public class Wiki implements Serializable {
         this.agriControl = agriControl;
     }
 
-    public Wiki(ControlMeasure controlMeasure, String enTypeName, String cnTypename, String diseaseFeature, String agriControl, String chemControl, String imgUrl) {
-        this.controlMeasure = controlMeasure;
+    public Wiki(String enTypeName, String cnTypename, String diseaseFeature, String agriControl, String chemControl, String imgUrl) {
         this.enTypeName = enTypeName;
         this.cnTypename = cnTypename;
         this.diseaseFeature = diseaseFeature;
@@ -98,9 +95,17 @@ public class Wiki implements Serializable {
     }
 
     private static List<Wiki> startDownloading() {
-        List<WikiRawPOJO> wikiRawPOJOS = JSONHelper.getWikiPOJOsFromJson(Userinfo.username);
+        List<WikiRawPOJO> wikiRawPOJOS = JSONHelper.getWikiPOJOsFromJson();
         List<Wiki> wikis = fillPOJOList(wikiRawPOJOS);
         return wikis;
+    }
+
+    public boolean containsKeyword(String filterWord) {
+        return  this.getEnTypeName().contains(filterWord)
+                || this.getCnTypename().contains(filterWord)
+                || this.getDiseaseFeature().contains(filterWord)
+                || this.getAgriControl().contains(filterWord)
+                || this.getChemControl().contains(filterWord);
     }
 
     public static class HistoriesDownloadThread extends Thread {
@@ -114,9 +119,7 @@ public class Wiki implements Serializable {
         public void run() {
             super.run();
             AlertHelper.warnNotImplemented("下载线程采用Glide加载图片");
-            // 阻塞，等待历史记录获取
-            AlertHelper.warnNotImplemented("请设置默认用户名");
-            List<Wiki> histories = Wiki.getAllRemoteWikiRecords(Userinfo.username);
+            List<Wiki> histories = Wiki.getAllRemoteWikiRecords();
             Message msg = Message.obtain();
             msg.what = GOT_ALL_WIKIS;
             Bundle historiesBundle = new Bundle();
@@ -126,13 +129,6 @@ public class Wiki implements Serializable {
         }
     }
 
-    public ControlMeasure getControlMeasure() {
-        return controlMeasure;
-    }
-
-    public void setControlMeasure(ControlMeasure controlMeasure) {
-        this.controlMeasure = controlMeasure;
-    }
 
     public static void startDownloadingWikis(Handler wikiViewHandler) {
         new Wiki.WikiDownloadThread(wikiViewHandler).start();
@@ -150,26 +146,19 @@ public class Wiki implements Serializable {
         public void run() {
             super.run();
             AlertHelper.warnNotImplemented("下载Wiki");
-            AlertHelper.warnNotImplemented("默认用户zpg");
-            List<Wiki> histories = Wiki.getAllRemoteWikiRecords("zpg");
-
+            List<Wiki> wikis = Wiki.getAllRemoteWikiRecords();
+            ControlMeasure.initControlMeasures(wikis);
             Message msg = Message.obtain();
             msg.what = GOT_ALL_WIKIS;
             Bundle wikiBundle = new Bundle();
-            wikiBundle.putSerializable("wikiList", (Serializable) histories);
+            wikiBundle.putSerializable("wikiList", (Serializable) wikis);
             msg.setData(wikiBundle);
             this.wikiViewHandler.sendMessage(msg);
         }
     }
 
-    /**
-     * 通过JSON获取POJO，得到WIKI
-     *
-     * @param username
-     * @return
-     */
-    private static List<Wiki> getAllRemoteWikiRecords(String username) {
-        ArrayList<WikiRawPOJO> wikiRawPOJOS = (ArrayList<WikiRawPOJO>) getWikiPOJOsFromJson(username);
+    private static List<Wiki> getAllRemoteWikiRecords() {
+        ArrayList<WikiRawPOJO> wikiRawPOJOS = (ArrayList<WikiRawPOJO>) getWikiPOJOsFromJson();
         return fillPOJOList(wikiRawPOJOS);
     }
 
@@ -181,8 +170,8 @@ public class Wiki implements Serializable {
         return wikis;
     }
 
-    private static List<WikiRawPOJO> getWikiPOJOsFromJson(String username) {
-        return JSONHelper.getWikiPOJOsFromJson(username);
+    private static List<WikiRawPOJO> getWikiPOJOsFromJson() {
+        return JSONHelper.getWikiPOJOsFromJson();
     }
 
     /**

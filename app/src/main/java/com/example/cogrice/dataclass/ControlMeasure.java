@@ -6,15 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ControlMeasure {
-    private String agriControl;
     private String diseaseFeature;
+    private String agriControl;
     private String chemControl;
 
     public static HashMap<String,ControlMeasure> controlMeasureMap = new HashMap<String, ControlMeasure>();
 
-    public ControlMeasure(String agriControl, String diseaseFeature, String chemControl) {
-        this.agriControl = agriControl;
+    public ControlMeasure(String diseaseFeature, String agriControl, String chemControl) {
         this.diseaseFeature = diseaseFeature;
+        this.agriControl = agriControl;
         this.chemControl = chemControl;
     }
 
@@ -30,8 +30,12 @@ public class ControlMeasure {
      * TODO 初始化防治信息，不必多次访问
      * @param wikis
      */
-    public static void initControlMearsures(List<Wiki> wikis){
+    public static void initControlMeasures(List<Wiki> wikis){
         AlertHelper.warnNotImplemented("防治信息未初始化");
+        // 数量问题
+        for(Wiki wiki:wikis){
+            controlMeasureMap.put(wiki.getCnTypename(),new ControlMeasure(wiki.getDiseaseFeature(),wiki.getAgriControl(),wiki.getChemControl()));
+        }
     }
 
     @Override
