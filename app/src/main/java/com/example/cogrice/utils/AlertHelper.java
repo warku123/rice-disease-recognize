@@ -9,6 +9,6 @@ public class AlertHelper {
     }
 
     public static void warnNotImplemented(String msg){
-        Log.d("【NOT IMPLEMENTED】",msg);
+        System.out.println("【NOT IMPLEMENTED】" + msg);
     }
 }

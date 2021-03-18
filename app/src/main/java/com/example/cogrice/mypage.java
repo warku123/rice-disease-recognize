@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.cogrice.utils.AlertHelper;
+
 public class mypage extends AppCompatActivity {
     ImageButton home;
     ImageButton platform;
@@ -34,6 +36,7 @@ public class mypage extends AppCompatActivity {
                         break;
                     case R.id.platform:
                         // intent=new Intent(mypage.this,platform.class);
+                        AlertHelper.warnNotImplemented("公共平台跳转到Wiki");
                         intent=new Intent(mypage.this,DiseaseWikiActivity.class);
                         break;
                     case R.id.goto_history_button:

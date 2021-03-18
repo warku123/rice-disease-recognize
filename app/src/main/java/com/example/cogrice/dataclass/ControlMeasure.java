@@ -1,5 +1,7 @@
 package com.example.cogrice.dataclass;
 
+import com.example.cogrice.utils.AlertHelper;
+
 import java.util.HashMap;
 
 public class ControlMeasure {
@@ -27,7 +29,7 @@ public class ControlMeasure {
      * TODO 初始化防治信息，不必多次访问
      */
     public static void initControlMearsures(){
-        System.out.println("【请初始化防治信息！！！】");
+        AlertHelper.warnNotImplemented("防治信息未初始化");
     }
 
     @Override

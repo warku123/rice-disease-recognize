@@ -119,5 +119,3 @@
 
 ----
 
-record_json_list = [{"record_id":"001","diease_name":"Two-spotted_spider_mite","image":base64.b64encode(open('D:/Research/GraduationInternship/rice-disease-recognize/app/src/main/res/drawable/background4.jpg','rb').read())},\
-{"record_id":"002","diease_name":"DO NOT KNOW","image":base64.b64encode(open('D:/Research/GraduationInternship/rice-disease-recognize/app/src/main/res/drawable/background4.jpg','rb').read())}]

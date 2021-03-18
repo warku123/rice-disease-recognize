@@ -144,13 +144,6 @@ public class History implements Serializable {
     public static List<History> getAllRemoteHistoryRecords(String username) {
         ArrayList<HistoryRawPOJO> historyRawPOJOS = (ArrayList<HistoryRawPOJO>) getHistoryPOJOsFromJson(username);
         return fillPOJOList(historyRawPOJOS);
-        /*   ArrayList<History> result = new ArrayList<History>();
-        // 获取远程历史记录
-        for(int i = 0;i<10;i++){
-            result.add(new History());
-        }
-        System.out.println("生成10个缺省历史记录");
-        return result;*/
     }
 
     private static List<History> fillPOJOList(ArrayList<HistoryRawPOJO> historyRawPOJOS) {
@@ -210,9 +203,10 @@ public class History implements Serializable {
         @Override
         public void run() {
             super.run();
-            AlertHelper.warnNotImplemented("下载线程开始运行");
+            AlertHelper.warnNotImplemented("下载线程采用Glide加载图片");
             // 阻塞，等待历史记录获取
-            List<History> histories = History.getAllRemoteHistoryRecords("TOURIST_1");
+            AlertHelper.warnNotImplemented("请设置默认用户名");
+            List<History> histories = History.getAllRemoteHistoryRecords("zpg");
             Message msg = Message.obtain();
             msg.what = GOT_ALL_HISTORIES;
             Bundle historiesBundle = new Bundle();

@@ -73,11 +73,9 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
     }
 
     public static void fillRecyclerView(RecyclerView recyclerView,Context parent){
-        recyclerView.addItemDecoration(new SpacesItemDecoration(WikiRecordsAdapter.SPACE));
-        System.out.println("读取远程数据填充");
         ArrayList<Wiki> localHistoriesList = Wiki.getAllRemoteWikis();
-        // TODO 读取真实的远程数据
         WikiRecordsAdapter wikiRecordsAdapter = new WikiRecordsAdapter(localHistoriesList);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(WikiRecordsAdapter.SPACE));
         LinearLayoutManager manager = new LinearLayoutManager(parent);
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);

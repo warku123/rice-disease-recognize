@@ -33,6 +33,7 @@ import com.example.cogrice.http.HttpHelp;
 import com.example.cogrice.http.I_failure;
 import com.example.cogrice.http.I_success;
 import com.example.cogrice.http.WeBean;
+import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.GlobalHelper;
 
 import org.json.JSONException;
@@ -106,6 +107,7 @@ public class photopage extends AppCompatActivity {
                 switch (view.getId()) {
                     case R.id.platform:
                         // intent = new Intent(photopage.this, platform.class);
+                        AlertHelper.warnNotImplemented("公共平台跳转到Wiki");
                         intent = new Intent(photopage.this, DiseaseWikiActivity.class);
                         break;
                     case R.id.mine:
