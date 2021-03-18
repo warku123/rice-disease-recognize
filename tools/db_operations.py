@@ -2,7 +2,7 @@ from utils.sql_helper import Sql_Helper
 import pymysql
 import time
 
-def get_all_info():
+def get_all_info(): 
     '''
     获取数据库病虫害信息表的所有数据
     :return:    数据元组，每条数据为一个元组单元
@@ -34,11 +34,17 @@ def get_all_info():
         for i in range(2):
             list_data[item].append(tuple_data[item][i])
         for i in range(len(tuple_data[item])-3):
-            with open(tuple_data[item][i+2],mode = 'r',encoding = 'utf8') as f:
-                list_data[item].append(f.read())
-        # TODO 1 此处不一定全都是png，可能会产生bug; 2 [item][5]根据表结构确定，可能会有bug
-        list_data[item].append("http://40.73.0.45/download/relative/disease_info/"+\
-             tuple_data[item][5].split("/")[-1])
+            try:
+                with open(tuple_data[item][i+2],mode = 'r',encoding = 'utf8') as f:
+                    list_data[item].append(f.read())
+            except:
+                list_data[item].append("")
+        try:
+            # TODO 1 此处不一定全都是png，可能会产生bug; 2 [item][5]根据表结构确定，可能会有bug
+            list_data[item].append("http://40.73.0.45/download/relative/disease_info/"+\
+                tuple_data[item][5].split("/")[-1])
+        except:
+            list_data[item].append("")
 
     # print(list_data)
 
@@ -88,9 +94,38 @@ def wiki_list_to_json(list_data):
         json_item["img_url"] = item[5]
         json_dic.append(json_item)
     
-    print(json_dic)
+    # print(json_dic)
 
     return json_dic
+
+def detetive_username_repeat(username,tel_number):
+    '''
+    插入一条用户数据
+    :param username:        用户名
+    :param password:        密码
+    :param tel_number:      电话号码
+    :return:                受影响的行数
+    '''
+    # 初始化对象
+    conn = Sql_Helper('localhost', 'root', '123456', 'PreventionInformation')
+    # 连接
+    try:
+        conn.connect()
+
+    except:
+        return 'Error when linking to database!'
+    
+    # 测试用户名或电话号码是否已存在
+    
+    data = conn.fetchall("select * from user where username=%s UNION select * from user where tel_number=%s",[username, tel_number])
+    # 关闭
+    conn.close()
+
+    if data != None:
+        return "1"
+    else:
+        return "0"
+    
 
 def get_one_user(username = None,password = None,tel_number = None):
     '''

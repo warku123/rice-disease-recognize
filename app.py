@@ -1,6 +1,6 @@
 # flask
 from flask import Flask
-from flask import request, Response, send_from_directory #, jsonify
+from flask import request, Response, send_from_directory, send_file#, jsonify
 # path
 import os
 from werkzeug.utils import secure_filename
@@ -21,6 +21,10 @@ from tools import db_operations, app_tools
 from ResNet_Code import infer
 from ResNet_Code.net import ResNet
 from ResNet_Code.config import train_parameters, init_train_parameters
+
+# multiprocess
+import multiprocessing
+from multiprocessing import Pool
 
 app = Flask(__name__)
 
@@ -87,9 +91,27 @@ def fetch_one_user():
         password = request.form['password']
         tel_number = request.form['tel_number']
         user_record = db_operations.get_one_user(username, password, tel_number)
+        print(user_record)
         return user_record
     else:
         return "Fetch user record failed!"
+
+@app.route('/user/detetive_user_repeat',methods=['GET', 'POST'])
+def detetive_user_repeat():
+    '''
+    pg's demand 1:
+    fetch one user's record from db.user
+    :return:    success:    user's record(string, attribute split by '####')
+                fail:       "insert user record failed!"
+    '''
+    if request.method == 'POST': 
+        username = request.form['username']
+        tel_number = request.form['tel_number']
+        result_row = db_operations.detetive_username_repeat(username,tel_number)
+        print(result_row)
+        return str(result_row)
+    else:
+        return "Fetch user_repeat record failed!"
 
 @app.route('/user/insert',methods=['GET', 'POST'])
 def insert_one_user():
@@ -107,7 +129,7 @@ def insert_one_user():
         print(influence_row)
         return str(influence_row)
     else:
-        return "insert user record failed!"
+        return "Insert user record failed!"
 
 @app.route('/user/fetch_by_tel',methods=['GET', 'POST'])
 def fetch_by_tel():
@@ -120,9 +142,10 @@ def fetch_by_tel():
     if request.method == 'POST':
         tel_number = request.form['tel_number']
         user_record = db_operations.get_user_by_tel(tel_number)
+        print(user_record)
         return user_record
     else:
-        return "fetch user record by tel failed!"
+        return "Fetch user record by tel failed!"
 
 @app.route('/user/update_pw_by_tel',methods=['GET', 'POST'])
 def update_pw_by_tel():
@@ -136,9 +159,12 @@ def update_pw_by_tel():
         tel_number = request.form['tel_number']
         password = request.form['password']
         influence_row = db_operations.update_pw_by_tel(tel_number, password)
+        print(str(influence_row))
         return str(influence_row)
     else:
-        return "update user password by tel failed!"
+        return "Update user password by tel failed!"
+
+'''frank's demand'''
 
 @app.route('/get_all_wiki',methods=['GET', 'POST'])
 def get_all_wiki():
@@ -148,7 +174,7 @@ def get_all_wiki():
     :return:    success:    wiki(bytes, json)
                 fail:       "Get all wiki failed!"
     '''
-    if request.method == 'POST': 
+    if request.method == 'POST' or request.method == 'GET': 
         # transfor list to json
         wiki_json_list = db_operations.wiki_list_to_json(list_label_info)
         wiki_json_result = json.dumps(wiki_json_list)
@@ -166,11 +192,13 @@ def get_all_records():
                 fail:       "Get all wiki failed!"
     '''
     if request.method == 'POST':
+        print(request)
         try:
             username = request.form['username']
+            print(username)
         except:
             return "Cannot get a username, please post a username!"
-        # username = "TOURIST"
+        # username = "zpg"
         record_result = db_operations.get_records_by_username(username)
         record_json_result = json.dumps(record_result)
         
@@ -198,9 +226,6 @@ def get_all_records_base64():
     else:
         return "Get all records failed!"
 
-from flask import send_file, send_from_directory
-import os
-
 @app.route("/download/absolute/<path:path>", methods=['GET','POST'])
 def download_file_absolute_path(path):
     '''
@@ -213,15 +238,15 @@ def download_file_absolute_path(path):
     # print(path)
     try:
         if os.path.isdir(path):
-            return '<h1>Cannot download folder!</h1>'
+            return 'Cannot download folder!'
         else:
             name=path.split('/')[-1]#split file name
             filePath=path.replace(name,'')
             # print(name)
             # print(filePath)
             return send_from_directory(filePath,filename=name,as_attachment=True)
-    except:
-        return '<h1>The file cannot be found or downloaded!</h1>'
+    except: 
+        return 'The file cannot be found or downloaded!'
 
 @app.route("/download/relative/<mode>/<path:path>", methods=['GET','POST'])
 def download_file_relative_path(mode,path):
@@ -238,11 +263,11 @@ def download_file_relative_path(mode,path):
     elif mode == 'disease_info':
         path = '/home/team4980/PreventionInfo/Pictures/' + path
     else:
-        return "relative path did not define!"
+        return "Relative path did not define!"
     print(path)
     try:
         if os.path.isdir(path):
-            return '<h1>Cannot download folder!</h1>'
+            return 'Cannot download folder!'
         else:
             name=path.split('/')[-1]#split file name
             filePath=path.replace(name,'')
@@ -250,7 +275,7 @@ def download_file_relative_path(mode,path):
             # print(filePath)
             return send_from_directory(filePath,filename=name,as_attachment=True)
     except:
-        return '<h1>The file cannot be found or downloaded!</h1>'
+        return 'The file cannot be found or downloaded!'
     
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -274,7 +299,19 @@ def upload_file():
         # call live-model
         img = Image.open(img_obj)
         diease_result = string_label_info[infer.live_model_infer(model = model, image = img)]
-        print(diease_result)
+
+        # load multiprocess_pool
+        # po = None
+        # global po
+        # with Pool(2) as po:
+        #     # apply_async process
+        #     en_diease_name_process_res = po.apply_async(infer.live_model_infer,(model,img))
+        #     # get result
+        #     en_diease_name = en_diease_name_process_res.get(timeout=1)
+        #     print(str(en_diease_name))
+        #     diease_result = string_label_info[str(en_diease_name)]
+
+        # print(diease_result)
 
         # generate img_save name
         # Beautiful!
@@ -312,7 +349,7 @@ if __name__ == '__main__':
     # TODO Load all dieases' info from Database, although retrieving is quick enough.
     list_label_info = db_operations.get_all_info()
     string_label_info = db_operations.list_to_string(list_label_info)
-
+    
     ## for test
     # result1 = infer.live_model_infer(model = model, image = "./uploads/bitmap.bmp")
     # print(result1)
