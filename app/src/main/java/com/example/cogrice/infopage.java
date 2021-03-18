@@ -93,32 +93,49 @@ public class infopage extends AppCompatActivity{
                 public void run() {
                     String username = null;
                     response = HttpClient.doPostBitmap(
-                            "http://40.73.0.45:80/upload",bitmap);
-                    infopage.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("response", "run: "+response);
-                            String[] result = response.split("####");
-                            String E_name = result[0].trim();
-                            String C_name = result[1].trim();
-                            String Intro = result[2].trim();
-                            String Method = result[3].trim();
-                            String Treat = result[4].trim();
+                            "http://40.73.0.45:80/upload",bitmap).trim();
+                    if(response.equals("connection failed")) {
+                        infopage.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                result_view.setText("网络连接失败");
+                            }
+                        });
+                    }
+                    else if(response.split("####").length>1){
+                        infopage.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("response", "run: " + response);
+                                String[] result = response.split("####");
+                                String E_name = result[0].trim();
+                                String C_name = result[1].trim();
+                                String Intro = result[2].trim();
+                                String Method = result[3].trim();
+                                String Treat = result[4].trim();
 
-                            Log.d("bitmap", "run: "+result);
-                            result_view.setText(C_name);
-                            introbtn.setVisibility(View.VISIBLE);
-                            introbtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent=new Intent(infopage.this,Intropage.class);
-                                    intent.putExtra("response",response);
-                                    startActivity(intent);
-                                }
-                            });
-//                            Log.d("Results", "onCreate: "+result_s);
-                        }
-                    });
+                                Log.d("bitmap", "run: " + result);
+                                result_view.setText(C_name);
+                                introbtn.setVisibility(View.VISIBLE);
+                                introbtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent = new Intent(infopage.this, Intropage.class);
+                                        intent.putExtra("response", response);
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        infopage.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                result_view.setText("识别失败");
+                            }
+                        });
+                    }
                 }
             });
             thread.start();

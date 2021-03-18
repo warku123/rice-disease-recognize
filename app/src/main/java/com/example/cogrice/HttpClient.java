@@ -2,6 +2,7 @@ package com.example.cogrice;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -128,10 +130,9 @@ public class HttpClient {
         return bitmap;
     }
 
-    public static String doPostString(String httpUrl, String request_string)
+    public static String doPost_select_tel(String httpUrl, String tel_number)
     {
         String response_inner = null;
-        String attachmentName = "string";
         try {
             HttpURLConnection httpUrlConnection = null;
             URL url = new URL(httpUrl);
@@ -156,12 +157,85 @@ public class HttpClient {
             //每次写入各类文件前要固定写入三个部分，以确定写入开始
             request.writeBytes(twoHyphens + boundary + crlf);
             //文件的头部信息，注意固定格式
-            request.writeBytes("Content-Disposition: form-data;name=\""+attachmentName+"\"" + crlf);
+            request.writeBytes("Content-Disposition: form-data;name=\"tel_number\"" + crlf);
             //最后头部信息部分总共要写两个换行（crlf）
             request.writeBytes(crlf);
-            request.writeBytes(request_string);
-            request.writeBytes(crlf);
+            request.writeBytes(tel_number);
+
             //整个输入流结尾的标识
+            request.writeBytes(crlf);
+            request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
+
+            request.flush();
+            request.close();
+            //accept response
+            InputStream responseStream = new
+                    BufferedInputStream(httpUrlConnection.getInputStream());
+
+            BufferedReader responseStreamReader =
+                    new BufferedReader(new InputStreamReader(responseStream));
+
+            String line = "";
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ((line = responseStreamReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+            responseStreamReader.close();
+
+            response_inner = stringBuilder.toString();
+//            Log.d("Response", "doPost: "+response_inner);
+            responseStream.close();
+
+            httpUrlConnection.disconnect();
+        }catch (Exception e) {
+            Log.d("connection_ex", "doPost_username_tel: "+e);
+            return "connection failed";
+        }
+        return response_inner;
+    }
+
+    public static String doPost_username_tel(
+            String httpUrl, String username, String tel_number)
+    {
+        String response_inner = null;
+        String keyName1 = "username";
+        String keyName2 = "tel_number";
+        try {
+            HttpURLConnection httpUrlConnection = null;
+            URL url = new URL(httpUrl);
+            httpUrlConnection = (HttpURLConnection) url.openConnection();
+            httpUrlConnection.setUseCaches(false);
+            httpUrlConnection.setDoOutput(true);
+            httpUrlConnection.setDoInput(true);
+            // 设置一些传递的参数
+            httpUrlConnection.setRequestMethod("POST");
+            httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
+            httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
+            httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+            //先设置字节流
+            DataOutputStream request = new DataOutputStream(
+                    httpUrlConnection.getOutputStream());
+            //每次写入各类文件前要固定写入三个部分，以确定写入开始
+            request.writeBytes(twoHyphens + boundary + crlf);
+            //文件的头部信息，注意固定格式
+            request.writeBytes("Content-Disposition: form-data;name=\""+keyName1+"\"");
+            //最后头部信息部分总共要写两个换行（crlf）
+            request.writeBytes(crlf+crlf);
+            request.writeBytes(username);
+
+            request.writeBytes(crlf);
+            //每次写入各类文件前要固定写入三个部分，以确定写入开始
+            request.writeBytes(twoHyphens + boundary + crlf);
+            //文件的头部信息，注意固定格式
+            request.writeBytes("Content-Disposition: form-data;name=\""+keyName2+"\"" );
+            //最后头部信息部分总共要写两个换行（crlf）
+            request.writeBytes(crlf + crlf);
+            request.writeBytes(tel_number);
+
+            //整个输入流结尾的标识
+            request.writeBytes(crlf);
             request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
 
             request.flush();
@@ -187,15 +261,13 @@ public class HttpClient {
 
             httpUrlConnection.disconnect();
         }
-        catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            Log.d("connection_ex", "doPost_username_tel: "+e);
+            return "connection failed";
         }
         return response_inner;
     }
+
 
     public static String doPost_Usr_info(
             String httpUrl, String username,String password, String tel_number)
@@ -273,12 +345,78 @@ public class HttpClient {
 
             httpUrlConnection.disconnect();
         }
-        catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            Log.d("connection_ex", "doPost_username_tel: "+e);
+            return "connection failed";
+        }
+        return response_inner;
+    }
+
+    public static String doPost_update_password(String httpUrl, String tel_number,String password)
+    {
+        String response_inner = null;
+        try {
+            HttpURLConnection httpUrlConnection = null;
+            URL url = new URL(httpUrl);
+            httpUrlConnection = (HttpURLConnection) url.openConnection();
+            httpUrlConnection.setUseCaches(false);
+            httpUrlConnection.setDoOutput(true);
+            httpUrlConnection.setDoInput(true);
+            // 设置一些传递的参数
+            httpUrlConnection.setRequestMethod("POST");
+            httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
+            httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
+            httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+            //先设置字节流
+            DataOutputStream request = new DataOutputStream(
+                    httpUrlConnection.getOutputStream());
+            //每次写入各类文件前要固定写入三个部分，以确定写入开始
+            request.writeBytes(twoHyphens + boundary + crlf);
+            //文件的头部信息，注意固定格式
+            request.writeBytes("Content-Disposition: form-data;name=\"tel_number\"" + crlf);
+            //最后头部信息部分总共要写两个换行（crlf）
+            request.writeBytes(crlf);
+            request.writeBytes(tel_number);
+
+            request.writeBytes(crlf);
+            //每次写入各类文件前要固定写入三个部分，以确定写入开始
+            request.writeBytes(twoHyphens + boundary + crlf);
+            //文件的头部信息，注意固定格式
+            request.writeBytes("Content-Disposition: form-data;name=\"password\"");
+            //最后头部信息部分总共要写两个换行（crlf）
+            request.writeBytes(crlf + crlf);
+            request.writeBytes(password);
+
+            //整个输入流结尾的标识
+            request.writeBytes(crlf);
+            request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
+
+            request.flush();
+            request.close();
+            //accept response
+            InputStream responseStream = new
+                    BufferedInputStream(httpUrlConnection.getInputStream());
+
+            BufferedReader responseStreamReader =
+                    new BufferedReader(new InputStreamReader(responseStream));
+
+            String line = "";
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ((line = responseStreamReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+            responseStreamReader.close();
+
+            response_inner = stringBuilder.toString();
+//            Log.d("Response", "doPost: "+response_inner);
+            responseStream.close();
+
+            httpUrlConnection.disconnect();
+        }catch (Exception e) {
+            Log.d("connection_ex", "doPost_username_tel: "+e);
+            return "connection failed";
         }
         return response_inner;
     }
@@ -317,6 +455,7 @@ public class HttpClient {
             //正式写入pixel文件
             request.write(pixels);
 
+            Log.d("is_login", "doPostBitmap: "+Userinfo.is_login);
             if(Userinfo.is_login==true) {
                 request.writeBytes(crlf);
                 //每次写入各类文件前要固定写入三个部分，以确定写入开始
@@ -355,12 +494,9 @@ public class HttpClient {
 
             httpUrlConnection.disconnect();
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.d("connection_ex", "doPost_username_tel: "+e);
+            return "connection failed";
         }
         return response_inner;
     }
