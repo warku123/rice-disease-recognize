@@ -21,6 +21,8 @@ public class mypage extends AppCompatActivity {
     TextView login;
     TextView question;
     TextView call;
+    TextView tel_number;
+
     // 需要把将要操作的组件激活
     Button goto_history_button;
 
@@ -68,17 +70,6 @@ public class mypage extends AppCompatActivity {
         });
 
 
-//        call.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View view){
-//                Intent intent = new Intent();
-//                intent.setAction(Intent.ACTION_CALL);//dial是拨号的意思
-//                Uri data = Uri.parse("tel:" + "13854551953");//这个tel不能改，后面的数字可以随便改
-//                startActivity(intent);
-//                intent.setData(data);
-//                startActivity(intent); // 激活Activity组件
-//            }
-//        });
-
         home.setOnClickListener(bottomlistener);
         platform.setOnClickListener(bottomlistener);
         // TODO 修改buttom Listener
@@ -91,8 +82,15 @@ public class mypage extends AppCompatActivity {
         login=findViewById(R.id.pleaselogin);
         question=findViewById(R.id.question_feedback);
         call=findViewById(R.id.customer_service);
+        tel_number = findViewById(R.id.history_login);
         // 加载组件
         goto_history_button = findViewById(R.id.goto_history_button);
+
+        if(Userinfo.is_login==true)
+        {
+            login.setText(Userinfo.username);
+            tel_number.setText(Userinfo.tel_number);
+        }
     }
     public  void calltel(View view){
         String number = "18801013877";

@@ -89,6 +89,7 @@ public class photopage extends AppCompatActivity {
 
         //组件初始化
         init();
+        Userinfo.init();
 
 //        context=photopage.this.getApplicationContext();
 //        LocationUtils.getCNBylocation(context);
