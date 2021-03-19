@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +37,13 @@ public class MyHistoryActivity extends AppCompatActivity {
                     // 填充信息
                     HistoryRecordsAdapter.fillRecyclerView(historyCardRecyclerView, MyHistoryActivity.this, histories);
                     break;
+                case History.NETWORK_ERROR:
+                    AlertHelper.toastAlert("网络繁忙，请稍候或致电客服");
+                    break;
+                case History.NO_HISTORY:
+                    AlertHelper.toastAlert("暂时没有数据，请拍照识别");
+                    Intent intent = new Intent(MyHistoryActivity.this,mypage.class);
+                    startActivity(intent);
                 default:
                     break;
             }

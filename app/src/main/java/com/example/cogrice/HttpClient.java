@@ -151,9 +151,9 @@ public class HttpClient {
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
             // 设置连接主机服务器的超时时间：15000毫秒
-            httpUrlConnection.setConnectTimeout(150000);
+            httpUrlConnection.setConnectTimeout(15000);
             // 设置读取远程返回的数据时间：60000毫秒
-            httpUrlConnection.setReadTimeout(6000000);
+            httpUrlConnection.setReadTimeout(60000);
             // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             // httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
@@ -217,6 +217,10 @@ public class HttpClient {
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
+            // 设置连接主机服务器的超时时间：15000毫秒
+            httpUrlConnection.setConnectTimeout(15000);
+            // 设置读取远程返回的数据时间：60000毫秒
+            httpUrlConnection.setReadTimeout(60000);
             // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
@@ -290,6 +294,8 @@ public class HttpClient {
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
+            httpUrlConnection.setConnectTimeout(5000);
+            httpUrlConnection.setReadTimeout(5000);
             // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
@@ -367,6 +373,10 @@ public class HttpClient {
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
+            // 设置连接主机服务器的超时时间：15000毫秒
+            httpUrlConnection.setConnectTimeout(15000);
+            // 设置读取远程返回的数据时间：60000毫秒
+            httpUrlConnection.setReadTimeout(60000);
             // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
@@ -435,6 +445,10 @@ public class HttpClient {
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
+            // 设置连接主机服务器的超时时间：15000毫秒
+            httpUrlConnection.setConnectTimeout(15000);
+            // 设置读取远程返回的数据时间：60000毫秒
+            httpUrlConnection.setReadTimeout(60000);
             // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
@@ -514,6 +528,10 @@ public class HttpClient {
             httpUrlConnection.setUseCaches(false);
             httpUrlConnection.setDoOutput(true);
             httpUrlConnection.setDoInput(true);
+            // 设置连接主机服务器的超时时间：15000毫秒
+            httpUrlConnection.setConnectTimeout(15000);
+            // 设置读取远程返回的数据时间：60000毫秒
+            httpUrlConnection.setReadTimeout(60000);
             // 设置一些传递的参数
             httpUrlConnection.setRequestMethod("POST");
             httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");

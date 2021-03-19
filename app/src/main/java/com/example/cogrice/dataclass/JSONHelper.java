@@ -1,6 +1,11 @@
 package com.example.cogrice.dataclass;
 
+import android.os.Bundle;
+import android.os.Message;
+
 import com.example.cogrice.HttpClient;
+import com.example.cogrice.adapters.HistoryRecordsAdapter;
+import com.example.cogrice.adapters.WikiRecordsAdapter;
 import com.example.cogrice.dataclass.History.HistoryRawPOJO;
 import com.example.cogrice.dataclass.Wiki.WikiRawPOJO;
 import com.example.cogrice.utils.AlertHelper;
@@ -26,13 +31,21 @@ public class JSONHelper {
 
     public static List<HistoryRawPOJO> getHistoryPOJOsFromJson(String username) {
         String recordsJson = null;
-        int count = 2;
+        int count = 1;
         recordsJson = getRecordsJsonStringAfterPost(username);
-        while (recordsJson == null || recordsJson.toLowerCase().contains("fail")) {
-            AlertHelper.toastAlert("服务器繁忙，请稍候");
+        while (recordsJson.toLowerCase().contains("fail")) {
+            if (count > 5) {
+                Message msg = new Message();
+                msg.what = History.NETWORK_ERROR;
+                HistoryRecordsAdapter.getHandler().sendMessage(new Message());
+                return null;
+            }
             AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
             recordsJson = getRecordsJsonStringAfterPost(username);
             count++;
+        }
+        if(recordsJson == null){
+            return null;
         }
         AlertHelper.warnNotImplemented("获取到历史记录JSON信息" + recordsJson);
         List<HistoryRawPOJO> historyRawPOJOS = null;
@@ -48,10 +61,17 @@ public class JSONHelper {
     public static List<WikiRawPOJO> getWikiPOJOsFromJson() {
         String wikisJson = null;
         int count = 1;
-        while (wikisJson == null) {
-            wikisJson = getWikiJsonStringAfterPost();
-            AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
+        wikisJson = getWikiJsonStringAfterPost();
+        while (wikisJson == null || wikisJson.toLowerCase().contains("fail")) {
+            AlertHelper.warnNotImplemented("获取Wiki JSON第" + count + "次");
+            if (count > 5) {
+                Message msg = new Message();
+                msg.what = Wiki.NETWORK_ERROR;
+                WikiRecordsAdapter.getHandler().sendMessage(new Message());
+                return null;
+            }
             count++;
+            wikisJson = getWikiJsonStringAfterPost();
         }
         AlertHelper.warnNotImplemented("获取到WikiJSON信息" + wikisJson);
         List<WikiRawPOJO> wikiRawPOJOS = null;

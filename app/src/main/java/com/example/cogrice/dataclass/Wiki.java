@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Wiki implements Serializable {
     public static final int GOT_ALL_WIKIS = 1;
-
+    public static final int NETWORK_ERROR = 2;
 
 
     private String enTypeName;
@@ -160,8 +160,8 @@ public class Wiki implements Serializable {
 
     private static List<Wiki> fillPOJOList(List<Wiki.WikiRawPOJO> wikiRawPOJOS) {
         ArrayList<Wiki> wikis = new ArrayList<>();
-        for (Wiki.WikiRawPOJO wikiRawPOJO : wikiRawPOJOS) {
-            wikis.add(wikiRawPOJO.toWiki());
+        for (int i = 0;i<wikiRawPOJOS.size();i++) {
+            wikis.add(wikiRawPOJOS.get(i).toWiki());
         }
         return wikis;
     }

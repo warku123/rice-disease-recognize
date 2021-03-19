@@ -2,6 +2,7 @@ package com.example.cogrice.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.util.List;
 public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAdapter.HistoryViewHolder> {
 
     public static final int SPACE = 2;
+    private static Handler handler;
     private List<History> historyRecords;
     private static Context context;
 
@@ -34,6 +36,14 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
 
     public static void setContext(Context tar) {
         HistoryRecordsAdapter.context = tar;
+    }
+
+    public static void setHandler(Handler handler) {
+        HistoryRecordsAdapter.handler = handler;
+    }
+
+    public static Handler getHandler() {
+        return handler;
     }
 
     /**
@@ -62,7 +72,7 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
         if (this.getContext() != null) {
             Glide.with(this.getContext()).load(historyRecords.get(position).getPhotoUrl()).error(R.drawable.loadfailed).placeholder(R.drawable.loading_bg).fallback(R.drawable.loadfailed).into(holder.photo);
         }
-        holder.date.setText((historyRecords.get(position).getFormattedDate()).toString());
+        holder.date.setText(historyRecords.get(position).getFormattedDate());
         holder.cnTypeName.setText(ControlMeasure.getCnName(historyRecords.get(position).getDiseaseEnTypeName().toString()));
         holder.gotoDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override

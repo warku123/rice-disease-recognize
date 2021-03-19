@@ -41,6 +41,9 @@ public class DiseaseWikiActivity extends AppCompatActivity {
                     // 填充信息
                     WikiRecordsAdapter.fillRecyclerView(wikiRecycler, DiseaseWikiActivity.this, wikis);
                     break;
+                case Wiki.NETWORK_ERROR:
+                    AlertHelper.toastAlert("网络繁忙，请稍候或致电客服");
+                    break;
                 default:
                     break;
             }
@@ -66,19 +69,20 @@ public class DiseaseWikiActivity extends AppCompatActivity {
         Wiki.startDownloadingWikis(wikiViewHandler);
 
         /*添加底部栏监听器*/
-        home=findViewById(R.id.home);
-        mine=findViewById(R.id.mine);
+        home = findViewById(R.id.home);
+        mine = findViewById(R.id.mine);
         View.OnClickListener bottomlistener = new View.OnClickListener() {
-            Intent intent=null;
+            Intent intent = null;
+
             @Override
             public void onClick(View view) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.home:
-                        intent=new Intent(DiseaseWikiActivity.this,photopage.class);
+                        intent = new Intent(DiseaseWikiActivity.this, photopage.class);
                         break;
                     case R.id.mine:
                         AlertHelper.warnNotImplemented("公共平台跳转到Wiki");
-                        intent=new Intent(DiseaseWikiActivity.this,mypage.class);
+                        intent = new Intent(DiseaseWikiActivity.this, mypage.class);
                         break;
                     default:
                         break;
