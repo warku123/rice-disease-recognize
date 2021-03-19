@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cogrice.Intropage;
 import com.example.cogrice.R;
 import com.example.cogrice.dataclass.Wiki;
@@ -59,10 +60,18 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
     @Override
     public void onBindViewHolder(@NonNull WikiViewHolder holder, int position) {
         if (this.getContext() != null) {
-            Glide.with(this.getContext()).load(filteredWikiList.get(position).getImgUrl()).error(R.drawable.loadfailed).placeholder(R.drawable.loading_bg).fallback(R.drawable.loadfailed).into(holder.insatncePhoto);
+            Glide.with(this.getContext()).load(filteredWikiList.get(position).getImgUrl())
+                    .error(R.drawable.loadfailed)
+                    .placeholder(R.drawable.loading_bg)
+                    .fallback(R.drawable.loadfailed)
+                    .skipMemoryCache(false)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.insatncePhoto);
         }
         if (filteredWikiList.get(position).getEnTypeName().toLowerCase().contains("healthy")) {
             holder.setVisibility(false);
+        }else{
+            holder.setVisibility(true);
         }
         holder.diseaseCnTypeName.setText(filteredWikiList.get(position).getCnTypename());
         holder.diseaseBriefInfo.setText(filteredWikiList.get(position).getDiseaseFeature());
@@ -87,14 +96,15 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
         return this.filteredWikiList.size();
     }
 
-    public void setFilter(String filterWord) {
+    public int setFilter(String filterWord) {
         this.filteredWikiList = new ArrayList<Wiki>();
-        for(Wiki wiki : this.fullWikiList){
+        for(Wiki wiki : this.filteredWikiList){
             if(wiki.containsKeyword(filterWord)){
                 this.filteredWikiList.add(wiki);
             }
         }
         notifyDataSetChanged();
+        return this.getItemCount();
     }
 
 

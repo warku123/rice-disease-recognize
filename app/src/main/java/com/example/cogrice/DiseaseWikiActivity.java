@@ -59,6 +59,7 @@ public class DiseaseWikiActivity extends AppCompatActivity {
     private void initComponents() {
         setContentView(R.layout.activity_disease_wiki);
         this.searchView = (SearchView) findViewById(R.id.wiki_search_bar);
+        this.searchView.setIconified(false);
         this.wikiRecycler = (RecyclerView) findViewById(R.id.wiki_cards_recycler_view);
         AlertHelper.toastAlert("正在获取防治指南");
         WikiRecordsAdapter.setContext(this);
@@ -95,13 +96,14 @@ public class DiseaseWikiActivity extends AppCompatActivity {
         this.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                int num = WikiRecordsAdapter.getInstance().setFilter(s);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                WikiRecordsAdapter.getInstance().setFilter(s);
-                return false;
+                int num = WikiRecordsAdapter.getInstance().setFilter(s);
+                return true;
             }
         });
     }
