@@ -7,9 +7,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by seven on 2017/3/11.
- */
 
 public class  GsonUtil {
     private static Gson gson;

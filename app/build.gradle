@@ -1,5 +1,13 @@
 plugins {
     id 'com.android.application'
+    id 'com.mob.sdk'
+}
+
+// 在MobSDK的扩展中注册SMSSDK的相关信息
+MobSDK {
+    appKey "32a423ebfb6f2"
+    appSecret "4a2854f3cb814426840bfc94dced5913"
+    SMSSDK {}
 }
 
 android {
@@ -39,6 +47,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.2.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.wear:wear:1.0.0'
+    implementation files('libs/ZhenziSmsSDK.jar')
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
