@@ -20,7 +20,7 @@
             android:id="@+id/goto_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="点击拍照"
+            android:text="返回"
             android:textSize="16sp"
             app:strokeColor="@color/text_green"
             />

@@ -12,43 +12,35 @@
         android:id="@+id/nullspace1"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical">
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/login"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="20dp"
-            android:layout_height="match_parent" />
 
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="70dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
             app:srcCompat="@drawable/my" />
-
-        <TextView
-            android:layout_width="10dp"
-            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/logintip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp" />
 
             <TextView
                 android:id="@+id/pleaselogin"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:layout_marginTop="20dp"
                 android:text="点击登录"
                 android:textSize="25sp" />
 
@@ -60,26 +52,22 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/history_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/goto_history_button"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:background="@drawable/history_button"
-                android:layout_marginLeft="70dp"
+                android:layout_centerInParent="true"
+
                 android:text="历史记录"
                 app:backgroundTint="@color/colorlogin_button"
                 app:cornerRadius="10dp" />
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>
@@ -103,13 +91,11 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="25dp"
-            android:layout_height="match_parent" />
 
         <ImageView
             android:id="@+id/takenclass_pic"
             android:layout_width="50dp"
+            android:layout_marginLeft="25dp"
             android:layout_height="30dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/question" />
@@ -133,14 +119,11 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="25dp"
-            android:layout_height="match_parent" />
-
         <ImageView
             android:id="@+id/myfavorite_pic"
             android:layout_width="50dp"
             android:layout_height="30dp"
+            android:layout_marginLeft="25dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/takenclass" />
 
