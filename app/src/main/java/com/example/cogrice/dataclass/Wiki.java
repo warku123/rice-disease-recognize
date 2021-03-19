@@ -101,10 +101,7 @@ public class Wiki implements Serializable {
     }
 
     public boolean containsKeyword(String filterWord) {
-        return  this.getCnTypename().contains(filterWord)
-                || this.getDiseaseFeature().contains(filterWord)
-                || this.getAgriControl().contains(filterWord)
-                || this.getChemControl().contains(filterWord);
+        return  this.getCnTypename().contains(filterWord);
     }
 
     public static class HistoriesDownloadThread extends Thread {
