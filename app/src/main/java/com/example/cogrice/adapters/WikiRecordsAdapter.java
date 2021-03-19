@@ -96,7 +96,7 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
 
     public int setFilter(String filterWord) {
         this.filteredWikiList = new ArrayList<Wiki>();
-        for(Wiki wiki : this.filteredWikiList){
+        for(Wiki wiki : this.fullWikiList){
             if(wiki.containsKeyword(filterWord)){
                 this.filteredWikiList.add(wiki);
             }
