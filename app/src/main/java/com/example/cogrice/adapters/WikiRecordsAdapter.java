@@ -70,8 +70,6 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
         }
         if (filteredWikiList.get(position).getEnTypeName().toLowerCase().contains("healthy")) {
             holder.setVisibility(false);
-        }else{
-            holder.setVisibility(true);
         }
         holder.diseaseCnTypeName.setText(filteredWikiList.get(position).getCnTypename());
         holder.diseaseBriefInfo.setText(filteredWikiList.get(position).getDiseaseFeature());
