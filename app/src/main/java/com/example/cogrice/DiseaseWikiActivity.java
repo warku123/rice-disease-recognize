@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import com.example.cogrice.adapters.WikiRecordsAdapter;
@@ -44,6 +47,8 @@ public class DiseaseWikiActivity extends AppCompatActivity {
         }
     };
     private WikiRecordsAdapter wikiAdapter;
+    private ImageButton home;
+    private ImageButton mine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,33 @@ public class DiseaseWikiActivity extends AppCompatActivity {
         AlertHelper.toastAlert("正在获取防治指南");
         WikiRecordsAdapter.setContext(this);
         Wiki.startDownloadingWikis(wikiViewHandler);
+
+        /*添加底部栏监听器*/
+        home=findViewById(R.id.home);
+        mine=findViewById(R.id.mine);
+        View.OnClickListener bottomlistener = new View.OnClickListener() {
+            Intent intent=null;
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()){
+                    case R.id.home:
+                        intent=new Intent(DiseaseWikiActivity.this,photopage.class);
+                        break;
+                    case R.id.mine:
+                        AlertHelper.warnNotImplemented("公共平台跳转到Wiki");
+                        intent=new Intent(DiseaseWikiActivity.this,mypage.class);
+                        break;
+                    default:
+                        break;
+                }
+                // 打开新活动页面
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        };
+
+        home.setOnClickListener(bottomlistener);
+        mine.setOnClickListener(bottomlistener);
 
         // 设置搜索框的监听器
         this.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

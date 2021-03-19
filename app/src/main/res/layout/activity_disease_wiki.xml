@@ -94,7 +94,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="2dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/platform_selected" />
+                android:src="@drawable/wiki_bar_selected" />
         </RelativeLayout>
 
         <RelativeLayout

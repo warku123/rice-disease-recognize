@@ -37,12 +37,12 @@ public class Intropage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intropage);
 
-        intro_rtn = findViewById(R.id.returninfo);
+        intro_rtn = findViewById(R.id.goto_photo);
         intro_rtn.setBackgroundColor(Color.TRANSPARENT);
         intro_rtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(Intropage.this,infopage.class);
+                Intent intent=new Intent(Intropage.this,photopage.class);
                 startActivity(intent);
             }
         });

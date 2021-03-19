@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="127dp"
         android:background="@drawable/shape_corner"
-        android:onClick="Wiki"
         android:orientation="vertical"
         app:layout_constraintDimensionRatio="1">
 
