@@ -8,15 +8,12 @@
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/wiki_card_inner_costraint"
         android:layout_width="match_parent"
         android:layout_height="127dp"
         android:background="@drawable/shape_corner"
+        android:onClick="Wiki"
         android:orientation="vertical"
         app:layout_constraintDimensionRatio="1">
 

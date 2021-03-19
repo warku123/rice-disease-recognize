@@ -1,12 +1,11 @@
 package com.example.cogrice.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowId;
-import android.widget.Filter;
-import android.widget.Filterable;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,13 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cogrice.Intropage;
 import com.example.cogrice.R;
 import com.example.cogrice.dataclass.Wiki;
 import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.SpacesItemDecoration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.WikiViewHolder> {
@@ -65,12 +64,21 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
         if (filteredWikiList.get(position).getEnTypeName().toLowerCase().contains("healthy")) {
             holder.setVisibility(false);
         }
-        holder.diseaseTypeName.setText(filteredWikiList.get(position).getCnTypename());
+        holder.diseaseCnTypeName.setText(filteredWikiList.get(position).getCnTypename());
         holder.diseaseBriefInfo.setText(filteredWikiList.get(position).getDiseaseFeature());
+        holder.gotoDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WikiRecordsAdapter.getContext(), Intropage.class);
+                intent.putExtra("response", Intropage.generateFormattMsgByCnName((String) holder.diseaseCnTypeName.getText()));
+                // 在外部调用Activity的方法
+                WikiRecordsAdapter.getContext().startActivity(intent);
+            }
+        });
         AlertHelper.warnNotImplemented("绑定Wiki控件");
     }
 
-    private Context getContext() {
+    private static Context getContext() {
         return WikiRecordsAdapter.context;
     }
 
@@ -97,8 +105,9 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
         // 实际填充
         // private ConstraintLayout wikiCard;
         private ImageView insatncePhoto;
-        private TextView diseaseTypeName;
+        private TextView diseaseCnTypeName;
         private TextView diseaseBriefInfo;
+        private Button gotoDetailsButton;
 
         public void setVisibility(boolean isVisible) {
             RecyclerView.LayoutParams param = (RecyclerView.LayoutParams) itemView.getLayoutParams();
@@ -116,9 +125,10 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
 
         public WikiViewHolder(@NonNull View itemView) {
             super(itemView);
-            diseaseTypeName = (TextView) itemView.findViewById(R.id.wiki_card_disease_type);
+            diseaseCnTypeName = (TextView) itemView.findViewById(R.id.wiki_card_disease_type);
             diseaseBriefInfo = (TextView) itemView.findViewById(R.id.wiki_card_brief_intro);
             insatncePhoto = (ImageView) itemView.findViewById(R.id.wiki_card_image);
+            gotoDetailsButton = (Button)itemView.findViewById(R.id.wiki_card_gotodetail_button);
         }
     }
 

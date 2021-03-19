@@ -8,7 +8,6 @@ import android.os.Message;
 import com.example.cogrice.HttpClient;
 import com.example.cogrice.Userinfo;
 import com.example.cogrice.utils.AlertHelper;
-import com.example.cogrice.utils.ImageHelper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -22,7 +21,7 @@ public class History implements Serializable {
     public static final int GOT_ALL_HISTORIES = 1;
 
 
-    private String diseaseType;
+    private String diseaseEnTypeName;
     private Date time;
     private ControlMeasure controlMeasure;
     private Bitmap photo;
@@ -39,7 +38,7 @@ public class History implements Serializable {
     @Override
     public String toString() {
         return "History{" +
-                "diseaseType='" + diseaseType + '\'' +
+                "diseaseType='" + diseaseEnTypeName + '\'' +
                 ", time=" + time +
                 ", controlMeasure=" + controlMeasure +
                 ", photo=" + photo +
@@ -109,7 +108,7 @@ public class History implements Serializable {
         public History toHistory() {
             AlertHelper.warnNotImplemented("正在填充" + this.toString());
             History result = new History();
-            SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Date time = null;
             try {
                 time = ft.parse(recordTime);
@@ -117,10 +116,10 @@ public class History implements Serializable {
             } catch (ParseException e) {
                 System.out.println("Unparseable using " + ft);
             }
-            result.setControlMeasure(ControlMeasure.getMeasureFor(recordResult));
+            result.setControlMeasure(ControlMeasure.getMeasureForEnName(recordResult));
             result.setTime(time);
             // TODO! IMPORTANT! 转化为BitMap
-            result.setDiseaseType(recordResult);
+            result.setDiseaseEnTypeName(recordResult);
             result.setPhotoUrl(recordImagePath);
             // result.setPhoto(ImageHelper.downloadImageAndLoadAsBitmap(recordImagePath));
             return result;
@@ -158,12 +157,12 @@ public class History implements Serializable {
         return JSONHelper.getHistoryPOJOsFromJson(username);
     }
 
-    public String getDiseaseType() {
-        return diseaseType;
+    public String getDiseaseEnTypeName() {
+        return diseaseEnTypeName;
     }
 
-    public void setDiseaseType(String diseaseType) {
-        this.diseaseType = diseaseType;
+    public void setDiseaseEnTypeName(String diseaseEnTypeName) {
+        this.diseaseEnTypeName = diseaseEnTypeName;
     }
 
     public Date getTime() {
@@ -203,6 +202,9 @@ public class History implements Serializable {
         @Override
         public void run() {
             super.run();
+            // 初始化防治信息，如果用户没有再次拉取防治信息，则以开启应用时的为准
+            ControlMeasure.initControlMeasures();
+
             AlertHelper.warnNotImplemented("下载线程采用Glide加载图片");
             // 阻塞，等待历史记录获取
             AlertHelper.warnNotImplemented("请设置默认用户名");

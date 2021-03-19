@@ -101,8 +101,7 @@ public class Wiki implements Serializable {
     }
 
     public boolean containsKeyword(String filterWord) {
-        return  this.getEnTypeName().contains(filterWord)
-                || this.getCnTypename().contains(filterWord)
+        return  this.getCnTypename().contains(filterWord)
                 || this.getDiseaseFeature().contains(filterWord)
                 || this.getAgriControl().contains(filterWord)
                 || this.getChemControl().contains(filterWord);
@@ -157,7 +156,7 @@ public class Wiki implements Serializable {
         }
     }
 
-    private static List<Wiki> getAllRemoteWikiRecords() {
+    public static List<Wiki> getAllRemoteWikiRecords() {
         ArrayList<WikiRawPOJO> wikiRawPOJOS = (ArrayList<WikiRawPOJO>) getWikiPOJOsFromJson();
         return fillPOJOList(wikiRawPOJOS);
     }

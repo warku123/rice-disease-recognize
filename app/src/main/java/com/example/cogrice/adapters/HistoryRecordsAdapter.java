@@ -1,9 +1,11 @@
 package com.example.cogrice.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,9 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cogrice.Intropage;
 import com.example.cogrice.R;
+import com.example.cogrice.dataclass.ControlMeasure;
 import com.example.cogrice.dataclass.History;
-import com.example.cogrice.utils.AlertHelper;
 import com.example.cogrice.utils.SpacesItemDecoration;
 
 import java.util.List;
@@ -25,7 +28,7 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
     private List<History> historyRecords;
     private static Context context;
 
-    public Context getContext() {
+    public static Context getContext() {
         return context;
     }
 
@@ -60,7 +63,16 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
             Glide.with(this.getContext()).load(historyRecords.get(position).getPhotoUrl()).error(R.drawable.loadfailed).placeholder(R.drawable.loading_bg).fallback(R.drawable.loadfailed).into(holder.photo);
         }
         holder.date.setText((historyRecords.get(position).getFormattedDate()).toString());
-        holder.type.setText(historyRecords.get(position).getDiseaseType().toString());
+        holder.cnTypeName.setText(ControlMeasure.getCnName(historyRecords.get(position).getDiseaseEnTypeName().toString()));
+        holder.gotoDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HistoryRecordsAdapter.getContext(), Intropage.class);
+                intent.putExtra("response", Intropage.generateFormattMsgByCnName((String) holder.cnTypeName.getText()));
+                // 在外部调用Activity的方法
+                HistoryRecordsAdapter.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -76,13 +88,15 @@ public class HistoryRecordsAdapter extends RecyclerView.Adapter<HistoryRecordsAd
         // private ConstraintLayout historyCard;
         private ImageView photo;
         private TextView date;
-        private TextView type;
+        private TextView cnTypeName;
+        private Button gotoDetailsButton;
 
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            type = (TextView) itemView.findViewById(R.id.history_card_disease_type);
+            cnTypeName = (TextView) itemView.findViewById(R.id.history_card_disease_type);
             date = (TextView) itemView.findViewById(R.id.history_card_date);
             photo = (ImageView) itemView.findViewById(R.id.history_card_image);
+            gotoDetailsButton = (Button)itemView.findViewById(R.id.history_card_gotodetail_button);
         }
     }
 

@@ -29,7 +29,7 @@ public class JSONHelper {
         int count = 2;
         recordsJson = getRecordsJsonStringAfterPost(username);
         while (recordsJson == null || recordsJson.toLowerCase().contains("fail")) {
-            AlertHelper.warn("服务器繁忙，请稍候");
+            AlertHelper.toastAlert("服务器繁忙，请稍候");
             AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
             recordsJson = getRecordsJsonStringAfterPost(username);
             count++;
