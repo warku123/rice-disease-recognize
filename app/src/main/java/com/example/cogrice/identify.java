@@ -7,8 +7,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,13 +27,31 @@ public class identify extends AppCompatActivity {
 
     String APPKEY = "32a423ebfb6f2";
     String APPSECRET = "4a2854f3cb814426840bfc94dced5913";
+    Button yanzhengma;
     EventHandler handler;
+    private CountDownTimer timer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identify);
         View background = findViewById(R.id.identify);
         background.getBackground().setAlpha(200);
+
+        yanzhengma=findViewById(R.id.button2);
+        timer = new CountDownTimer(60 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                yanzhengma.setClickable(false);
+                yanzhengma.setText(millisUntilFinished / 1000 + "s"+"后重试");
+            }
+
+            @Override
+            public void onFinish() {
+                yanzhengma.setText("重发验证码");
+                yanzhengma.setClickable(true);
+            }
+        };
+
         Intent get = getIntent();
         String username = get.getStringExtra("username");
         String tel = get.getStringExtra("tel");
@@ -101,6 +121,7 @@ public class identify extends AppCompatActivity {
 
     //点击发送验证码
     public void identifycode(View v){
+        timer.start();
         Intent get = getIntent();
         String tel = get.getStringExtra("tel");
         SMSSDK.getVerificationCode("86",tel);

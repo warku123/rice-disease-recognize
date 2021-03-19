@@ -9,10 +9,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,13 +35,30 @@ public class ForgetPassword extends AppCompatActivity {
     String APPSECRET = "4a2854f3cb814426840bfc94dced5913";
     String tel;
     String code;
+    Button identify;
+    private CountDownTimer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-
         String flag="login";
+        identify=findViewById(R.id.getpin);
+
+        timer = new CountDownTimer(60 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                identify.setClickable(false);
+                identify.setText(millisUntilFinished / 1000 + "s"+"后重试");
+            }
+
+            @Override
+            public void onFinish() {
+                identify.setText("重发验证码");
+                identify.setClickable(true);
+            }
+        };
+
         //如果 targetSdkVersion小于或等于22，可以忽略这一步，如果大于或等于23，需要做权限的动态申请：
         if (Build.VERSION.SDK_INT >= 23) {
             String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE, Manifest.permission.READ_LOGS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.SET_DEBUG_APP, Manifest.permission.SYSTEM_ALERT_WINDOW, Manifest.permission.GET_ACCOUNTS, Manifest.permission.WRITE_APN_SETTINGS};
@@ -153,6 +172,7 @@ public class ForgetPassword extends AppCompatActivity {
 
 
     public void identifycode2(View v){
+        timer.start();
         tel = login_tel.getText().toString().trim();
         SMSSDK.getVerificationCode("86",tel);
     }
