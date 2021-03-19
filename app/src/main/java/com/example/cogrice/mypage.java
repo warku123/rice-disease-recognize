@@ -40,13 +40,18 @@ public class mypage extends AppCompatActivity {
                         intent=new Intent(mypage.this,DiseaseWikiActivity.class);
                         break;
                     case R.id.goto_history_button:
+                        if(Userinfo.is_login == false || Userinfo.username==null){
+                            // 未登录
+                            AlertHelper.toastAlert("登录后获取相关历史记录");
+                            break;
+                        }
                         intent = new Intent(mypage.this, MyHistoryActivity.class);
                         break;
                     default:
                         break;
                 }
                 // 打开新活动页面
-                startActivity(intent);
+                if(intent!=null)startActivity(intent);
                 overridePendingTransition(0, 0);
             }
         };
