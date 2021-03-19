@@ -48,7 +48,7 @@
                 android:id="@+id/history_login"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="登陆之后查看"
+                android:text="登录之后查看"
                 android:textSize="15sp" />
         </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.os.Message;
 
 import com.example.cogrice.HttpClient;
 import com.example.cogrice.Userinfo;
+import com.example.cogrice.adapters.HistoryRecordsAdapter;
 import com.example.cogrice.utils.AlertHelper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,6 +20,8 @@ import java.util.List;
 
 public class History implements Serializable {
     public static final int GOT_ALL_HISTORIES = 1;
+    public static final int NETWORK_ERROR = 2;
+    public static final int NO_HISTORY = 3;
 
 
     private String diseaseEnTypeName;
@@ -108,7 +111,7 @@ public class History implements Serializable {
         public History toHistory() {
             AlertHelper.warnNotImplemented("正在填充" + this.toString());
             History result = new History();
-            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date time = null;
             try {
                 time = ft.parse(recordTime);
@@ -147,8 +150,8 @@ public class History implements Serializable {
 
     private static List<History> fillPOJOList(ArrayList<HistoryRawPOJO> historyRawPOJOS) {
         ArrayList<History> histories = new ArrayList<>();
-        for (HistoryRawPOJO historyRawPOJO : historyRawPOJOS) {
-            histories.add(historyRawPOJO.toHistory());
+        for (int i = 0;i<histories.size();i++) {
+            histories.add(historyRawPOJOS.get(i).toHistory());
         }
         return histories;
     }
@@ -170,7 +173,7 @@ public class History implements Serializable {
     }
 
     public String getFormattedDate() {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return ft.format(this.time);
     }
 
@@ -197,6 +200,8 @@ public class History implements Serializable {
 
         public HistoriesDownloadThread(Handler historyViewHandler) {
             this.historyViewHandler = historyViewHandler;
+            AlertHelper.warnNotImplemented("绑定Handler");
+            HistoryRecordsAdapter.setHandler(historyViewHandler);
         }
 
         @Override
@@ -209,6 +214,11 @@ public class History implements Serializable {
             // 阻塞，等待历史记录获取
             AlertHelper.warnNotImplemented("请设置默认用户名");
             List<History> histories = History.getAllRemoteHistoryRecords(Userinfo.username);
+            if(histories.size() == 0){
+                Message message = Message.obtain();
+                message.what = History.NO_HISTORY;
+                HistoryRecordsAdapter.getHandler().sendMessage(message);
+            }
             Message msg = Message.obtain();
             msg.what = GOT_ALL_HISTORIES;
             Bundle historiesBundle = new Bundle();

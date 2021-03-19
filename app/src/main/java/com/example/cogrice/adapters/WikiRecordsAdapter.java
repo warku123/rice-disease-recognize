@@ -2,6 +2,7 @@ package com.example.cogrice.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,12 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
     public static final int SPACE = 2;
 
     private static Context context;
+
+    public static void setHandler(Handler handler) {
+        WikiRecordsAdapter.handler = handler;
+    }
+
+    private static Handler handler;
     private final ArrayList<Wiki> fullWikiList;
     private List<Wiki> filteredWikiList;
 
@@ -41,6 +48,10 @@ public class WikiRecordsAdapter extends RecyclerView.Adapter<WikiRecordsAdapter.
 
     public static void setContext(Context diseaseWikiActivity) {
         WikiRecordsAdapter.context = diseaseWikiActivity;
+    }
+
+    public static Handler getHandler() {
+        return WikiRecordsAdapter.handler;
     }
 
 

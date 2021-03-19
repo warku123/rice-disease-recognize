@@ -72,7 +72,7 @@ public class login extends AppCompatActivity {
                             login.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getApplicationContext(), "登陆成功", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(login.this, mypage.class);
                                     startActivity(intent);
                                 }
@@ -83,7 +83,7 @@ public class login extends AppCompatActivity {
                             login.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getApplicationContext(), "登陆失败", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "登录失败", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
