@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -54,13 +55,18 @@ public class CustomerService extends AppCompatActivity {
             public void onClick(View view) {
                 String content = inputText.getText().toString();
                 if(!"".equals(content)) {
-                    String time=NowTime();
-                    Msg msg = new Msg(content, Msg.TYPE_SEND,time,quickresponse(LastMsgtime,NowMsgtime));
-                    msgList.add(msg);
-                    adapter.notifyDataSetChanged();
-                    msgListView.setSelection(msgList.size());
-                    inputText.setText("");
-                    autoresponse(source);
+                    if("".equals(content.trim())){
+                        Toast.makeText(CustomerService.this,"空消息客服君不知道说什么哦！", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        String time=NowTime();
+                        Msg msg = new Msg(content, Msg.TYPE_SEND,time,quickresponse(LastMsgtime,NowMsgtime));
+                        msgList.add(msg);
+                        adapter.notifyDataSetChanged();
+                        msgListView.setSelection(msgList.size());
+                        inputText.setText("");
+                        autoresponse(source,content);
+                    }
                 }
             }
         });
@@ -101,13 +107,23 @@ public class CustomerService extends AppCompatActivity {
         }
         msgList.add(msg1);
     }
-    private void autoresponse(String source){
+    private void autoresponse(String source,String content){
         Msg response;
         if(source.equals("product")){
-            response = new Msg("您的回复我已收到，感谢您对本产品提出的建议！后台管理员会定期查看用户回复，并对产品进行改进！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+            if(content.length()<5){
+                response = new Msg("感謝您的回复！我将把您的反馈及时递交后台管理人员！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+            }
+            else{
+                response = new Msg("您的回复我已收到，感谢您对本产品提出的建议！后台管理员会定期查看用户回复，并对产品进行改进！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+            }
         }
         else{
-            response = new Msg("您的反馈我已收到，感谢您对识别结果提出的建议！我们会检查模型，核对结果，进一步提高识别正确率！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+            if(content.length()<5){
+                response = new Msg("收到！您的回复是我们最大的动力！我将把您的意见反馈到模型训练中！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+            }
+            else{
+                response = new Msg("您的反馈我已收到，感谢您对识别结果提出的建议！我们会检查模型，核对结果，进一步提高识别正确率！", Msg.TYPE_RECEIVED,NowTime(),quickresponse(LastMsgtime,NowMsgtime));
+            }
         }
         msgList.add(response);
     }

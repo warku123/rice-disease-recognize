@@ -120,11 +120,20 @@ public class infopage extends AppCompatActivity{
 
                                 if(result.length>2) {
                                     introbtn.setVisibility(View.VISIBLE);
+                                    anyquestion.setVisibility(View.VISIBLE);
                                     introbtn.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             Intent intent = new Intent(infopage.this, Intropage.class);
                                             intent.putExtra("response", response);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    anyquestion.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(infopage.this, CustomerService.class);
+                                            intent.putExtra("question", "output");
                                             startActivity(intent);
                                         }
                                     });
