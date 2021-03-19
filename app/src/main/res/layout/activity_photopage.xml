@@ -97,10 +97,11 @@
 
     <Button
         android:id="@+id/choose_from_album"
-        android:layout_width="246dp"
-        android:layout_height="55dp"
+        android:layout_width="240dp"
+        android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
-        android:background="#6600ff"
+        android:background="#000000"
+        android:textColor="#ffffff"
         android:text="从相册中选择图片" />
 
 
