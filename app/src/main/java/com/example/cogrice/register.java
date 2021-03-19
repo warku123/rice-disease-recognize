@@ -93,7 +93,7 @@ public class register extends AppCompatActivity {
                 if (!str.equals("") && !str2.equals("")) {
                     register.setBackgroundColor(Color.parseColor("#ffff0000"));
                 } else {
-                    register.setBackgroundColor(Color.parseColor("#9bff0000"));
+                    register.setBackgroundColor(Color.parseColor("#c8ffffff"));
                 }
             }
         });
