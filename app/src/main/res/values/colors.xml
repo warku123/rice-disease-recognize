@@ -12,4 +12,5 @@
     <color name="colorLoginpasswordEditText">#FFFFFF</color>
     <color name="bg_green">#3C76FF03</color>
     <color name="text_green">#4CAF50</color>
+    <color name="button_green">#D811D183</color>
 </resources>

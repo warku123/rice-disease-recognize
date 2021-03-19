@@ -5,63 +5,42 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.net.sip.SipAudioCall;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cogrice.dataclass.History;
 import com.example.cogrice.http.GsonUtil;
 import com.example.cogrice.http.HttpHelp;
 import com.example.cogrice.http.I_failure;
 import com.example.cogrice.http.I_success;
 import com.example.cogrice.http.WeBean;
+import com.example.cogrice.utils.AlertHelper;
+import com.example.cogrice.utils.GlobalHelper;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.BreakIterator;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class photopage extends AppCompatActivity {
@@ -81,11 +60,15 @@ public class photopage extends AppCompatActivity {
 
     private Uri imageUri;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photopage);
+
+
+        // 全局初始化
+        GlobalHelper.initGlobaly(this);
 
         //组件初始化
         init();
@@ -124,7 +107,9 @@ public class photopage extends AppCompatActivity {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.platform:
-                        intent = new Intent(photopage.this, platform.class);
+                        // intent = new Intent(photopage.this, platform.class);
+                        AlertHelper.warnNotImplemented("公共平台跳转到Wiki");
+                        intent = new Intent(photopage.this, DiseaseWikiActivity.class);
                         break;
                     case R.id.mine:
                         intent = new Intent(photopage.this, mypage.class);
@@ -256,7 +241,7 @@ public class photopage extends AppCompatActivity {
     /**
      * 定位：权限判断
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = 24)
     private void getLocation2() {
         //检查定位权限
         ArrayList<String> permissions = new ArrayList<>();
@@ -279,6 +264,15 @@ public class photopage extends AppCompatActivity {
 
     //根据经纬度，获取对应的城市
     public static String getCity(Context context, double latitude, double longitude) {
+        /*public void login(String username){
+            userStatus = Status.StatusEnum.LOGGED_IN;
+            this.userName = username;
+        }
+
+        public void logout(){
+            userStatus = Status.StatusEnum.LOGGED_OUT;
+            this.userName = null;
+        }*/
         String cityName = "";
         List<Address> addList = null;
         Geocoder ge = new Geocoder(context);
@@ -336,13 +330,22 @@ public class photopage extends AppCompatActivity {
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
-            Location l = mLocationManager.getLastKnownLocation(provider);
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                // Found best last known location: %s", l);
-                bestLocation = l;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                Location l = mLocationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l;
+                }
             }
         }
         return bestLocation;
@@ -355,6 +358,7 @@ public class photopage extends AppCompatActivity {
      * @param permissions
      * @param grantResults
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {

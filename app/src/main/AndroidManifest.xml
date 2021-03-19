@@ -35,11 +35,13 @@
 
 
     <application
+        android:name=".utils.GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo_4980"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:usesCleartextTraffic="true"
+        android:roundIcon="@mipmap/logo_4980"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen">
         <activity android:name=".photopage"></activity>
@@ -48,6 +50,7 @@
         <activity android:name=".ForgetPassword" />
         <activity android:name=".login" />
         <activity android:name=".setpassword" />
+        <activity android:name=".DiseaseWikiActivity" />
         <activity android:name=".identify" />
         <activity android:name=".checkfun" />
         <activity android:name=".register" />
@@ -58,7 +61,6 @@
         <activity android:name=".Welcomepage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

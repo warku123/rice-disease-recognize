@@ -11,7 +11,7 @@ public class Userinfo {
     {
         if(is_init==false) {
             is_login = false;
-            username = null;
+            username = "zpg";
             tel_number = null;
             is_init = true;
         }

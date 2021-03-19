@@ -7,21 +7,26 @@
     android:orientation="vertical"
     android:background="@color/cardview_light_background"
     tools:context=".Intropage">
+
     <LinearLayout
         android:id="@+id/null_space1"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="vertical"
-        android:background="@drawable/intro_background">
+        android:background="@drawable/intro_background"
+        android:backgroundTint="#11D082"
+        android:orientation="vertical">
+
         <Button
+            android:id="@+id/goto_photo"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:id="@+id/returninfo"
-            android:text="返回"
-            android:textSize="20sp"
-            android:background="@android:color/transparent"
-            android:textColor="#d0ffffff">
-        </Button>
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:text="点击拍照"
+            android:textSize="16sp"
+            app:strokeColor="@color/text_green"
+            app:strokeWidth="1dp"
+            />
     </LinearLayout>
 
     <ScrollView

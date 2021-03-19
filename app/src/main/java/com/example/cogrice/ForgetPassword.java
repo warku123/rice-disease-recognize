@@ -137,7 +137,7 @@ public class ForgetPassword extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(ForgetPassword.this,"提交验证码有误", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ForgetPassword.this,"提交错误信息", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
