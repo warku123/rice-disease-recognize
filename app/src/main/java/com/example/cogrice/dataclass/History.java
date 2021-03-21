@@ -150,7 +150,7 @@ public class History implements Serializable {
 
     private static List<History> fillPOJOList(ArrayList<HistoryRawPOJO> historyRawPOJOS) {
         ArrayList<History> histories = new ArrayList<>();
-        for (int i = 0;i<histories.size();i++) {
+        for (int i = 0;i<historyRawPOJOS.size();i++) {
             histories.add(historyRawPOJOS.get(i).toHistory());
         }
         return histories;

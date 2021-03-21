@@ -42,7 +42,8 @@ public class MyHistoryActivity extends AppCompatActivity {
                     break;
                 case History.NO_HISTORY:
                     AlertHelper.toastAlert("暂时没有数据，请拍照识别");
-                    Intent intent = new Intent(MyHistoryActivity.this,mypage.class);
+                    Intent intent = new Intent(
+                            MyHistoryActivity.this,mypage.class);
                     startActivity(intent);
                 default:
                     break;
