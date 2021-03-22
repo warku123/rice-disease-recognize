@@ -70,22 +70,22 @@ public class JSONHelper {
     }
 
     public static List<WikiRawPOJO> getWikiPOJOsFromJson() {
+        List<WikiRawPOJO> wikiRawPOJOS = new ArrayList<WikiRawPOJO>();
         String wikisJson = null;
         int count = 1;
         wikisJson = getWikiJsonStringAfterPost();
         while (wikisJson == null || wikisJson.toLowerCase().contains("fail")) {
             AlertHelper.warnNotImplemented("获取Wiki JSON第" + count + "次");
             if (count > 5) {
-                Message msg = new Message();
-                msg.what = Wiki.NETWORK_ERROR;
-                WikiRecordsAdapter.getHandler().sendMessage(new Message());
-                return null;
+                // Message msg = new Message();
+                // msg.what = Wiki.NETWORK_ERROR;
+                // WikiRecordsAdapter.getHandler().sendMessage(new Message());
+                return wikiRawPOJOS;
             }
             count++;
             wikisJson = getWikiJsonStringAfterPost();
         }
         AlertHelper.warnNotImplemented("获取到WikiJSON信息" + wikisJson);
-        List<WikiRawPOJO> wikiRawPOJOS = null;
         try {
             wikiRawPOJOS = new ObjectMapper().readValue(wikisJson, new TypeReference<List<WikiRawPOJO>>() {
             });
