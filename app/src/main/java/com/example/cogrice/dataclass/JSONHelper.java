@@ -30,25 +30,36 @@ public class JSONHelper {
     }
 
     public static List<HistoryRawPOJO> getHistoryPOJOsFromJson(String username) {
+        List<HistoryRawPOJO> historyRawPOJOS = new ArrayList<HistoryRawPOJO>();
         String recordsJson = null;
         int count = 1;
         recordsJson = getRecordsJsonStringAfterPost(username);
-        while (recordsJson.toLowerCase().contains("fail")) {
+        while (recordsJson.equals("connection failed")) {
             if (count > 5) {
                 Message msg = new Message();
                 msg.what = History.NETWORK_ERROR;
                 HistoryRecordsAdapter.getHandler().sendMessage(new Message());
-                return null;
+                return historyRawPOJOS;
             }
             AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
             recordsJson = getRecordsJsonStringAfterPost(username);
             count++;
         }
-        if(recordsJson == null){
-            return null;
+        while (recordsJson.contains("no")) {
+            if (count > 5) {
+                Message msg = new Message();
+                msg.what = History.NO_HISTORY;
+                HistoryRecordsAdapter.getHandler().sendMessage(new Message());
+                return historyRawPOJOS;
+            }
+            AlertHelper.warnNotImplemented("获取JSON第" + count + "次");
+            recordsJson = getRecordsJsonStringAfterPost(username);
+            count++;
+        }
+        if (recordsJson == null) {
+            return historyRawPOJOS;
         }
         AlertHelper.warnNotImplemented("获取到历史记录JSON信息" + recordsJson);
-        List<HistoryRawPOJO> historyRawPOJOS = null;
         try {
             historyRawPOJOS = new ObjectMapper().readValue(recordsJson, new TypeReference<List<HistoryRawPOJO>>() {
             });

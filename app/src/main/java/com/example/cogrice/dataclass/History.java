@@ -218,6 +218,7 @@ public class History implements Serializable {
                 Message message = Message.obtain();
                 message.what = History.NO_HISTORY;
                 HistoryRecordsAdapter.getHandler().sendMessage(message);
+                return;
             }
             Message msg = Message.obtain();
             msg.what = GOT_ALL_HISTORIES;

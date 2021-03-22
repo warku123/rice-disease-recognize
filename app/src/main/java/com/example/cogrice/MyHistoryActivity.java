@@ -45,6 +45,7 @@ public class MyHistoryActivity extends AppCompatActivity {
                     Intent intent = new Intent(
                             MyHistoryActivity.this,mypage.class);
                     startActivity(intent);
+                    break;
                 default:
                     break;
             }
