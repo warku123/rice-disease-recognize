@@ -1,6 +1,10 @@
 # rice disease recognize
 
-毕业实习项目
+毕业实习项目，整体项目原来在码云，现已整体迁移至Github，方便浏览。
+
+项目整体均为原创，无任何框架使用
+
+整体Release发行版为zxy分支，欢迎fork与clone
 
 **以下是项目的创建报告**
 
